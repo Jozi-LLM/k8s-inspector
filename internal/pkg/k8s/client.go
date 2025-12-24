@@ -1,0 +1,89 @@
+package k8s
+
+import (
+	"context"
+	"fmt"
+	"path/filepath"
+
+	"github.com/mitchellh/go-homedir"
+	"github.com/ym/k8s-inspector/internal/pkg/utils"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
+)
+
+type Client struct {
+	Clientset kubernetes.Interface
+	Config    *rest.Config
+	Context   string
+}
+
+func NewClient(kubeconfig, context string) (*Client, error) {
+	var config *rest.Config
+	var err error
+
+	// 如果kubeconfig为空，尝试从默认位置加载
+	if kubeconfig == "" {
+		if home, err := homedir.Dir(); err == nil {
+			kubeconfig = filepath.Join(home, ".kube", "config")
+		}
+	}
+
+	// 创建客户端配置
+	if kubeconfig != "" {
+		loadingRules := &clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig}
+		configOverrides := &clientcmd.ConfigOverrides{}
+
+		if context != "" {
+			configOverrides.CurrentContext = context
+		}
+
+		config, err = clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
+			loadingRules, configOverrides).ClientConfig()
+	} else {
+		// 使用in-cluster配置
+		config, err = rest.InClusterConfig()
+	}
+	if err != nil {
+		return nil, fmt.Errorf("创建k8s客户端配置失败: %v", err)
+	}
+
+	// 创建客户端集
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		return nil, fmt.Errorf("创建k8s客户端集失败: %v", err)
+	}
+
+	logger := utils.GetGlobalLogger()
+	logger.Infof("成功连接到K8S集群")
+
+	return &Client{
+		Clientset: clientset,
+		Config:    config,
+		Context:   context,
+	}, nil
+}
+
+// 获取集群信息
+func (c *Client) HealthCheck(ctx context.Context) error {
+	_, err := c.Clientset.Discovery().ServerVersion()
+	if err != nil {
+		return fmt.Errorf("获取K8S集群版本失败: %v", err)
+	}
+	return nil
+}
+
+// 获取集群信息
+func (c *Client) GetClusterInfo(ctx context.Context) (map[string]string, error) {
+	version, err := c.Clientset.Discovery().ServerVersion()
+	if err != nil {
+		return nil, err
+	}
+
+	info := map[string]string{
+		"version":  version.String(),
+		"platform": version.Platform,
+	}
+
+	return info, nil
+}

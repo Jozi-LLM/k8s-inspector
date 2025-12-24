@@ -1,0 +1,49 @@
+# configs/config.yaml
+inspection:
+  schedule: "0 */6 * * *"
+  
+  clusters:
+    - name: "default"
+      kubeconfig: "$HOME/.kube/config"
+      context: ""
+  
+  checks:
+    enabled:
+      - node_health
+      - resource_usage
+      - pod_health
+      - deployment_health
+      - security_basic
+    
+    thresholds:
+      cpu_usage_warning: 80
+      memory_usage_warning: 85
+      pod_restart_warning: 5
+      disk_usage_warning: 90
+    
+    settings:
+      check_timeout: "30s"
+      concurrent_checks: 5
+  
+  reporting:
+    formats:
+      - console
+      - json
+    output_dir: "./reports"
+
+logging:
+  level: "info"
+  format: "console"
+  output: "stdout"
+
+alerting:
+  slack:
+    enabled: false
+    webhook: ""
+  webhook:
+    enabled: false
+    url: ""
+  email:
+    enabled: false
+    smtp_server: "smtp.example.com:587"
+    recipients: []
