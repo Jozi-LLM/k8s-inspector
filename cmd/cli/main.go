@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/ym/k8s-inspector/internal/analyzer"
+	"github.com/ym/k8s-inspector/internal/checker"
 	"github.com/ym/k8s-inspector/internal/pkg/config"
 	"github.com/ym/k8s-inspector/internal/pkg/k8s"
 	"github.com/ym/k8s-inspector/internal/pkg/utils"
@@ -30,6 +31,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("加载配置失败: %v", err)
 	}
+
+	// 初始化检查器
+	checker.InitCheckers()
 
 	// 创建上下文
 	ctx, cancel := context.WithCancel(context.Background())

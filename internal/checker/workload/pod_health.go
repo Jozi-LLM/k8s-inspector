@@ -10,7 +10,6 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/ym/k8s-inspector/internal/checker"
 	"github.com/ym/k8s-inspector/internal/pkg/k8s"
 	"github.com/ym/k8s-inspector/internal/pkg/types"
 	"github.com/ym/k8s-inspector/internal/pkg/utils"
@@ -844,7 +843,3 @@ func (c *PodHealthChecker) checkSecurityContext(pod corev1.Pod) []types.CheckDet
 	return results
 }
 
-// 注册检查器
-func init() {
-	checker.Register(&PodHealthChecker{})
-}

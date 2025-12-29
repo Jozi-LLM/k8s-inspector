@@ -20,7 +20,7 @@ type NodeHealthChecker struct {
 }
 
 func (c *NodeHealthChecker) Name() string {
-	return "NodeHealthChecker"
+	return "node_health"
 }
 
 func (c *NodeHealthChecker) Description() string {
@@ -706,7 +706,4 @@ func formatBytes(bytes int64) string {
 		float64(bytes)/float64(div), "KMGTPE"[exp])
 }
 
-// 注册检查器
-func init() {
-	Register(&NodeHealthChecker{})
-}
+

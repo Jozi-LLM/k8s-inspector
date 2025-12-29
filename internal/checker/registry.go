@@ -22,6 +22,7 @@ func Register(checker types.Checker) {
 	if _, exists := registry[name]; exists {
 		panic(fmt.Sprintf("checker %s already registered", name))
 	}
+	registry[name] = checker
 }
 
 func Get(name string) (types.Checker, bool) {
