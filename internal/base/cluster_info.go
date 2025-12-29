@@ -2,40 +2,47 @@ package base
 
 import (
 	"context"
-	"go/types"
+	"fmt"
+	"time"
 
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/ym/k8s-inspector/internal/checker"
 	"github.com/ym/k8s-inspector/internal/pkg/k8s"
+	"github.com/ym/k8s-inspector/internal/pkg/types"
+	"github.com/ym/k8s-inspector/internal/pkg/utils"
 )
 
-type CluserInfoChecker struct{}
+type ClusterInfoChecker struct{}
 
-func (c *CluserInfoChecker) Name() string {
-	return "cluser_info"
+func (c *ClusterInfoChecker) Name() string {
+	return "cluster_info"
 }
 
-func (c *CluserInfoChecker) Description() string {
+func (c *ClusterInfoChecker) Description() string {
 	return "检查集群基本信息和版本"
 }
 
-func (c *CluserInfoChecker) Category() string {
+func (c *ClusterInfoChecker) Category() string {
 	return "base"
 }
 
-func (c *CluserInfoChecker) RequiredPermissions() []string {
+func (c *ClusterInfoChecker) RequiredPermissions() []string {
 	return []string{"get", "list"}
 }
 
-func (c *CluserInfoChecker) Execute(ctx context.Context, clent *k8s.Client) ([]types.CheckerDetail, error)
-	logger := utils.GetLogger()
+func (c *ClusterInfoChecker) Execute(ctx context.Context, client *k8s.Client) ([]types.CheckDetail, error) {
+	logger := utils.GetGlobalLogger()
 	logger.Infow("开始进行集群基本信息检查", "checker", c.Name())
 
 	startTime := time.Now()
-	var result []types.CheckerDetail
+	var results []types.CheckDetail
 
-	//检查集群链接
+	// 检查集群连接
 	info, err := client.GetClusterInfo(ctx)
 	if err != nil {
-		results = append(results, types.CheckerDetail{
+		results = append(results, types.CheckDetail{
 			Category:  c.Category(),
 			CheckName: c.Name(),
 			CheckID:   "cluster_connectivity",
@@ -49,25 +56,25 @@ func (c *CluserInfoChecker) Execute(ctx context.Context, clent *k8s.Client) ([]t
 
 	// 检查集群版本
 	version, ok := info["version"]
-	if ok{
-		results = append(results, types.CheckerDetail{
-			Category:  c.Category(),
-			CheckName: c.Name(),
-			CheckID:   "cluster_version",
-			Status:    types.StatusPass,
-			Message:   fmt.Sprintf("集群版本: %v", version),
-			Resource:  "cluster",
-			ResourceType:"cluster",
-			Severity:    types.SeverityLow,
-			Evidence:    info,
-			Timestamp:   time.Now(),
+	if ok {
+		results = append(results, types.CheckDetail{
+			Category:     c.Category(),
+			CheckName:    c.Name(),
+			CheckID:      "cluster_version",
+			Status:       types.StatusPass,
+			Message:      fmt.Sprintf("集群版本: %v", version),
+			Resource:     "cluster",
+			ResourceType: "cluster",
+			Severity:     types.SeverityLow,
+			Evidence:     info,
+			Timestamp:    time.Now(),
 		})
 	}
 
 	// 获取节点数量
 	nodes, err := client.Clientset.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
 	if err != nil {
-		results = append(results, types.CheckerDetail{
+		results = append(results, types.CheckDetail{
 			Category:  c.Category(),
 			CheckName: c.Name(),
 			CheckID:   "cluster_node_count",
@@ -76,61 +83,63 @@ func (c *CluserInfoChecker) Execute(ctx context.Context, clent *k8s.Client) ([]t
 			Severity:  types.SeverityCritical,
 			Timestamp: time.Now(),
 		})
-	}else{
-		readyNotes := 0
-		for _, node := range nodes.Items{
-			for _, condition := range node.Status.Conditions{
-				if condition.Type == v1.NodeReady && condition.Status == v1.ConditionTrue{
-					readyNotes++
+	} else {
+		readyNodes := 0
+		for _, node := range nodes.Items {
+			for _, condition := range node.Status.Conditions {
+				if condition.Type == corev1.NodeReady && condition.Status == corev1.ConditionTrue {
+					readyNodes++
 					break
 				}
 			}
 		}
 
-		results = append(results, types.CheckerDetail{
-			Category:  c.Category(),
-			CheckName: c.Name(),
-			CheckID:   "cluster_node_count",
-			Status:    func() types.Status {
-				if readyNotes == len(nodes.Items){
-					return types.StatusPass
-				} else if readyNotes == 0{
-					return types.StatusWarning
-				} else {
-					return types.StatusFail
-				}(),
-				Message:      fmt.Sprintf("节点状态: %d/%d Ready", readyNodes, len(nodes.Items)),
-				Resource: "cluster",
-				ResourceType:"cluster",
-				Severity:   func() types.Severity {
-					if readyNodes == 0 {
-						return types.SeverityCritical
-					} else if readyNodes < len(nodes.Items) {
-						return types.SeverityMedium
-					}
-					return types.SeverityLow
-					}(),
-					Evidence: map[string]interface{}{
-						"readyNodes": readyNodes,
-						"totalNodes": len(nodes.Items),
-					},
-					Suggestions: []string{
-						if readyNodes < len(nodes.Items) {
-							return fmt.Sprintf("建议检查节点状态，当前有 %d 个节点未就绪", len(nodes.Items)-readyNodes)
-						}
-						return nil
-					}(),
-					Timestamp: time.Now(),
-				})
-			}
+		status := types.StatusPass
+		if readyNodes == 0 {
+			status = types.StatusWarning
+		} else if readyNodes < len(nodes.Items) {
+			status = types.StatusFail
+		}
 
-			duration := time.Since(startTime)
-			logger.Infow("集群基本信息检查完成", 
-				"checker", c.Name(), 
-				"duration", duration,
-				"results",len(results))
-			return results, nil
+		severity := types.SeverityLow
+		if readyNodes == 0 {
+			severity = types.SeverityCritical
+		} else if readyNodes < len(nodes.Items) {
+			severity = types.SeverityMedium
+		}
+
+		message := fmt.Sprintf("节点状态: %d/%d Ready", readyNodes, len(nodes.Items))
+		suggestions := []string{}
+		if readyNodes < len(nodes.Items) {
+			suggestions = append(suggestions, fmt.Sprintf("建议检查节点状态，当前有 %d 个节点未就绪", len(nodes.Items)-readyNodes))
+		}
+
+		results = append(results, types.CheckDetail{
+			Category:     c.Category(),
+			CheckName:    c.Name(),
+			CheckID:      "cluster_node_count",
+			Status:       status,
+			Message:      message,
+			Resource:     "cluster",
+			ResourceType: "cluster",
+			Severity:     severity,
+			Evidence: map[string]interface{}{
+				"readyNodes": readyNodes,
+				"totalNodes": len(nodes.Items),
+			},
+			Suggestions: suggestions,
+			Timestamp:   time.Now(),
+		})
 	}
+
+	duration := time.Since(startTime)
+	logger.Infow("集群基本信息检查完成",
+		"checker", c.Name(),
+		"duration", duration,
+		"results", len(results))
+
+	return results, nil
+}
 
 // 注册检查器
 func init() {
