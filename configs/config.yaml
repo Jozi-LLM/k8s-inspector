@@ -3,7 +3,7 @@ inspector:
   
   clusters:
     - name: "default"
-      kubeconfig: "$HOME/.kube/config"
+      kubeconfig: "/root/.kube/config"
       context: ""
   
   checks:
