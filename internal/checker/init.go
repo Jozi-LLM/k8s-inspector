@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"github.com/ym/k8s-inspector/internal/checker/resource"
 	"github.com/ym/k8s-inspector/internal/checker/workload"
 )
 
@@ -8,12 +9,13 @@ import (
 func InitCheckers() {
 	// 注册节点健康检查器
 	Register(&NodeHealthChecker{})
-	
+
 	// 注册Pod健康检查器
 	Register(&workload.PodHealthChecker{})
-	
-	// TODO: 添加其他检查器
-	// Register(&ResourceUsageChecker{})
-	// Register(&DeploymentHealthChecker{})
-	// Register(&SecurityBasicChecker{})
+
+	// 注册Deployment健康检查器
+	Register(&workload.DeploymentChecker{})
+
+	// 注册资源使用检查器
+	Register(&resource.ResourceUsageChecker{})
 }

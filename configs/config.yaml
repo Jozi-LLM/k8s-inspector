@@ -1,24 +1,31 @@
-inspector:
-  schedule: "0 */6 * * *"
+# configs/config-full.yaml
+inspection:
+  schedule: "0 */6 * * *"  # 每6小时执行一次
   
   clusters:
-    - name: "default"
-      kubeconfig: "/root/.kube/config"
-      context: ""
+    - name: "production"
+      kubeconfig: "$HOME/.kube/config"
+      context: "prod-cluster"
+    - name: "staging"
+      kubeconfig: "$HOME/.kube/config"
+      context: "staging-cluster"
   
   checks:
     enabled:
+      - cluster_info
       - node_health
-      - resource_usage
       - pod_health
+      - resource_usage
       - deployment_health
-      - security_basic
+      - service_health
     
     thresholds:
       cpu_usage_warning: 80
       memory_usage_warning: 85
       pod_restart_warning: 5
       disk_usage_warning: 90
+      node_cpu_allocation_warning: 80
+      node_memory_allocation_warning: 85
     
     settings:
       check_timeout: "30s"
@@ -28,21 +35,47 @@ inspector:
     formats:
       - console
       - json
+      - html
     output_dir: "./reports"
+    retention_days: 30
 
 logging:
   level: "info"
-  format: "console"
-  output: "stdout"
+  format: "json"
+  output: "both"
+  file: "./logs/k8s-inspector.log"
 
 alerting:
   slack:
-    enabled: false
-    webhook: ""
+    enabled: true
+    webhook: "https://hooks.slack.com/services/..."
+    channel: "#k8s-alerts"
   webhook:
     enabled: false
-    url: ""
+    url: "http://alert-manager/webhook"
+    headers:
+      X-Auth-Token: "your-token"
   email:
     enabled: false
     smtp_server: "smtp.example.com:587"
-    recipients: []
+    username: "alert@example.com"
+    password: "password"
+    recipients:
+      - "admin@example.com"
+      - "ops@example.com"
+
+storage:
+  enabled: true
+  driver: "sqlite"
+  dsn: "./data/k8s-inspector.db"
+  max_conns: 10
+  cleanup_days: 90
+
+server:
+  enabled: true
+  port: 8080
+  host: "0.0.0.0"
+  auth:
+    enabled: false
+    username: "admin"
+    password: "password"

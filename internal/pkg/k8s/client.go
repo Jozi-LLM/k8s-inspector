@@ -3,9 +3,9 @@ package k8s
 import (
 	"context"
 	"fmt"
+	"os"
 	"path/filepath"
 
-	"github.com/mitchellh/go-homedir"
 	"github.com/ym/k8s-inspector/internal/pkg/utils"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -24,7 +24,11 @@ func NewClient(kubeconfig, context string) (*Client, error) {
 
 	// 如果kubeconfig为空，尝试从默认位置加载
 	if kubeconfig == "" {
-		if home, err := homedir.Dir(); err == nil {
+		home := os.Getenv("HOME")
+		if home == "" {
+			home = os.Getenv("USERPROFILE")
+		}
+		if home != "" {
 			kubeconfig = filepath.Join(home, ".kube", "config")
 		}
 	}

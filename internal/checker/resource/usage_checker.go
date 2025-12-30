@@ -9,7 +9,6 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/ym/k8s-inspector/internal/checker"
 	"github.com/ym/k8s-inspector/internal/pkg/k8s"
 	"github.com/ym/k8s-inspector/internal/pkg/types"
 	"github.com/ym/k8s-inspector/internal/pkg/utils"
@@ -738,9 +737,4 @@ func formatBytes(bytes int64) string {
 	}
 	return fmt.Sprintf("%.1f %ciB",
 		float64(bytes)/float64(div), "KMGTPE"[exp])
-}
-
-// 注册检查器
-func init() {
-	checker.Register(&ResourceUsageChecker{})
 }
