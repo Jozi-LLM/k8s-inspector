@@ -13,6 +13,8 @@ type Config struct {
 	Inspector InspectorConfig `yaml:"inspector"`
 	Logging   LoggingConfig   `yaml:"logging"`
 	Alerting  AlertingConfig  `yaml:"alerting"`
+	Storage   StorageConfig   `yaml:"storage"`
+	Server    ServerConfig    `yaml:"server"`
 }
 
 type InspectorConfig struct {
@@ -55,11 +57,13 @@ type AlertingConfig struct {
 type SlackConfig struct {
 	Enabled bool   `yaml:"enabled"`
 	Webhook string `yaml:"webhook"`
+	Channel string `yaml:"channel"`
 }
 
 type WebhookConfig struct {
-	Enabled bool   `yaml:"enabled"`
-	URL     string `yaml:"url"`
+	Enabled bool              `yaml:"enabled"`
+	URL     string            `yaml:"url"`
+	Headers map[string]string `yaml:"headers"`
 }
 
 type EmailConfig struct {
@@ -68,11 +72,40 @@ type EmailConfig struct {
 	Recipients []string `yaml:"recipients"`
 }
 
+type StorageConfig struct {
+	Enabled  bool   `yaml:"enabled"`
+	Driver   string `yaml:"driver"`
+	DSN      string `yaml:"dsn"`
+	MaxConns int    `yaml:"max_conns"`
+}
+
+type ServerConfig struct {
+	Enabled bool   `yaml:"enabled"`
+	Port    int    `yaml:"port"`
+	Host    string `yaml:"host"`
+}
+
 // 添加默认配置
 func DefaultConfig() *Config {
+	home := os.Getenv("HOME")
+	if home == "" {
+		home = os.Getenv("USERPROFILE")
+	}
+	kubeconfig := ""
+	if home != "" {
+		kubeconfig = filepath.Join(home, ".kube", "config")
+	}
+
 	return &Config{
 		Inspector: InspectorConfig{
 			Schedule: "0 */6 * * *",
+			Clusters: []Cluster{
+				{
+					Name:       "default",
+					Kubeconfig: kubeconfig,
+					Context:    "",
+				},
+			},
 			Reporting: ReportConfig{
 				Formats:   []string{"console", "html"},
 				OutputDir: "./reports",

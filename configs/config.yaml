@@ -1,14 +1,11 @@
 # configs/config-full.yaml
-inspection:
+inspector:
   schedule: "0 */6 * * *"  # 每6小时执行一次
-  
+
   clusters:
     - name: "production"
       kubeconfig: "$HOME/.kube/config"
-      context: "prod-cluster"
-    - name: "staging"
-      kubeconfig: "$HOME/.kube/config"
-      context: "staging-cluster"
+      context: ""
   
   checks:
     enabled:

@@ -13,6 +13,7 @@ import (
 	"github.com/ym/k8s-inspector/internal/pkg/utils"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	gormlogger "gorm.io/gorm/logger"
 )
 
 // 存储管理器
@@ -330,6 +331,54 @@ func (m *StorageManager) Close() error {
 		return err
 	}
 	return sqlDB.Close()
+}
+
+// GetScoreHistory 获取健康分历史
+func (m *StorageManager) GetScoreHistory(cluster string, days int) ([]types.ScoreHistory, error) {
+	var records []InspectionRecord
+
+	query := m.db.Model(&InspectionRecord{}).
+		Where("cluster_name = ?", cluster).
+		Where("timestamp >= DATE('now', ? || ' days')", -days).
+		Order("timestamp ASC")
+
+	if err := query.Find(&records).Error; err != nil {
+		return nil, err
+	}
+
+	var history []types.ScoreHistory
+	for _, record := range records {
+		history = append(history, types.ScoreHistory{
+			Date:  record.Timestamp.Format("2006-01-02"),
+			Score: record.Score,
+		})
+	}
+
+	return history, nil
+}
+
+// GetCategoryDistribution 获取分类统计
+func (m *StorageManager) GetCategoryDistribution(cluster string) ([]types.CategoryCount, error) {
+	var records []CheckDetailRecord
+
+	query := m.db.Model(&CheckDetailRecord{}).
+		Select("category, COUNT(*) as count").
+		Group("category").
+		Order("category ASC")
+
+	if err := query.Find(&records).Error; err != nil {
+		return nil, err
+	}
+
+	var distribution []types.CategoryCount
+	for _, record := range records {
+		distribution = append(distribution, types.CategoryCount{
+			Category: record.Category,
+			Count:    1,
+		})
+	}
+
+	return distribution, nil
 }
 
 // 生成唯一ID

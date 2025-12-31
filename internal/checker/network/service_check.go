@@ -34,7 +34,7 @@ func (c *ServiceChecker) RequiredPermissions() []string {
 }
 
 func (c *ServiceChecker) Execute(ctx context.Context, client *k8s.Client) ([]types.CheckDetail, error) {
-	logger := utils.GetLogger()
+	logger := utils.GetGlobalLogger()
 	logger.Infow("开始执行Service检查", "checker", c.Name())
 
 	startTime := time.Now()
@@ -136,8 +136,6 @@ func (c *ServiceChecker) Execute(ctx context.Context, client *k8s.Client) ([]typ
 
 func (c *ServiceChecker) checkService(ctx context.Context, client *k8s.Client, service corev1.Service) []types.CheckDetail {
 	var results []types.CheckDetail
-	serviceName := service.Name
-	namespace := service.Namespace
 
 	// 1. 检查Service类型
 	results = append(results, c.checkServiceType(service)...)
@@ -640,9 +638,4 @@ func (c *ServiceChecker) checkSessionAffinity(service corev1.Service) []types.Ch
 	}
 
 	return results
-}
-
-// 注册检查器
-func init() {
-	Register(&ServiceChecker{})
 }

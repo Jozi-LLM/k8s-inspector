@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/ym/k8s-inspector/internal/alerting"
 	"github.com/ym/k8s-inspector/internal/checker"
 	"github.com/ym/k8s-inspector/internal/pkg/config"
 	"github.com/ym/k8s-inspector/internal/pkg/k8s"
@@ -14,14 +15,16 @@ import (
 )
 
 type InspectionEngine struct {
-	config   *config.InspectorConfig
-	checkers []string
+	config       *config.InspectorConfig
+	checkers     []string
+	alertManager *alerting.AlertManager
 }
 
-func NewInspectionEngine(config *config.InspectorConfig) *InspectionEngine {
+func NewInspectionEngine(config *config.InspectorConfig, alertManager *alerting.AlertManager) *InspectionEngine {
 	return &InspectionEngine{
-		config:   config,
-		checkers: config.Checks.Enabled,
+		config:       config,
+		checkers:     config.Checks.Enabled,
+		alertManager: alertManager,
 	}
 }
 

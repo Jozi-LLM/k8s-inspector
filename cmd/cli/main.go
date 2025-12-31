@@ -5,17 +5,19 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/ym/k8s-inspector/internal/alerting"
 	"github.com/ym/k8s-inspector/internal/analyzer"
+	"github.com/ym/k8s-inspector/internal/checker"
 	"github.com/ym/k8s-inspector/internal/pkg/config"
 	"github.com/ym/k8s-inspector/internal/pkg/k8s"
 	"github.com/ym/k8s-inspector/internal/pkg/types"
 	"github.com/ym/k8s-inspector/internal/pkg/utils"
+	"github.com/ym/k8s-inspector/internal/reporter"
 	"github.com/ym/k8s-inspector/internal/scheduler"
 	"github.com/ym/k8s-inspector/internal/storage"
 )
@@ -44,8 +46,11 @@ func main() {
 		log.Fatalf("初始化日志失败: %v", err)
 	}
 
-	logger := utils.GetLogger()
+	logger := utils.GetGlobalLogger()
 	defer logger.Sync()
+
+	// 初始化并注册所有检查器
+	checker.InitCheckers()
 
 	// 创建上下文
 	ctx, cancel := context.WithCancel(context.Background())
@@ -79,8 +84,13 @@ func main() {
 }
 
 func runInspection(ctx context.Context, cfg *config.Config) error {
-	logger := utils.GetLogger()
+	logger := utils.GetGlobalLogger()
 	logger.Info("开始集群巡检...")
+
+	// 检查集群配置
+	if len(cfg.Inspector.Clusters) == 0 {
+		return fmt.Errorf("配置文件中没有配置集群信息")
+	}
 
 	// 初始化存储
 	var storageManager *storage.StorageManager
@@ -122,8 +132,8 @@ func runInspection(ctx context.Context, cfg *config.Config) error {
 
 	// 初始化K8s客户端
 	client, err := k8s.NewClient(
-		cfg.Inspection.Clusters[0].Kubeconfig,
-		cfg.Inspection.Clusters[0].Context,
+		cfg.Inspector.Clusters[0].Kubeconfig,
+		cfg.Inspector.Clusters[0].Context,
 	)
 	if err != nil {
 		return fmt.Errorf("创建K8s客户端失败: %v", err)
@@ -135,10 +145,10 @@ func runInspection(ctx context.Context, cfg *config.Config) error {
 	}
 
 	// 创建巡检引擎
-	engine := analyzer.NewInspectionEngine(&cfg.Inspection, alertManager)
+	engine := analyzer.NewInspectionEngine(&cfg.Inspector, alertManager)
 
 	// 运行巡检
-	result, err := engine.Run(ctx, client, cfg.Inspection.Clusters[0].Name)
+	result, err := engine.Run(ctx, client, cfg.Inspector.Clusters[0].Name)
 	if err != nil {
 		return fmt.Errorf("巡检执行失败: %v", err)
 	}
@@ -153,16 +163,16 @@ func runInspection(ctx context.Context, cfg *config.Config) error {
 	// 生成报告
 	reporters := []reporter.Reporter{}
 
-	for _, format := range cfg.Inspection.Reporting.Formats {
+	for _, format := range cfg.Inspector.Reporting.Formats {
 		switch format {
 		case "console":
 			reporters = append(reporters, reporter.NewConsoleReporter())
 		case "json":
 			reporters = append(reporters,
-				reporter.NewJSONReporter(cfg.Inspection.Reporting.OutputDir))
+				reporter.NewJSONReporter(cfg.Inspector.Reporting.OutputDir))
 		case "html":
 			htmlReporter := reporter.NewHTMLReporter(
-				cfg.Inspection.Reporting.OutputDir,
+				cfg.Inspector.Reporting.OutputDir,
 				"./web/templates",
 				storageManager,
 			)
@@ -186,7 +196,7 @@ func runInspection(ctx context.Context, cfg *config.Config) error {
 }
 
 func runServer(ctx context.Context, cfg *config.Config) error {
-	logger := utils.GetLogger()
+	logger := utils.GetGlobalLogger()
 	logger.Info("启动巡检服务...")
 
 	// 初始化存储
@@ -236,7 +246,7 @@ func runServer(ctx context.Context, cfg *config.Config) error {
 
 		// 查找集群配置
 		var clusterConfig *config.Cluster
-		for _, c := range cfg.Inspection.Clusters {
+		for _, c := range cfg.Inspector.Clusters {
 			if c.Name == clusterName {
 				clusterConfig = &c
 				break
@@ -254,7 +264,7 @@ func runServer(ctx context.Context, cfg *config.Config) error {
 		}
 
 		// 运行巡检
-		engine := analyzer.NewInspectionEngine(&cfg.Inspection, alertManager)
+		engine := analyzer.NewInspectionEngine(&cfg.Inspector, alertManager)
 		result, err := engine.Run(ctx, client, clusterName)
 		if err != nil {
 			return nil, err
@@ -277,15 +287,17 @@ func runServer(ctx context.Context, cfg *config.Config) error {
 	defer scheduler.Stop()
 
 	// 启动API服务器（如果启用）
+	// TODO: 实现API服务器模块
 	if cfg.Server.Enabled {
-		apiServer := api.NewServer(scheduler, storageManager, cfg)
-		go func() {
-			addr := fmt.Sprintf(":%d", cfg.Server.Port)
-			logger.Infow("启动API服务器", "addr", addr)
-			if err := http.ListenAndServe(addr, apiServer.Handler()); err != nil {
-				logger.Errorw("API服务器运行失败", "error", err)
-			}
-		}()
+		logger.Warnw("API服务器功能尚未实现，已跳过", "port", cfg.Server.Port)
+		// apiServer := api.NewServer(scheduler, storageManager, cfg)
+		// go func() {
+		// 	addr := fmt.Sprintf(":%d", cfg.Server.Port)
+		// 	logger.Infow("启动API服务器", "addr", addr)
+		// 	if err := http.ListenAndServe(addr, apiServer.Handler()); err != nil {
+		// 		logger.Errorw("API服务器运行失败", "error", err)
+		// 	}
+		// }()
 	}
 
 	logger.Info("巡检服务已启动，按Ctrl+C退出")

@@ -22,6 +22,11 @@ func NewClient(kubeconfig, context string) (*Client, error) {
 	var config *rest.Config
 	var err error
 
+	// 展开环境变量
+	if kubeconfig != "" {
+		kubeconfig = os.ExpandEnv(kubeconfig)
+	}
+
 	// 如果kubeconfig为空，尝试从默认位置加载
 	if kubeconfig == "" {
 		home := os.Getenv("HOME")
@@ -38,12 +43,25 @@ func NewClient(kubeconfig, context string) (*Client, error) {
 		loadingRules := &clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig}
 		configOverrides := &clientcmd.ConfigOverrides{}
 
+		// 如果指定了 context，尝试使用它；如果失败，回退到默认 context
 		if context != "" {
 			configOverrides.CurrentContext = context
+			// 先尝试使用指定的 context
+			config, err = clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
+				loadingRules, configOverrides).ClientConfig()
+			if err != nil {
+				// 如果指定的 context 不存在，尝试使用默认 context
+				logger := utils.GetGlobalLogger()
+				logger.Warnf("指定的 context '%s' 不存在，尝试使用默认 context: %v", context, err)
+				configOverrides.CurrentContext = ""
+				config, err = clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
+					loadingRules, configOverrides).ClientConfig()
+			}
+		} else {
+			// 使用默认 context
+			config, err = clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
+				loadingRules, configOverrides).ClientConfig()
 		}
-
-		config, err = clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
-			loadingRules, configOverrides).ClientConfig()
 	} else {
 		// 使用in-cluster配置
 		config, err = rest.InClusterConfig()

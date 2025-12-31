@@ -1,12 +1,17 @@
 package checker
 
 import (
+	"github.com/ym/k8s-inspector/internal/base"
+	"github.com/ym/k8s-inspector/internal/checker/network"
 	"github.com/ym/k8s-inspector/internal/checker/resource"
 	"github.com/ym/k8s-inspector/internal/checker/workload"
 )
 
 // InitCheckers 初始化并注册所有检查器
 func InitCheckers() {
+	// 注册集群信息检查器
+	Register(&base.ClusterInfoChecker{})
+
 	// 注册节点健康检查器
 	Register(&NodeHealthChecker{})
 
@@ -18,4 +23,7 @@ func InitCheckers() {
 
 	// 注册资源使用检查器
 	Register(&resource.ResourceUsageChecker{})
+
+	// 注册Service健康检查器
+	Register(&network.ServiceChecker{})
 }

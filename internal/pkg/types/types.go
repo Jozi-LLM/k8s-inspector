@@ -77,3 +77,13 @@ type Checker interface {
 	RequiredPermissions() []string
 	Execute(ctx context.Context, client *k8s.Client) ([]CheckDetail, error)
 }
+
+type ScoreHistory struct {
+	Date  string `json:"date"`
+	Score int    `json:"score"`
+}
+
+type CategoryCount struct {
+	Category string `json:"category"`
+	Count    int    `json:"count"`
+}
