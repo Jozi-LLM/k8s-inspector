@@ -1,0 +1,948 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes集群巡检报告 - production</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .metadata {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+        
+        .metadata-item {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .metadata-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .metadata-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .score-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .score-number {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .score-100 { color: #10b981; }
+        .score-80 { color: #f59e0b; }
+        .score-60 { color: #f97316; }
+        .score-0 { color: #ef4444; }
+        
+        .score-description {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card.passed { border-left: 5px solid #10b981; }
+        .stat-card.warning { border-left: 5px solid #f59e0b; }
+        .stat-card.failed { border-left: 5px solid #ef4444; }
+        .stat-card.error { border-left: 5px solid #8b5cf6; }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .check-results {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+        
+        .category-tab {
+            padding: 10px 20px;
+            background: #f3f4f6;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-tab:hover {
+            background: #e5e7eb;
+        }
+        
+        .category-tab.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .check-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 5px solid;
+        }
+        
+        .check-item.passed { 
+            background: #f0fdf4;
+            border-left-color: #10b981;
+        }
+        
+        .check-item.warning { 
+            background: #fffbeb;
+            border-left-color: #f59e0b;
+        }
+        
+        .check-item.failed { 
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        
+        .check-item.error { 
+            background: #f5f3ff;
+            border-left-color: #8b5cf6;
+        }
+        
+        .check-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .check-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .check-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .check-status.passed { background: #10b981; color: white; }
+        .check-status.warning { background: #f59e0b; color: white; }
+        .check-status.failed { background: #ef4444; color: white; }
+        .check-status.error { background: #8b5cf6; color: white; }
+        
+        .check-message {
+            margin-bottom: 10px;
+            color: #4b5563;
+        }
+        
+        .check-details {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .details-toggle {
+            color: #3b82f6;
+            cursor: pointer;
+            font-size: 0.9rem;
+            user-select: none;
+        }
+        
+        .details-content {
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .details-content.show {
+            display: block;
+        }
+        
+        .evidence-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .evidence-table th,
+        .evidence-table td {
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            text-align: left;
+        }
+        
+        .evidence-table th {
+            background: #f9fafb;
+            font-weight: bold;
+        }
+        
+        .recommendations {
+            background: #eff6ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .recommendations h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+        }
+        
+        .recommendation-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+            font-size: 0.9rem;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 20px;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        
+        .export-button {
+            padding: 10px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+        
+        .export-button:hover {
+            background: #2563eb;
+        }
+        
+         
+        .sub-check-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        .sub-check-status {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+        
+        .sub-check-status.passed {
+            background: #10b981;
+            color: white;
+        }
+        
+        .sub-check-status.warning {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .sub-check-status.failed {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .sub-check-status.error {
+            background: #8b5cf6;
+            color: white;
+        }
+        
+        .sub-check-message {
+            flex: 1;
+            font-size: 0.95rem;
+            color: #4b5563;
+        }
+        
+        .sub-check-suggestions {
+            margin: 5px 0 0 30px;
+            padding-left: 15px;
+        }
+        
+        .sub-check-suggestions li {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin: 3px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .charts {
+                grid-template-columns: 1fr;
+            }
+            
+            .metadata-item {
+                min-width: 100%;
+            }
+            
+            .score-number {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header">
+            <h1>Kubernetes集群巡检报告</h1>
+            <div class="metadata">
+                <div class="metadata-item">
+                    <div class="metadata-label">集群名称</div>
+                    <div class="metadata-value">production</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">巡检时间</div>
+                    <div class="metadata-value">2026-02-03 11:00:13</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">耗时</div>
+                    <div class="metadata-value">3.60 秒</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">工具版本</div>
+                    <div class="metadata-value">1.0.0</div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="export-buttons">
+            <a href="#" class="export-button" onclick="window.print()">打印报告</a>
+            <a href="#" class="export-button" id="exportPdf">导出PDF</a>
+            <a href="?format=json" class="export-button">JSON格式</a>
+        </div>
+        
+        
+        <div class="score-card">
+            <h2>集群健康评分</h2>
+            <div class="score-number score-78">78</div>
+            <div class="score-description">
+                
+                良好 - 集群状态正常
+                
+                
+            </div>
+        </div>
+        
+        
+        <div class="stats-cards">
+            <div class="stat-card passed">
+                <div class="stat-number">101</div>
+                <div class="stat-label">通过</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-number">54</div>
+                <div class="stat-label">警告</div>
+            </div>
+            <div class="stat-card failed">
+                <div class="stat-number">7</div>
+                <div class="stat-label">失败</div>
+            </div>
+            <div class="stat-card error">
+                <div class="stat-number">0</div>
+                <div class="stat-label">错误</div>
+            </div>
+        </div>
+        
+        
+        <div class="charts">
+            <div class="chart-container">
+                <canvas id="scoreTrendChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="categoryDistributionChart"></canvas>
+            </div>
+        </div>
+        
+        
+        <div class="check-results">
+            <h2>详细检查结果</h2>
+            
+            
+            <div class="category-tabs" id="categoryTabs">
+                <div class="category-tab active" data-category="all">全部 (162)</div>
+                
+                <div class="category-tab" data-category="base">base (2)</div>
+                
+                <div class="category-tab" data-category="network">network (39)</div>
+                
+                <div class="category-tab" data-category="node">node (10)</div>
+                
+                <div class="category-tab" data-category="resource">resource (10)</div>
+                
+                <div class="category-tab" data-category="workload">workload (101)</div>
+                
+            </div>
+            
+            
+            <div id="checkResults">
+                
+            </div>
+            
+            
+            <script id="checkData" type="application/json">
+                [{"category":"base","check_name":"cluster_info","check_id":"cluster_version","status":"PASS","message":"集群版本: v1.28.2","resource":"cluster","resource_type":"cluster","namespace":"","severity":"LOW","evidence":{"platform":"linux/amd64","version":"v1.28.2"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.342901345+08:00","duration":0},{"category":"base","check_name":"cluster_info","check_id":"cluster_node_count","status":"PASS","message":"节点状态: 1/1 Ready","resource":"cluster","resource_type":"cluster","namespace":"","severity":"LOW","evidence":{"readyNodes":1,"totalNodes":1},"suggestions":[],"timestamp":"2026-02-03T11:00:10.345017434+08:00","duration":0},{"category":"node","check_name":"node_health","check_id":"node_health","status":"PASS","message":"节点 jiaozi-uat 状态正常","resource":"jiaozi-uat","resource_type":"","namespace":"","severity":"LOW","evidence":{"last_heartbeat_time":"2026-02-03T10:57:34+08:00","mesage":"节点 jiaozi-uat 状态正常","node_conditions":[{"type":"NetworkUnavailable","status":"False","lastHeartbeatTime":"2026-01-29T08:27:41Z","lastTransitionTime":"2026-01-29T08:27:41Z","reason":"FlannelIsUp","message":"Flannel is running on this node"},{"type":"MemoryPressure","status":"False","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2025-10-31T03:29:28Z","reason":"KubeletHasSufficientMemory","message":"kubelet has sufficient memory available"},{"type":"DiskPressure","status":"False","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2025-10-31T03:29:28Z","reason":"KubeletHasNoDiskPressure","message":"kubelet has no disk pressure"},{"type":"PIDPressure","status":"False","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2025-10-31T03:29:28Z","reason":"KubeletHasSufficientPID","message":"kubelet has sufficient PID available"},{"type":"Ready","status":"True","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2026-01-28T16:15:51Z","reason":"KubeletReady","message":"kubelet is posting ready status"}],"ready":true},"suggestions":null,"timestamp":"2026-02-03T11:00:10.346611657+08:00","duration":0},{"category":"node","check_name":"node_health","check_id":"node_schedulable","status":"PASS","message":"节点 jiaozi-uat 可调度","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"taints":null,"unschedulable":false},"suggestions":null,"timestamp":"2026-02-03T11:00:10.3466131+08:00","duration":0},{"category":"node","check_name":"node_health","check_id":"memory_pressure","status":"PASS","message":"节点 jiaozi-uat 内存压力正常","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"memory_pressure":false,"message":"kubelet has sufficient memory available"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.34661421+08:00","duration":0},{"category":"node","check_name":"node_health","check_id":"disk_pressure","status":"PASS","message":"节点 jiaozi-uat 磁盘压力正常","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"disk_pressure":false,"message":"kubelet has no disk pressure"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.346620369+08:00","duration":0},{"category":"node","check_name":"node_health","check_id":"pid_pressure","status":"PASS","message":"节点 jiaozi-uat PID压力正常","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"message":"kubelet has sufficient PID available","pid_pressure":false},"suggestions":null,"timestamp":"2026-02-03T11:00:10.346621036+08:00","duration":0},{"category":"node","check_name":"node_health","check_id":"network_available","status":"PASS","message":"节点 jiaozi-uat 网络正常","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"addresses":[{"type":"InternalIP","address":"172.16.40.253"},{"type":"Hostname","address":"jiaozi-uat"}],"message":"Flannel is running on this node","network_unavailable":false},"suggestions":null,"timestamp":"2026-02-03T11:00:10.346622571+08:00","duration":0},{"category":"node","check_name":"node_health","check_id":"kernel_version","status":"PASS","message":"节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"architecture":"amd64","kernel_version":"5.10.134-19.1.al8.x86_64","os_image":"Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.346623569+08:00","duration":0},{"category":"node","check_name":"node_health","check_id":"container_runtime","status":"PASS","message":"节点 jiaozi-uat 容器运行时: containerd://1.6.32","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"container_runtime_version":"containerd://1.6.32","kubelet_version":"v1.28.2"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.346624274+08:00","duration":0},{"category":"node","check_name":"node_health","check_id":"operating_system","status":"PASS","message":"节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"operating_system":"linux","os_image":"Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.346624728+08:00","duration":0},{"category":"node","check_name":"node_health","check_id":"resource_summary","status":"PASS","message":"节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"cpu_allocatable":"4","cpu_capacity":"4","memory_allocatable":"15719356Ki","memory_capacity":"15821756Ki","pods_capacity":"110"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.346627618+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 状态正常","resource":"ingress-nginx-admission-create-d2qz4","resource_type":"Pod","namespace":"ingress-nginx","severity":"LOW","evidence":{"message":"","phase":"Succeeded","qos":"BestEffort","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.354401597+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"FAIL","message":"Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 有容器已终止","resource":"ingress-nginx-admission-create-d2qz4","resource_type":"Pod","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"container_statuses":[{"name":"create","state":{"terminated":{"exitCode":0,"reason":"Completed","startedAt":"2025-09-24T03:00:11Z","finishedAt":"2025-09-24T03:00:11Z","containerID":"containerd://21477677bf9c277fa7666ef2a67d69fd8ea8706778dc79b4fd3ca916a3e074e3"}},"lastState":{},"ready":false,"restartCount":0,"image":"registry.cn-hangzhou.aliyuncs.com/google_containers/kube-webhook-certgen:v20230407","imageID":"registry.cn-hangzhou.aliyuncs.com/google_containers/kube-webhook-certgen@sha256:bf362268a6ccb40dd0fd260517403b32642677628a68beede72fe2918790f9d5","containerID":"containerd://21477677bf9c277fa7666ef2a67d69fd8ea8706778dc79b4fd3ca916a3e074e3","started":false}],"running_containers":false,"total_containers":1},"suggestions":["查看容器退出代码和原因"],"timestamp":"2026-02-03T11:00:10.354403147+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"PASS","message":"Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 重启次数正常","resource":"ingress-nginx-admission-create-d2qz4","resource_type":"Pod","namespace":"ingress-nginx","severity":"LOW","evidence":{"age":"3168h0m1.354403983s","max_restarts":0,"restarting_containers":null},"suggestions":null,"timestamp":"2026-02-03T11:00:10.354404401+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"resource_limits_missing","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 的容器未设置资源限制: create","resource":"ingress-nginx-admission-create-d2qz4","resource_type":"Pod","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"containers_without_limits":["create"]},"suggestions":["为所有容器设置CPU和内存限制","参考应用实际使用情况设置合理的限制","使用Vertical Pod Autoscaler自动设置资源"],"timestamp":"2026-02-03T11:00:10.354405726+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"resource_requests_missing","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 的容器未设置资源请求: create","resource":"ingress-nginx-admission-create-d2qz4","resource_type":"Pod","namespace":"ingress-nginx","severity":"LOW","evidence":{"containers_without_requests":["create"]},"suggestions":["为所有容器设置CPU和内存请求","资源请求应该反映应用的最小资源需求"],"timestamp":"2026-02-03T11:00:10.354406433+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"readiness_probe_missing","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 的容器未设置就绪探针: create","resource":"ingress-nginx-admission-create-d2qz4","resource_type":"Pod","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"containers_without_readiness":["create"]},"suggestions":["为所有容器设置就绪探针","就绪探针确保流量只转发到完全准备好的Pod"],"timestamp":"2026-02-03T11:00:10.354408426+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"liveness_probe_missing","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 的容器未设置存活探针: create","resource":"ingress-nginx-admission-create-d2qz4","resource_type":"Pod","namespace":"ingress-nginx","severity":"LOW","evidence":{"containers_without_liveness":["create"]},"suggestions":["为关键容器设置存活探针","存活探针可以自动重启失败的容器"],"timestamp":"2026-02-03T11:00:10.354408992+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"run_as_root","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 的容器以root用户运行: create","resource":"ingress-nginx-admission-create-d2qz4","resource_type":"Pod","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"root_containers":["create"]},"suggestions":["避免以root用户运行容器","创建非root用户运行应用","在Dockerfile中使用USER指令"],"timestamp":"2026-02-03T11:00:10.354410052+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 状态正常","resource":"ingress-nginx-admission-patch-7nk6m","resource_type":"Pod","namespace":"ingress-nginx","severity":"LOW","evidence":{"message":"","phase":"Succeeded","qos":"BestEffort","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.354417028+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"FAIL","message":"Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 有容器已终止","resource":"ingress-nginx-admission-patch-7nk6m","resource_type":"Pod","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"container_statuses":[{"name":"patch","state":{"terminated":{"exitCode":0,"reason":"Completed","startedAt":"2025-09-24T03:00:11Z","finishedAt":"2025-09-24T03:00:11Z","containerID":"containerd://393cf9a866de371df08defb3d3b8ee70adc2f8352e8494dcd88b28ed2e49c6b9"}},"lastState":{},"ready":false,"restartCount":0,"image":"registry.cn-hangzhou.aliyuncs.com/google_containers/kube-webhook-certgen:v20230407","imageID":"registry.cn-hangzhou.aliyuncs.com/google_containers/kube-webhook-certgen@sha256:bf362268a6ccb40dd0fd260517403b32642677628a68beede72fe2918790f9d5","containerID":"containerd://393cf9a866de371df08defb3d3b8ee70adc2f8352e8494dcd88b28ed2e49c6b9","started":false}],"running_containers":false,"total_containers":1},"suggestions":["查看容器退出代码和原因"],"timestamp":"2026-02-03T11:00:10.354417722+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"PASS","message":"Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 重启次数正常","resource":"ingress-nginx-admission-patch-7nk6m","resource_type":"Pod","namespace":"ingress-nginx","severity":"LOW","evidence":{"age":"3168h0m1.354418107s","max_restarts":0,"restarting_containers":null},"suggestions":null,"timestamp":"2026-02-03T11:00:10.354418286+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"resource_limits_missing","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 的容器未设置资源限制: patch","resource":"ingress-nginx-admission-patch-7nk6m","resource_type":"Pod","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"containers_without_limits":["patch"]},"suggestions":["为所有容器设置CPU和内存限制","参考应用实际使用情况设置合理的限制","使用Vertical Pod Autoscaler自动设置资源"],"timestamp":"2026-02-03T11:00:10.354418876+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"resource_requests_missing","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 的容器未设置资源请求: patch","resource":"ingress-nginx-admission-patch-7nk6m","resource_type":"Pod","namespace":"ingress-nginx","severity":"LOW","evidence":{"containers_without_requests":["patch"]},"suggestions":["为所有容器设置CPU和内存请求","资源请求应该反映应用的最小资源需求"],"timestamp":"2026-02-03T11:00:10.354419242+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"readiness_probe_missing","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 的容器未设置就绪探针: patch","resource":"ingress-nginx-admission-patch-7nk6m","resource_type":"Pod","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"containers_without_readiness":["patch"]},"suggestions":["为所有容器设置就绪探针","就绪探针确保流量只转发到完全准备好的Pod"],"timestamp":"2026-02-03T11:00:10.354419976+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"liveness_probe_missing","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 的容器未设置存活探针: patch","resource":"ingress-nginx-admission-patch-7nk6m","resource_type":"Pod","namespace":"ingress-nginx","severity":"LOW","evidence":{"containers_without_liveness":["patch"]},"suggestions":["为关键容器设置存活探针","存活探针可以自动重启失败的容器"],"timestamp":"2026-02-03T11:00:10.354420372+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"run_as_root","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 的容器以root用户运行: patch","resource":"ingress-nginx-admission-patch-7nk6m","resource_type":"Pod","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"root_containers":["patch"]},"suggestions":["避免以root用户运行容器","创建非root用户运行应用","在Dockerfile中使用USER指令"],"timestamp":"2026-02-03T11:00:10.354421002+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod ingress-nginx/ingress-nginx-controller-5f68f8d58f-mrpbf 状态正常","resource":"ingress-nginx-controller-5f68f8d58f-mrpbf","resource_type":"Pod","namespace":"ingress-nginx","severity":"LOW","evidence":{"message":"","phase":"Running","qos":"Burstable","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.354423056+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"PASS","message":"Pod ingress-nginx/ingress-nginx-controller-5f68f8d58f-mrpbf 所有容器运行正常","resource":"ingress-nginx-controller-5f68f8d58f-mrpbf","resource_type":"Pod","namespace":"ingress-nginx","severity":"LOW","evidence":{"container_statuses":[{"name":"controller","state":{"running":{"startedAt":"2026-01-29T08:27:52Z"}},"lastState":{"terminated":{"exitCode":255,"reason":"Unknown","startedAt":"2026-01-29T08:16:25Z","finishedAt":"2026-01-29T08:27:24Z","containerID":"containerd://d1b395ad865d6c0dac54096a3b5b335734b32697325316d43e41157e685c17f5"}},"ready":true,"restartCount":40,"image":"registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-ingress-controller:v1.8.1","imageID":"registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-ingress-controller@sha256:cddf819180b5472dd238dccf2148eb8ee4de104293f30fecc3cbd26b47401b13","containerID":"containerd://375a0a761f35fb6dd1b51fe200a98eae537b0c4c1fabf31a4d163b33af1090a2","started":true}],"running_containers":true,"total_containers":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.354423462+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-controller-5f68f8d58f-mrpbf 重启次数较多: 40次","resource":"ingress-nginx-controller-5f68f8d58f-mrpbf","resource_type":"Pod","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"age":"2303h0m57.354424988s","max_restarts":40,"restarting_containers":["controller(40)"]},"suggestions":["检查容器日志查找重启原因","检查内存限制是否过小","检查应用是否有内存泄漏","检查健康检查探针配置"],"timestamp":"2026-02-03T11:00:10.354425212+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"resource_limits_missing","status":"WARNING","message":"Pod ingress-nginx/ingress-nginx-controller-5f68f8d58f-mrpbf 的容器未设置资源限制: controller","resource":"ingress-nginx-controller-5f68f8d58f-mrpbf","resource_type":"Pod","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"containers_without_limits":["controller"]},"suggestions":["为所有容器设置CPU和内存限制","参考应用实际使用情况设置合理的限制","使用Vertical Pod Autoscaler自动设置资源"],"timestamp":"2026-02-03T11:00:10.354425751+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod jiaozi/jiaozi-app-deployment-cd489cd6d-gz429 状态正常","resource":"jiaozi-app-deployment-cd489cd6d-gz429","resource_type":"Pod","namespace":"jiaozi","severity":"LOW","evidence":{"message":"","phase":"Running","qos":"Burstable","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.355850634+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"PASS","message":"Pod jiaozi/jiaozi-app-deployment-cd489cd6d-gz429 所有容器运行正常","resource":"jiaozi-app-deployment-cd489cd6d-gz429","resource_type":"Pod","namespace":"jiaozi","severity":"LOW","evidence":{"container_statuses":[{"name":"jozi-app","state":{"running":{"startedAt":"2026-01-29T08:34:00Z"}},"lastState":{},"ready":true,"restartCount":0,"image":"registry.cn-hangzhou.aliyuncs.com/jiaoziera/jiaozi_app:01231547","imageID":"registry.cn-hangzhou.aliyuncs.com/jiaoziera/jiaozi_app@sha256:b166c9fef858664f7d65f50c28dac9ed9300c1cdc1a4cb3c019dec4e5549d0af","containerID":"containerd://653cd894e10d262c4c270aedaf13b471c3ec4018e080eb8601a30f6fad5491c1","started":true}],"running_containers":true,"total_containers":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.35585159+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"PASS","message":"Pod jiaozi/jiaozi-app-deployment-cd489cd6d-gz429 重启次数正常","resource":"jiaozi-app-deployment-cd489cd6d-gz429","resource_type":"Pod","namespace":"jiaozi","severity":"LOW","evidence":{"age":"114h26m11.355852454s","max_restarts":0,"restarting_containers":null},"suggestions":null,"timestamp":"2026-02-03T11:00:10.355852949+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"run_as_root","status":"WARNING","message":"Pod jiaozi/jiaozi-app-deployment-cd489cd6d-gz429 的容器以root用户运行: jozi-app","resource":"jiaozi-app-deployment-cd489cd6d-gz429","resource_type":"Pod","namespace":"jiaozi","severity":"MEDIUM","evidence":{"root_containers":["jozi-app"]},"suggestions":["避免以root用户运行容器","创建非root用户运行应用","在Dockerfile中使用USER指令"],"timestamp":"2026-02-03T11:00:10.355855395+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod jiaozi/jiaozi-app-deployment-cd489cd6d-lv5bm 状态正常","resource":"jiaozi-app-deployment-cd489cd6d-lv5bm","resource_type":"Pod","namespace":"jiaozi","severity":"LOW","evidence":{"message":"","phase":"Running","qos":"Burstable","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.35585611+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"PASS","message":"Pod jiaozi/jiaozi-app-deployment-cd489cd6d-lv5bm 所有容器运行正常","resource":"jiaozi-app-deployment-cd489cd6d-lv5bm","resource_type":"Pod","namespace":"jiaozi","severity":"LOW","evidence":{"container_statuses":[{"name":"jozi-app","state":{"running":{"startedAt":"2026-01-29T08:34:10Z"}},"lastState":{},"ready":true,"restartCount":0,"image":"registry.cn-hangzhou.aliyuncs.com/jiaoziera/jiaozi_app:01231547","imageID":"registry.cn-hangzhou.aliyuncs.com/jiaoziera/jiaozi_app@sha256:b166c9fef858664f7d65f50c28dac9ed9300c1cdc1a4cb3c019dec4e5549d0af","containerID":"containerd://de4983c0a2f549beba01dabeb370b061e813a4cbfe4613cc75967771d996f8ec","started":true}],"running_containers":true,"total_containers":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.355858294+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"PASS","message":"Pod jiaozi/jiaozi-app-deployment-cd489cd6d-lv5bm 重启次数正常","resource":"jiaozi-app-deployment-cd489cd6d-lv5bm","resource_type":"Pod","namespace":"jiaozi","severity":"LOW","evidence":{"age":"114h26m0.355858722s","max_restarts":0,"restarting_containers":null},"suggestions":null,"timestamp":"2026-02-03T11:00:10.35585891+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"run_as_root","status":"WARNING","message":"Pod jiaozi/jiaozi-app-deployment-cd489cd6d-lv5bm 的容器以root用户运行: jozi-app","resource":"jiaozi-app-deployment-cd489cd6d-lv5bm","resource_type":"Pod","namespace":"jiaozi","severity":"MEDIUM","evidence":{"root_containers":["jozi-app"]},"suggestions":["避免以root用户运行容器","创建非root用户运行应用","在Dockerfile中使用USER指令"],"timestamp":"2026-02-03T11:00:10.3558597+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod kubernetes-dashboard/dashboard-metrics-scraper-5bd5dd4784-rrxxp 状态正常","resource":"dashboard-metrics-scraper-5bd5dd4784-rrxxp","resource_type":"Pod","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"message":"","phase":"Running","qos":"Burstable","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.357273989+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"PASS","message":"Pod kubernetes-dashboard/dashboard-metrics-scraper-5bd5dd4784-rrxxp 所有容器运行正常","resource":"dashboard-metrics-scraper-5bd5dd4784-rrxxp","resource_type":"Pod","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"container_statuses":[{"name":"dashboard-metrics-scraper","state":{"running":{"startedAt":"2026-01-29T08:27:52Z"}},"lastState":{"terminated":{"exitCode":255,"reason":"Unknown","startedAt":"2026-01-28T16:15:51Z","finishedAt":"2026-01-29T08:27:25Z","containerID":"containerd://e7832c83418ef7b376426dfea72a0752c5159516dfd21a01a8b50a64113a4492"}},"ready":true,"restartCount":28,"image":"registry.aliyuncs.com/google_containers/metrics-scraper:v1.0.8","imageID":"registry.aliyuncs.com/google_containers/metrics-scraper@sha256:76049887f07a0476dc93efc2d3569b9529bf982b22d29f356092ce206e98765c","containerID":"containerd://bd7c36afe26f005e25c852e19222e4cae22ecb51e5b13bff405a250cddbea4a4","started":true}],"running_containers":true,"total_containers":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.357275379+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"WARNING","message":"Pod kubernetes-dashboard/dashboard-metrics-scraper-5bd5dd4784-rrxxp 重启次数较多: 28次","resource":"dashboard-metrics-scraper-5bd5dd4784-rrxxp","resource_type":"Pod","namespace":"kubernetes-dashboard","severity":"MEDIUM","evidence":{"age":"2297h29m20.357277446s","max_restarts":28,"restarting_containers":["dashboard-metrics-scraper(28)"]},"suggestions":["检查容器日志查找重启原因","检查内存限制是否过小","检查应用是否有内存泄漏","检查健康检查探针配置"],"timestamp":"2026-02-03T11:00:10.357278272+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"readiness_probe_missing","status":"WARNING","message":"Pod kubernetes-dashboard/dashboard-metrics-scraper-5bd5dd4784-rrxxp 的容器未设置就绪探针: dashboard-metrics-scraper","resource":"dashboard-metrics-scraper-5bd5dd4784-rrxxp","resource_type":"Pod","namespace":"kubernetes-dashboard","severity":"MEDIUM","evidence":{"containers_without_readiness":["dashboard-metrics-scraper"]},"suggestions":["为所有容器设置就绪探针","就绪探针确保流量只转发到完全准备好的Pod"],"timestamp":"2026-02-03T11:00:10.357281358+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod kubernetes-dashboard/kubernetes-dashboard-7cf975b984-8p8lh 状态正常","resource":"kubernetes-dashboard-7cf975b984-8p8lh","resource_type":"Pod","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"message":"","phase":"Running","qos":"Burstable","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.357282735+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"PASS","message":"Pod kubernetes-dashboard/kubernetes-dashboard-7cf975b984-8p8lh 所有容器运行正常","resource":"kubernetes-dashboard-7cf975b984-8p8lh","resource_type":"Pod","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"container_statuses":[{"name":"kubernetes-dashboard","state":{"running":{"startedAt":"2026-01-29T08:27:53Z"}},"lastState":{"terminated":{"exitCode":255,"reason":"Unknown","startedAt":"2026-01-28T16:15:52Z","finishedAt":"2026-01-29T08:27:25Z","containerID":"containerd://d67f78d61690943a3a5aaee28609709fb9a899f61acff2c5b19b764452bb347c"}},"ready":true,"restartCount":22,"image":"registry.aliyuncs.com/google_containers/dashboard:v2.7.0","imageID":"registry.aliyuncs.com/google_containers/dashboard@sha256:2e500d29e9d5f4a086b908eb8dfe7ecac57d2ab09d65b24f588b1d449841ef93","containerID":"containerd://df8e279442a3b08ac96b3888538c731499c3e9ffa849a529bce9d5e3ff31a029","started":true}],"running_containers":true,"total_containers":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.357283464+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"WARNING","message":"Pod kubernetes-dashboard/kubernetes-dashboard-7cf975b984-8p8lh 重启次数较多: 22次","resource":"kubernetes-dashboard-7cf975b984-8p8lh","resource_type":"Pod","namespace":"kubernetes-dashboard","severity":"MEDIUM","evidence":{"age":"2297h29m20.357284377s","max_restarts":22,"restarting_containers":["kubernetes-dashboard(22)"]},"suggestions":["检查容器日志查找重启原因","检查内存限制是否过小","检查应用是否有内存泄漏","检查健康检查探针配置"],"timestamp":"2026-02-03T11:00:10.357284625+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"readiness_probe_missing","status":"WARNING","message":"Pod kubernetes-dashboard/kubernetes-dashboard-7cf975b984-8p8lh 的容器未设置就绪探针: kubernetes-dashboard","resource":"kubernetes-dashboard-7cf975b984-8p8lh","resource_type":"Pod","namespace":"kubernetes-dashboard","severity":"MEDIUM","evidence":{"containers_without_readiness":["kubernetes-dashboard"]},"suggestions":["为所有容器设置就绪探针","就绪探针确保流量只转发到完全准备好的Pod"],"timestamp":"2026-02-03T11:00:10.357285924+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod monitoring/grafana-5598848c7f-qh85g 状态正常","resource":"grafana-5598848c7f-qh85g","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"message":"","phase":"Running","qos":"Burstable","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360064702+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"PASS","message":"Pod monitoring/grafana-5598848c7f-qh85g 所有容器运行正常","resource":"grafana-5598848c7f-qh85g","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"container_statuses":[{"name":"grafana","state":{"running":{"startedAt":"2026-01-30T02:50:43Z"}},"lastState":{},"ready":true,"restartCount":0,"image":"registry.cn-hangzhou.aliyuncs.com/aliyun-wym/grafana:12.3.0","imageID":"registry.cn-hangzhou.aliyuncs.com/aliyun-wym/grafana@sha256:7b3879a91d13357379c55d9f9ebea9cf02c4637ff9321e13b4c032e818703ff2","containerID":"containerd://6917d726aa81709c258042d3ce1897050def412abbcfb23b4b72946176ac7a50","started":true}],"running_containers":true,"total_containers":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360066149+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"PASS","message":"Pod monitoring/grafana-5598848c7f-qh85g 重启次数正常","resource":"grafana-5598848c7f-qh85g","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"age":"96h9m27.360067101s","max_restarts":0,"restarting_containers":null},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360067729+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"run_as_root","status":"WARNING","message":"Pod monitoring/grafana-5598848c7f-qh85g 的容器以root用户运行: grafana","resource":"grafana-5598848c7f-qh85g","resource_type":"Pod","namespace":"monitoring","severity":"MEDIUM","evidence":{"root_containers":["grafana"]},"suggestions":["避免以root用户运行容器","创建非root用户运行应用","在Dockerfile中使用USER指令"],"timestamp":"2026-02-03T11:00:10.360071375+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod monitoring/loki-fcbb6d57c-lvnl4 状态正常","resource":"loki-fcbb6d57c-lvnl4","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"message":"","phase":"Running","qos":"Burstable","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.36007736+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"PASS","message":"Pod monitoring/loki-fcbb6d57c-lvnl4 所有容器运行正常","resource":"loki-fcbb6d57c-lvnl4","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"container_statuses":[{"name":"loki","state":{"running":{"startedAt":"2026-01-30T03:50:23Z"}},"lastState":{},"ready":true,"restartCount":0,"image":"registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools:loki-2.8.0","imageID":"registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools@sha256:8a74987b5f6e9064a62eab0de22c1beef9c948641d4a753f87a4e5971e1cc46d","containerID":"containerd://7d4938b196b58d4243b89088e3dddc774191cd086fdea40edaac3275b1dab061","started":true}],"running_containers":true,"total_containers":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360077894+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"PASS","message":"Pod monitoring/loki-fcbb6d57c-lvnl4 重启次数正常","resource":"loki-fcbb6d57c-lvnl4","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"age":"95h9m47.360078414s","max_restarts":0,"restarting_containers":null},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360078656+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"readiness_probe_missing","status":"WARNING","message":"Pod monitoring/loki-fcbb6d57c-lvnl4 的容器未设置就绪探针: loki","resource":"loki-fcbb6d57c-lvnl4","resource_type":"Pod","namespace":"monitoring","severity":"MEDIUM","evidence":{"containers_without_readiness":["loki"]},"suggestions":["为所有容器设置就绪探针","就绪探针确保流量只转发到完全准备好的Pod"],"timestamp":"2026-02-03T11:00:10.360080092+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"liveness_probe_missing","status":"WARNING","message":"Pod monitoring/loki-fcbb6d57c-lvnl4 的容器未设置存活探针: loki","resource":"loki-fcbb6d57c-lvnl4","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"containers_without_liveness":["loki"]},"suggestions":["为关键容器设置存活探针","存活探针可以自动重启失败的容器"],"timestamp":"2026-02-03T11:00:10.360080923+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"run_as_root","status":"WARNING","message":"Pod monitoring/loki-fcbb6d57c-lvnl4 的容器以root用户运行: loki","resource":"loki-fcbb6d57c-lvnl4","resource_type":"Pod","namespace":"monitoring","severity":"MEDIUM","evidence":{"root_containers":["loki"]},"suggestions":["避免以root用户运行容器","创建非root用户运行应用","在Dockerfile中使用USER指令"],"timestamp":"2026-02-03T11:00:10.360082057+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod monitoring/node-exporter-vq2tr 状态正常","resource":"node-exporter-vq2tr","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"message":"","phase":"Running","qos":"Burstable","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360082794+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"PASS","message":"Pod monitoring/node-exporter-vq2tr 所有容器运行正常","resource":"node-exporter-vq2tr","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"container_statuses":[{"name":"node-exporter","state":{"running":{"startedAt":"2026-01-30T06:24:18Z"}},"lastState":{},"ready":true,"restartCount":0,"image":"registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools:node-exporter-latest","imageID":"registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools@sha256:d5b2a2e2bb07a4a5a7c4bd9e54641cab63e1d2627622dbde17efc04849d3d30d","containerID":"containerd://c52ef8c8a39e6b37849346f91eff317c262c55bc517cb7df4ebd911dd9716c64","started":true}],"running_containers":true,"total_containers":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360083625+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"PASS","message":"Pod monitoring/node-exporter-vq2tr 重启次数正常","resource":"node-exporter-vq2tr","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"age":"92h35m53.360084066s","max_restarts":0,"restarting_containers":null},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360084266+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"node_affinity_set","status":"PASS","message":"Pod monitoring/node-exporter-vq2tr 设置了节点亲和性","resource":"node-exporter-vq2tr","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"node_affinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchFields":[{"key":"metadata.name","operator":"In","values":["jiaozi-uat"]}]}]}}},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360089028+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"readiness_probe_missing","status":"WARNING","message":"Pod monitoring/node-exporter-vq2tr 的容器未设置就绪探针: node-exporter","resource":"node-exporter-vq2tr","resource_type":"Pod","namespace":"monitoring","severity":"MEDIUM","evidence":{"containers_without_readiness":["node-exporter"]},"suggestions":["为所有容器设置就绪探针","就绪探针确保流量只转发到完全准备好的Pod"],"timestamp":"2026-02-03T11:00:10.360090023+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"liveness_probe_missing","status":"WARNING","message":"Pod monitoring/node-exporter-vq2tr 的容器未设置存活探针: node-exporter","resource":"node-exporter-vq2tr","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"containers_without_liveness":["node-exporter"]},"suggestions":["为关键容器设置存活探针","存活探针可以自动重启失败的容器"],"timestamp":"2026-02-03T11:00:10.360090536+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 状态正常","resource":"prometheus-server-c7bbbdbd5-f2gms","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"message":"","phase":"Running","qos":"Burstable","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360091595+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"PASS","message":"Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 所有容器运行正常","resource":"prometheus-server-c7bbbdbd5-f2gms","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"container_statuses":[{"name":"prometheus","state":{"running":{"startedAt":"2026-01-30T06:07:11Z"}},"lastState":{},"ready":true,"restartCount":0,"image":"registry.cn-hangzhou.aliyuncs.com/google_containers/prometheus:v2.48.0","imageID":"registry.cn-hangzhou.aliyuncs.com/google_containers/prometheus@sha256:8746f9f324e8f8956dfe30e1abb9ff0a1af4024bae623e0f7feeaa8562faa119","containerID":"containerd://96f4784c923704577cad604bc2df28a7eecd7067544a27f3368b83ba5c47987c","started":true}],"running_containers":true,"total_containers":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360092473+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"PASS","message":"Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 重启次数正常","resource":"prometheus-server-c7bbbdbd5-f2gms","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"age":"92h53m0.360095642s","max_restarts":0,"restarting_containers":null},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360095936+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"readiness_probe_missing","status":"WARNING","message":"Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 的容器未设置就绪探针: prometheus","resource":"prometheus-server-c7bbbdbd5-f2gms","resource_type":"Pod","namespace":"monitoring","severity":"MEDIUM","evidence":{"containers_without_readiness":["prometheus"]},"suggestions":["为所有容器设置就绪探针","就绪探针确保流量只转发到完全准备好的Pod"],"timestamp":"2026-02-03T11:00:10.360097373+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"liveness_probe_missing","status":"WARNING","message":"Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 的容器未设置存活探针: prometheus","resource":"prometheus-server-c7bbbdbd5-f2gms","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"containers_without_liveness":["prometheus"]},"suggestions":["为关键容器设置存活探针","存活探针可以自动重启失败的容器"],"timestamp":"2026-02-03T11:00:10.360097846+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"run_as_root","status":"WARNING","message":"Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 的容器以root用户运行: prometheus","resource":"prometheus-server-c7bbbdbd5-f2gms","resource_type":"Pod","namespace":"monitoring","severity":"MEDIUM","evidence":{"root_containers":["prometheus"]},"suggestions":["避免以root用户运行容器","创建非root用户运行应用","在Dockerfile中使用USER指令"],"timestamp":"2026-02-03T11:00:10.360098559+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_phase","status":"PASS","message":"Pod monitoring/promtail-g8q6z 状态正常","resource":"promtail-g8q6z","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"message":"","phase":"Running","qos":"Burstable","reason":""},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360099172+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"container_status","status":"PASS","message":"Pod monitoring/promtail-g8q6z 所有容器运行正常","resource":"promtail-g8q6z","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"container_statuses":[{"name":"promtail","state":{"running":{"startedAt":"2026-01-30T03:49:15Z"}},"lastState":{},"ready":true,"restartCount":0,"image":"registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools:promtail-2.8.0","imageID":"registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools@sha256:34a52d6030077bfccf82fdd1448831dff8881f7b4253893e72ec3e62c6b5b8b9","containerID":"containerd://d1dd90193aa21fde18203337a7dcf146c91ce55f9fe81bbe7c65ba3074fb459b","started":true}],"running_containers":true,"total_containers":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360099954+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"restart_count","status":"PASS","message":"Pod monitoring/promtail-g8q6z 重启次数正常","resource":"promtail-g8q6z","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"age":"95h10m55.36010046s","max_restarts":0,"restarting_containers":null},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360100696+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"node_affinity_set","status":"PASS","message":"Pod monitoring/promtail-g8q6z 设置了节点亲和性","resource":"promtail-g8q6z","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"node_affinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchFields":[{"key":"metadata.name","operator":"In","values":["jiaozi-uat"]}]}]}}},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360101542+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"readiness_probe_missing","status":"WARNING","message":"Pod monitoring/promtail-g8q6z 的容器未设置就绪探针: promtail","resource":"promtail-g8q6z","resource_type":"Pod","namespace":"monitoring","severity":"MEDIUM","evidence":{"containers_without_readiness":["promtail"]},"suggestions":["为所有容器设置就绪探针","就绪探针确保流量只转发到完全准备好的Pod"],"timestamp":"2026-02-03T11:00:10.360102272+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"liveness_probe_missing","status":"WARNING","message":"Pod monitoring/promtail-g8q6z 的容器未设置存活探针: promtail","resource":"promtail-g8q6z","resource_type":"Pod","namespace":"monitoring","severity":"LOW","evidence":{"containers_without_liveness":["promtail"]},"suggestions":["为关键容器设置存活探针","存活探针可以自动重启失败的容器"],"timestamp":"2026-02-03T11:00:10.360102745+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"run_as_root","status":"WARNING","message":"Pod monitoring/promtail-g8q6z 的容器以root用户运行: promtail","resource":"promtail-g8q6z","resource_type":"Pod","namespace":"monitoring","severity":"MEDIUM","evidence":{"root_containers":["promtail"]},"suggestions":["避免以root用户运行容器","创建非root用户运行应用","在Dockerfile中使用USER指令"],"timestamp":"2026-02-03T11:00:10.360103576+08:00","duration":0},{"category":"workload","check_name":"pod_health","check_id":"pod_summary","status":"FAIL","message":"Pod健康状态: 总数 12, 有问题 12","resource":"cluster","resource_type":"cluster","namespace":"","severity":"LOW","evidence":{"namespaces":9,"problem_pods":12,"total_pods":12},"suggestions":null,"timestamp":"2026-02-03T11:00:10.360104891+08:00","duration":0},{"category":"resource","check_name":"resource_usage","check_id":"node_ready","status":"PASS","message":"节点 jiaozi-uat 状态正常","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"last_heartbeat":"2026-02-03T10:57:34+08:00","message":"kubelet is posting ready status","node_conditions":[{"type":"NetworkUnavailable","status":"False","lastHeartbeatTime":"2026-01-29T08:27:41Z","lastTransitionTime":"2026-01-29T08:27:41Z","reason":"FlannelIsUp","message":"Flannel is running on this node"},{"type":"MemoryPressure","status":"False","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2025-10-31T03:29:28Z","reason":"KubeletHasSufficientMemory","message":"kubelet has sufficient memory available"},{"type":"DiskPressure","status":"False","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2025-10-31T03:29:28Z","reason":"KubeletHasNoDiskPressure","message":"kubelet has no disk pressure"},{"type":"PIDPressure","status":"False","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2025-10-31T03:29:28Z","reason":"KubeletHasSufficientPID","message":"kubelet has sufficient PID available"},{"type":"Ready","status":"True","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2026-01-28T16:15:51Z","reason":"KubeletReady","message":"kubelet is posting ready status"}],"ready":true},"suggestions":null,"timestamp":"2026-02-03T11:00:10.361657072+08:00","duration":0},{"category":"resource","check_name":"resource_usage","check_id":"node_schedulable","status":"PASS","message":"节点 jiaozi-uat 可调度","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"taints":null,"unschedulable":false},"suggestions":null,"timestamp":"2026-02-03T11:00:10.361661703+08:00","duration":0},{"category":"resource","check_name":"resource_usage","check_id":"node_resource_usage","status":"PASS","message":"节点 jiaozi-uat 资源使用情况正常","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"allocatable":{"cpu":"4","ephemeral-storage":"123293848577","hugepages-1Gi":"0","hugepages-2Mi":"0","memory":"15719356Ki","pods":"110"},"capacity":{"cpu":"4","ephemeral-storage":"133782388Ki","hugepages-1Gi":"0","hugepages-2Mi":"0","memory":"15821756Ki","pods":"110"},"conditions":[{"type":"NetworkUnavailable","status":"False","lastHeartbeatTime":"2026-01-29T08:27:41Z","lastTransitionTime":"2026-01-29T08:27:41Z","reason":"FlannelIsUp","message":"Flannel is running on this node"},{"type":"MemoryPressure","status":"False","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2025-10-31T03:29:28Z","reason":"KubeletHasSufficientMemory","message":"kubelet has sufficient memory available"},{"type":"DiskPressure","status":"False","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2025-10-31T03:29:28Z","reason":"KubeletHasNoDiskPressure","message":"kubelet has no disk pressure"},{"type":"PIDPressure","status":"False","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2025-10-31T03:29:28Z","reason":"KubeletHasSufficientPID","message":"kubelet has sufficient PID available"},{"type":"Ready","status":"True","lastHeartbeatTime":"2026-02-03T02:57:34Z","lastTransitionTime":"2026-01-28T16:15:51Z","reason":"KubeletReady","message":"kubelet is posting ready status"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:10.361662526+08:00","duration":0},{"category":"resource","check_name":"resource_usage","check_id":"disk_pressure","status":"PASS","message":"节点 jiaozi-uat 磁盘压力正常","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"disk_pressure":false,"message":"kubelet has no disk pressure"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.361664249+08:00","duration":0},{"category":"resource","check_name":"resource_usage","check_id":"pid_pressure","status":"PASS","message":"节点 jiaozi-uat PID压力正常","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"message":"kubelet has sufficient PID available","pid_pressure":false},"suggestions":null,"timestamp":"2026-02-03T11:00:10.361665112+08:00","duration":0},{"category":"resource","check_name":"resource_usage","check_id":"network_available","status":"PASS","message":"节点 jiaozi-uat 网络正常","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"addresses":[{"type":"InternalIP","address":"172.16.40.253"},{"type":"Hostname","address":"jiaozi-uat"}],"message":"Flannel is running on this node","network_unavailable":false},"suggestions":null,"timestamp":"2026-02-03T11:00:10.361666136+08:00","duration":0},{"category":"resource","check_name":"resource_usage","check_id":"kernel_version","status":"PASS","message":"节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"architecture":"amd64","kernel_version":"5.10.134-19.1.al8.x86_64","os_image":"Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.361666961+08:00","duration":0},{"category":"resource","check_name":"resource_usage","check_id":"container_runtime","status":"PASS","message":"节点 jiaozi-uat 容器运行时: containerd://1.6.32","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"container_runtime_version":"containerd://1.6.32","kubelet_version":"v1.28.2"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.36166768+08:00","duration":0},{"category":"resource","check_name":"resource_usage","check_id":"operating_system","status":"PASS","message":"节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"operating_system":"linux","os_image":"Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.36166814+08:00","duration":0},{"category":"resource","check_name":"resource_usage","check_id":"resource_summary","status":"PASS","message":"节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki","resource":"jiaozi-uat","resource_type":"Node","namespace":"","severity":"LOW","evidence":{"cpu_allocatable":"4","cpu_capacity":"4","memory_allocatable":"15719356Ki","memory_capacity":"15821756Ki","pods_capacity":"110"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.361670641+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"replica_status","status":"PASS","message":"Deployment ingress-nginx/ingress-nginx-controller 副本状态正常","resource":"ingress-nginx-controller","resource_type":"Deployment","namespace":"ingress-nginx","severity":"LOW","evidence":{"available_replicas":1,"conditions":[{"type":"Progressing","status":"True","lastUpdateTime":"2025-09-24T03:00:33Z","lastTransitionTime":"2025-09-24T03:00:09Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"ingress-nginx-controller-5f68f8d58f\" has successfully progressed."},{"type":"Available","status":"True","lastUpdateTime":"2026-01-28T16:16:06Z","lastTransitionTime":"2026-01-28T16:16:06Z","reason":"MinimumReplicasAvailable","message":"Deployment has minimum availability."}],"desired_replicas":1,"ready_replicas":1,"replicas":1,"updated_replicas":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.368057075+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"update_strategy","status":"PASS","message":"Deployment ingress-nginx/ingress-nginx-controller 更新策略: RollingUpdate","resource":"ingress-nginx-controller","resource_type":"Deployment","namespace":"ingress-nginx","severity":"LOW","evidence":{"max_surge":"25%","max_unavailable":"25%","strategy_type":"RollingUpdate"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.368060434+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"rolling_update_stalled","status":"WARNING","message":"Deployment ingress-nginx/ingress-nginx-controller 滚动更新已进行 3167h59m37.368061025s，可能已停滞","resource":"ingress-nginx-controller","resource_type":"Deployment","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"duration":"3167h59m37.368061025s","progressing_condition":{"type":"Progressing","status":"True","lastUpdateTime":"2025-09-24T03:00:33Z","lastTransitionTime":"2025-09-24T03:00:09Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"ingress-nginx-controller-5f68f8d58f\" has successfully progressed."}},"suggestions":["检查新Pod是否无法启动","查看就绪探针配置","检查资源限制是否足够","考虑增加滚动更新超时时间"],"timestamp":"2026-02-03T11:00:10.368063546+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"container_no_limits","status":"WARNING","message":"Deployment ingress-nginx/ingress-nginx-controller 容器 controller 未设置资源限制","resource":"ingress-nginx-controller","resource_type":"Deployment","namespace":"ingress-nginx","severity":"MEDIUM","evidence":{"container":"controller"},"suggestions":["为容器设置CPU和内存限制","资源限制可以防止单个容器占用过多资源"],"timestamp":"2026-02-03T11:00:10.368079925+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_monitoring_annotations","status":"WARNING","message":"Deployment ingress-nginx/ingress-nginx-controller 缺少监控注解","resource":"ingress-nginx-controller","resource_type":"Deployment","namespace":"ingress-nginx","severity":"LOW","evidence":null,"suggestions":["添加Prometheus监控注解","例如: prometheus.io/scrape, prometheus.io/port"],"timestamp":"2026-02-03T11:00:10.368081055+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"replica_status","status":"PASS","message":"Deployment jiaozi/jiaozi-app-deployment 副本状态正常","resource":"jiaozi-app-deployment","resource_type":"Deployment","namespace":"jiaozi","severity":"LOW","evidence":{"available_replicas":2,"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2026-01-29T08:34:10Z","lastTransitionTime":"2026-01-29T08:34:10Z","reason":"MinimumReplicasAvailable","message":"Deployment has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2026-01-29T08:34:20Z","lastTransitionTime":"2026-01-21T02:58:06Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"jiaozi-app-deployment-cd489cd6d\" has successfully progressed."}],"desired_replicas":2,"ready_replicas":2,"replicas":2,"updated_replicas":2},"suggestions":null,"timestamp":"2026-02-03T11:00:10.369467771+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"update_strategy","status":"PASS","message":"Deployment jiaozi/jiaozi-app-deployment 更新策略: RollingUpdate","resource":"jiaozi-app-deployment","resource_type":"Deployment","namespace":"jiaozi","severity":"LOW","evidence":{"max_surge":"25%","max_unavailable":"25%","strategy_type":"RollingUpdate"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.369470344+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"rolling_update_stalled","status":"WARNING","message":"Deployment jiaozi/jiaozi-app-deployment 滚动更新已进行 114h25m50.36947081s，可能已停滞","resource":"jiaozi-app-deployment","resource_type":"Deployment","namespace":"jiaozi","severity":"MEDIUM","evidence":{"duration":"114h25m50.36947081s","progressing_condition":{"type":"Progressing","status":"True","lastUpdateTime":"2026-01-29T08:34:20Z","lastTransitionTime":"2026-01-21T02:58:06Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"jiaozi-app-deployment-cd489cd6d\" has successfully progressed."}},"suggestions":["检查新Pod是否无法启动","查看就绪探针配置","检查资源限制是否足够","考虑增加滚动更新超时时间"],"timestamp":"2026-02-03T11:00:10.369472836+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_version_label","status":"WARNING","message":"Deployment jiaozi/jiaozi-app-deployment 缺少版本标签","resource":"jiaozi-app-deployment","resource_type":"Deployment","namespace":"jiaozi","severity":"LOW","evidence":null,"suggestions":["添加版本标签以便跟踪和管理","建议使用app.kubernetes.io/version标签"],"timestamp":"2026-02-03T11:00:10.36947809+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_monitoring_annotations","status":"WARNING","message":"Deployment jiaozi/jiaozi-app-deployment 缺少监控注解","resource":"jiaozi-app-deployment","resource_type":"Deployment","namespace":"jiaozi","severity":"LOW","evidence":null,"suggestions":["添加Prometheus监控注解","例如: prometheus.io/scrape, prometheus.io/port"],"timestamp":"2026-02-03T11:00:10.369483056+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"replica_status","status":"PASS","message":"Deployment kubernetes-dashboard/dashboard-metrics-scraper 副本状态正常","resource":"dashboard-metrics-scraper","resource_type":"Deployment","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"available_replicas":1,"conditions":[{"type":"Progressing","status":"True","lastUpdateTime":"2025-10-30T09:31:00Z","lastTransitionTime":"2025-10-30T09:30:49Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"dashboard-metrics-scraper-5bd5dd4784\" has successfully progressed."},{"type":"Available","status":"True","lastUpdateTime":"2026-01-21T02:28:19Z","lastTransitionTime":"2026-01-21T02:28:19Z","reason":"MinimumReplicasAvailable","message":"Deployment has minimum availability."}],"desired_replicas":1,"ready_replicas":1,"replicas":1,"updated_replicas":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.370922351+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"update_strategy","status":"PASS","message":"Deployment kubernetes-dashboard/dashboard-metrics-scraper 更新策略: RollingUpdate","resource":"dashboard-metrics-scraper","resource_type":"Deployment","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"max_surge":"25%","max_unavailable":"25%","strategy_type":"RollingUpdate"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.370924959+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"rolling_update_stalled","status":"WARNING","message":"Deployment kubernetes-dashboard/dashboard-metrics-scraper 滚动更新已进行 2297h29m10.370925518s，可能已停滞","resource":"dashboard-metrics-scraper","resource_type":"Deployment","namespace":"kubernetes-dashboard","severity":"MEDIUM","evidence":{"duration":"2297h29m10.370925518s","progressing_condition":{"type":"Progressing","status":"True","lastUpdateTime":"2025-10-30T09:31:00Z","lastTransitionTime":"2025-10-30T09:30:49Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"dashboard-metrics-scraper-5bd5dd4784\" has successfully progressed."}},"suggestions":["检查新Pod是否无法启动","查看就绪探针配置","检查资源限制是否足够","考虑增加滚动更新超时时间"],"timestamp":"2026-02-03T11:00:10.370927754+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_version_label","status":"WARNING","message":"Deployment kubernetes-dashboard/dashboard-metrics-scraper 缺少版本标签","resource":"dashboard-metrics-scraper","resource_type":"Deployment","namespace":"kubernetes-dashboard","severity":"LOW","evidence":null,"suggestions":["添加版本标签以便跟踪和管理","建议使用app.kubernetes.io/version标签"],"timestamp":"2026-02-03T11:00:10.370933804+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_monitoring_annotations","status":"WARNING","message":"Deployment kubernetes-dashboard/dashboard-metrics-scraper 缺少监控注解","resource":"dashboard-metrics-scraper","resource_type":"Deployment","namespace":"kubernetes-dashboard","severity":"LOW","evidence":null,"suggestions":["添加Prometheus监控注解","例如: prometheus.io/scrape, prometheus.io/port"],"timestamp":"2026-02-03T11:00:10.370934358+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"replica_status","status":"PASS","message":"Deployment kubernetes-dashboard/kubernetes-dashboard 副本状态正常","resource":"kubernetes-dashboard","resource_type":"Deployment","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"available_replicas":1,"conditions":[{"type":"Progressing","status":"True","lastUpdateTime":"2025-10-30T09:30:57Z","lastTransitionTime":"2025-10-30T09:30:49Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"kubernetes-dashboard-7cf975b984\" has successfully progressed."},{"type":"Available","status":"True","lastUpdateTime":"2026-01-21T02:28:24Z","lastTransitionTime":"2026-01-21T02:28:24Z","reason":"MinimumReplicasAvailable","message":"Deployment has minimum availability."}],"desired_replicas":1,"ready_replicas":1,"replicas":1,"updated_replicas":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.370937178+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"update_strategy","status":"PASS","message":"Deployment kubernetes-dashboard/kubernetes-dashboard 更新策略: RollingUpdate","resource":"kubernetes-dashboard","resource_type":"Deployment","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"max_surge":"1","max_unavailable":"0","strategy_type":"RollingUpdate"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.370938356+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"rolling_update_stalled","status":"WARNING","message":"Deployment kubernetes-dashboard/kubernetes-dashboard 滚动更新已进行 2297h29m13.370938632s，可能已停滞","resource":"kubernetes-dashboard","resource_type":"Deployment","namespace":"kubernetes-dashboard","severity":"MEDIUM","evidence":{"duration":"2297h29m13.370938632s","progressing_condition":{"type":"Progressing","status":"True","lastUpdateTime":"2025-10-30T09:30:57Z","lastTransitionTime":"2025-10-30T09:30:49Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"kubernetes-dashboard-7cf975b984\" has successfully progressed."}},"suggestions":["检查新Pod是否无法启动","查看就绪探针配置","检查资源限制是否足够","考虑增加滚动更新超时时间"],"timestamp":"2026-02-03T11:00:10.370939711+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_version_label","status":"WARNING","message":"Deployment kubernetes-dashboard/kubernetes-dashboard 缺少版本标签","resource":"kubernetes-dashboard","resource_type":"Deployment","namespace":"kubernetes-dashboard","severity":"LOW","evidence":null,"suggestions":["添加版本标签以便跟踪和管理","建议使用app.kubernetes.io/version标签"],"timestamp":"2026-02-03T11:00:10.370942456+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_monitoring_annotations","status":"WARNING","message":"Deployment kubernetes-dashboard/kubernetes-dashboard 缺少监控注解","resource":"kubernetes-dashboard","resource_type":"Deployment","namespace":"kubernetes-dashboard","severity":"LOW","evidence":null,"suggestions":["添加Prometheus监控注解","例如: prometheus.io/scrape, prometheus.io/port"],"timestamp":"2026-02-03T11:00:10.370942782+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"replica_status","status":"PASS","message":"Deployment monitoring/grafana 副本状态正常","resource":"grafana","resource_type":"Deployment","namespace":"monitoring","severity":"LOW","evidence":{"available_replicas":1,"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2026-01-30T02:19:12Z","lastTransitionTime":"2026-01-30T02:19:12Z","reason":"MinimumReplicasAvailable","message":"Deployment has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2026-01-30T02:50:53Z","lastTransitionTime":"2026-01-30T02:05:56Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"grafana-5598848c7f\" has successfully progressed."}],"desired_replicas":1,"ready_replicas":1,"replicas":1,"updated_replicas":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.372596145+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"update_strategy","status":"PASS","message":"Deployment monitoring/grafana 更新策略: RollingUpdate","resource":"grafana","resource_type":"Deployment","namespace":"monitoring","severity":"LOW","evidence":{"max_surge":"25%","max_unavailable":"25%","strategy_type":"RollingUpdate"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.37259824+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"rolling_update_stalled","status":"WARNING","message":"Deployment monitoring/grafana 滚动更新已进行 96h9m17.372599035s，可能已停滞","resource":"grafana","resource_type":"Deployment","namespace":"monitoring","severity":"MEDIUM","evidence":{"duration":"96h9m17.372599035s","progressing_condition":{"type":"Progressing","status":"True","lastUpdateTime":"2026-01-30T02:50:53Z","lastTransitionTime":"2026-01-30T02:05:56Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"grafana-5598848c7f\" has successfully progressed."}},"suggestions":["检查新Pod是否无法启动","查看就绪探针配置","检查资源限制是否足够","考虑增加滚动更新超时时间"],"timestamp":"2026-02-03T11:00:10.372601422+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_monitoring_annotations","status":"WARNING","message":"Deployment monitoring/grafana 缺少监控注解","resource":"grafana","resource_type":"Deployment","namespace":"monitoring","severity":"LOW","evidence":null,"suggestions":["添加Prometheus监控注解","例如: prometheus.io/scrape, prometheus.io/port"],"timestamp":"2026-02-03T11:00:10.372613691+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"replica_status","status":"PASS","message":"Deployment monitoring/loki 副本状态正常","resource":"loki","resource_type":"Deployment","namespace":"monitoring","severity":"LOW","evidence":{"available_replicas":1,"conditions":[{"type":"Progressing","status":"True","lastUpdateTime":"2026-01-30T03:49:40Z","lastTransitionTime":"2026-01-30T03:41:34Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"loki-fcbb6d57c\" has successfully progressed."},{"type":"Available","status":"True","lastUpdateTime":"2026-01-30T03:50:24Z","lastTransitionTime":"2026-01-30T03:50:24Z","reason":"MinimumReplicasAvailable","message":"Deployment has minimum availability."}],"desired_replicas":1,"ready_replicas":1,"replicas":1,"updated_replicas":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.372615485+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"update_strategy","status":"PASS","message":"Deployment monitoring/loki 更新策略: RollingUpdate","resource":"loki","resource_type":"Deployment","namespace":"monitoring","severity":"LOW","evidence":{"max_surge":"25%","max_unavailable":"25%","strategy_type":"RollingUpdate"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.372616208+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"rolling_update_stalled","status":"WARNING","message":"Deployment monitoring/loki 滚动更新已进行 95h10m30.372616481s，可能已停滞","resource":"loki","resource_type":"Deployment","namespace":"monitoring","severity":"MEDIUM","evidence":{"duration":"95h10m30.372616481s","progressing_condition":{"type":"Progressing","status":"True","lastUpdateTime":"2026-01-30T03:49:40Z","lastTransitionTime":"2026-01-30T03:41:34Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"loki-fcbb6d57c\" has successfully progressed."}},"suggestions":["检查新Pod是否无法启动","查看就绪探针配置","检查资源限制是否足够","考虑增加滚动更新超时时间"],"timestamp":"2026-02-03T11:00:10.372617095+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_version_label","status":"WARNING","message":"Deployment monitoring/loki 缺少版本标签","resource":"loki","resource_type":"Deployment","namespace":"monitoring","severity":"LOW","evidence":null,"suggestions":["添加版本标签以便跟踪和管理","建议使用app.kubernetes.io/version标签"],"timestamp":"2026-02-03T11:00:10.372618648+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_monitoring_annotations","status":"WARNING","message":"Deployment monitoring/loki 缺少监控注解","resource":"loki","resource_type":"Deployment","namespace":"monitoring","severity":"LOW","evidence":null,"suggestions":["添加Prometheus监控注解","例如: prometheus.io/scrape, prometheus.io/port"],"timestamp":"2026-02-03T11:00:10.372619023+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"replica_status","status":"PASS","message":"Deployment monitoring/prometheus-server 副本状态正常","resource":"prometheus-server","resource_type":"Deployment","namespace":"monitoring","severity":"LOW","evidence":{"available_replicas":1,"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2026-01-30T02:10:22Z","lastTransitionTime":"2026-01-30T02:10:22Z","reason":"MinimumReplicasAvailable","message":"Deployment has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2026-01-30T06:07:11Z","lastTransitionTime":"2026-01-30T02:10:13Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"prometheus-server-c7bbbdbd5\" has successfully progressed."}],"desired_replicas":1,"ready_replicas":1,"replicas":1,"updated_replicas":1},"suggestions":null,"timestamp":"2026-02-03T11:00:10.372620012+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"update_strategy","status":"PASS","message":"Deployment monitoring/prometheus-server 更新策略: RollingUpdate","resource":"prometheus-server","resource_type":"Deployment","namespace":"monitoring","severity":"LOW","evidence":{"max_surge":"25%","max_unavailable":"25%","strategy_type":"RollingUpdate"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.372620545+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"rolling_update_stalled","status":"WARNING","message":"Deployment monitoring/prometheus-server 滚动更新已进行 92h52m59.372620815s，可能已停滞","resource":"prometheus-server","resource_type":"Deployment","namespace":"monitoring","severity":"MEDIUM","evidence":{"duration":"92h52m59.372620815s","progressing_condition":{"type":"Progressing","status":"True","lastUpdateTime":"2026-01-30T06:07:11Z","lastTransitionTime":"2026-01-30T02:10:13Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"prometheus-server-c7bbbdbd5\" has successfully progressed."}},"suggestions":["检查新Pod是否无法启动","查看就绪探针配置","检查资源限制是否足够","考虑增加滚动更新超时时间"],"timestamp":"2026-02-03T11:00:10.372621298+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_version_label","status":"WARNING","message":"Deployment monitoring/prometheus-server 缺少版本标签","resource":"prometheus-server","resource_type":"Deployment","namespace":"monitoring","severity":"LOW","evidence":null,"suggestions":["添加版本标签以便跟踪和管理","建议使用app.kubernetes.io/version标签"],"timestamp":"2026-02-03T11:00:10.372623649+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"missing_monitoring_annotations","status":"WARNING","message":"Deployment monitoring/prometheus-server 缺少监控注解","resource":"prometheus-server","resource_type":"Deployment","namespace":"monitoring","severity":"LOW","evidence":null,"suggestions":["添加Prometheus监控注解","例如: prometheus.io/scrape, prometheus.io/port"],"timestamp":"2026-02-03T11:00:10.372623888+08:00","duration":0},{"category":"workload","check_name":"deployment_health","check_id":"deployment_summary","status":"FAIL","message":"Deployment健康状态: 总数 7, 有问题 7","resource":"cluster","resource_type":"cluster","namespace":"","severity":"LOW","evidence":{"namespaces":9,"total_deployments":7,"unhealthy_deployments":7},"suggestions":null,"timestamp":"2026-02-03T11:00:10.372625853+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service default/kubernetes 类型: ClusterIP","resource":"kubernetes","resource_type":"Service","namespace":"default","severity":"LOW","evidence":{"cluster_ip":"10.96.0.1","type":"ClusterIP"},"suggestions":null,"timestamp":"2026-02-03T11:00:10.745853034+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service default/kubernetes 端口配置","resource":"kubernetes","resource_type":"Service","namespace":"default","severity":"LOW","evidence":{"port_count":1,"ports":[{"name":"https","node_port":0,"port":443,"protocol":"TCP","target_port":"6443"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:10.745855475+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"no_selector","status":"WARNING","message":"Service default/kubernetes 没有选择器","resource":"kubernetes","resource_type":"Service","namespace":"default","severity":"LOW","evidence":{"selector":null},"suggestions":["如果这是外部服务，请确认端点已正确配置","如果是集群内服务，请添加选择器以自动管理端点"],"timestamp":"2026-02-03T11:00:10.745856531+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service ingress-nginx/ingress-nginx-controller 类型: NodePort","resource":"ingress-nginx-controller","resource_type":"Service","namespace":"ingress-nginx","severity":"LOW","evidence":{"cluster_ip":"10.102.180.190","type":"NodePort"},"suggestions":null,"timestamp":"2026-02-03T11:00:11.144967199+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service ingress-nginx/ingress-nginx-controller 端口配置","resource":"ingress-nginx-controller","resource_type":"Service","namespace":"ingress-nginx","severity":"LOW","evidence":{"port_count":2,"ports":[{"name":"http","node_port":30170,"port":80,"protocol":"TCP","target_port":"http"},{"name":"https","node_port":31121,"port":443,"protocol":"TCP","target_port":"https"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:11.144970109+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"endpoint_availability","status":"PASS","message":"Service ingress-nginx/ingress-nginx-controller 有 1 个就绪端点","resource":"ingress-nginx-controller","resource_type":"Service","namespace":"ingress-nginx","severity":"LOW","evidence":{"not_ready_pods":0,"ready_pods":1,"selector":{"app.kubernetes.io/component":"controller","app.kubernetes.io/instance":"ingress-nginx","app.kubernetes.io/name":"ingress-nginx"},"total_pods":1},"suggestions":null,"timestamp":"2026-02-03T11:00:11.345636236+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service ingress-nginx/ingress-nginx-controller-admission 类型: ClusterIP","resource":"ingress-nginx-controller-admission","resource_type":"Service","namespace":"ingress-nginx","severity":"LOW","evidence":{"cluster_ip":"10.101.2.176","type":"ClusterIP"},"suggestions":null,"timestamp":"2026-02-03T11:00:11.345642567+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service ingress-nginx/ingress-nginx-controller-admission 端口配置","resource":"ingress-nginx-controller-admission","resource_type":"Service","namespace":"ingress-nginx","severity":"LOW","evidence":{"port_count":1,"ports":[{"name":"https-webhook","node_port":0,"port":443,"protocol":"TCP","target_port":"webhook"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:11.345648264+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"endpoint_availability","status":"PASS","message":"Service ingress-nginx/ingress-nginx-controller-admission 有 1 个就绪端点","resource":"ingress-nginx-controller-admission","resource_type":"Service","namespace":"ingress-nginx","severity":"LOW","evidence":{"not_ready_pods":0,"ready_pods":1,"selector":{"app.kubernetes.io/component":"controller","app.kubernetes.io/instance":"ingress-nginx","app.kubernetes.io/name":"ingress-nginx"},"total_pods":1},"suggestions":null,"timestamp":"2026-02-03T11:00:11.545181074+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service jiaozi/jiaozi-backend 类型: NodePort","resource":"jiaozi-backend","resource_type":"Service","namespace":"jiaozi","severity":"LOW","evidence":{"cluster_ip":"10.102.119.171","type":"NodePort"},"suggestions":null,"timestamp":"2026-02-03T11:00:11.745279344+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service jiaozi/jiaozi-backend 端口配置","resource":"jiaozi-backend","resource_type":"Service","namespace":"jiaozi","severity":"LOW","evidence":{"port_count":1,"ports":[{"name":"tcp-8000","node_port":30088,"port":8000,"protocol":"TCP","target_port":"8000"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:11.745283064+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"endpoint_availability","status":"FAIL","message":"Service jiaozi/jiaozi-backend 没有匹配的Pod","resource":"jiaozi-backend","resource_type":"Service","namespace":"jiaozi","severity":"HIGH","evidence":{"not_ready_pods":0,"ready_pods":0,"selector":{"app":"jiaozi-backend"},"total_pods":0},"suggestions":["检查Pod标签是否与Service选择器匹配","确认Pod已部署到正确的命名空间"],"timestamp":"2026-02-03T11:00:11.945283173+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service jiaozi/jozi-app-service 类型: ClusterIP","resource":"jozi-app-service","resource_type":"Service","namespace":"jiaozi","severity":"LOW","evidence":{"cluster_ip":"10.104.42.20","type":"ClusterIP"},"suggestions":null,"timestamp":"2026-02-03T11:00:11.945289965+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service jiaozi/jozi-app-service 端口配置","resource":"jozi-app-service","resource_type":"Service","namespace":"jiaozi","severity":"LOW","evidence":{"port_count":1,"ports":[{"name":"http","node_port":0,"port":3001,"protocol":"TCP","target_port":"3001"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:11.945293979+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"endpoint_availability","status":"PASS","message":"Service jiaozi/jozi-app-service 有 2 个就绪端点","resource":"jozi-app-service","resource_type":"Service","namespace":"jiaozi","severity":"LOW","evidence":{"not_ready_pods":0,"ready_pods":2,"selector":{"app":"jozi-app"},"total_pods":2},"suggestions":null,"timestamp":"2026-02-03T11:00:12.145677171+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service jiaozi/standalone-backend-service 类型: NodePort","resource":"standalone-backend-service","resource_type":"Service","namespace":"jiaozi","severity":"LOW","evidence":{"cluster_ip":"10.101.68.137","type":"NodePort"},"suggestions":null,"timestamp":"2026-02-03T11:00:12.145683775+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service jiaozi/standalone-backend-service 端口配置","resource":"standalone-backend-service","resource_type":"Service","namespace":"jiaozi","severity":"LOW","evidence":{"port_count":1,"ports":[{"name":"http","node_port":30089,"port":81,"protocol":"TCP","target_port":"8000"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:12.145687124+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"endpoint_availability","status":"FAIL","message":"Service jiaozi/standalone-backend-service 没有匹配的Pod","resource":"standalone-backend-service","resource_type":"Service","namespace":"jiaozi","severity":"HIGH","evidence":{"not_ready_pods":0,"ready_pods":0,"selector":{"app":"standalone-backend"},"total_pods":0},"suggestions":["检查Pod标签是否与Service选择器匹配","确认Pod已部署到正确的命名空间"],"timestamp":"2026-02-03T11:00:12.34577284+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service kubernetes-dashboard/dashboard-metrics-scraper 类型: ClusterIP","resource":"dashboard-metrics-scraper","resource_type":"Service","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"cluster_ip":"10.98.161.154","type":"ClusterIP"},"suggestions":null,"timestamp":"2026-02-03T11:00:12.544751383+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_name_missing","status":"WARNING","message":"Service kubernetes-dashboard/dashboard-metrics-scraper 端口 8000 缺少名称","resource":"dashboard-metrics-scraper","resource_type":"Service","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"port":8000,"target_port":"8000"},"suggestions":["为端口设置一个有意义的名称","端口名称在Istio等Service Mesh中有特殊用途"],"timestamp":"2026-02-03T11:00:12.544754252+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service kubernetes-dashboard/dashboard-metrics-scraper 端口配置","resource":"dashboard-metrics-scraper","resource_type":"Service","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"port_count":1,"ports":[{"name":"","node_port":0,"port":8000,"protocol":"TCP","target_port":"8000"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:12.544755769+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"endpoint_availability","status":"PASS","message":"Service kubernetes-dashboard/dashboard-metrics-scraper 有 1 个就绪端点","resource":"dashboard-metrics-scraper","resource_type":"Service","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"not_ready_pods":0,"ready_pods":1,"selector":{"k8s-app":"dashboard-metrics-scraper"},"total_pods":1},"suggestions":null,"timestamp":"2026-02-03T11:00:12.744915951+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service kubernetes-dashboard/kubernetes-dashboard 类型: NodePort","resource":"kubernetes-dashboard","resource_type":"Service","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"cluster_ip":"10.104.221.251","type":"NodePort"},"suggestions":null,"timestamp":"2026-02-03T11:00:12.744920951+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service kubernetes-dashboard/kubernetes-dashboard 端口配置","resource":"kubernetes-dashboard","resource_type":"Service","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"port_count":1,"ports":[{"name":"https","node_port":30443,"port":443,"protocol":"TCP","target_port":"8443"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:12.74492312+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"endpoint_availability","status":"PASS","message":"Service kubernetes-dashboard/kubernetes-dashboard 有 1 个就绪端点","resource":"kubernetes-dashboard","resource_type":"Service","namespace":"kubernetes-dashboard","severity":"LOW","evidence":{"not_ready_pods":0,"ready_pods":1,"selector":{"k8s-app":"kubernetes-dashboard"},"total_pods":1},"suggestions":null,"timestamp":"2026-02-03T11:00:12.945133854+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service monitoring/alertmanager 类型: NodePort","resource":"alertmanager","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"cluster_ip":"10.110.40.179","type":"NodePort"},"suggestions":null,"timestamp":"2026-02-03T11:00:13.145636116+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_name_missing","status":"WARNING","message":"Service monitoring/alertmanager 端口 80 缺少名称","resource":"alertmanager","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"port":80,"target_port":"9093"},"suggestions":["为端口设置一个有意义的名称","端口名称在Istio等Service Mesh中有特殊用途"],"timestamp":"2026-02-03T11:00:13.14563955+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service monitoring/alertmanager 端口配置","resource":"alertmanager","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"port_count":1,"ports":[{"name":"","node_port":30903,"port":80,"protocol":"TCP","target_port":"9093"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:13.145642313+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"endpoint_availability","status":"FAIL","message":"Service monitoring/alertmanager 没有匹配的Pod","resource":"alertmanager","resource_type":"Service","namespace":"monitoring","severity":"HIGH","evidence":{"not_ready_pods":0,"ready_pods":0,"selector":{"app":"alertmanager"},"total_pods":0},"suggestions":["检查Pod标签是否与Service选择器匹配","确认Pod已部署到正确的命名空间"],"timestamp":"2026-02-03T11:00:13.345860638+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service monitoring/grafana 类型: NodePort","resource":"grafana","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"cluster_ip":"10.108.162.23","type":"NodePort"},"suggestions":null,"timestamp":"2026-02-03T11:00:13.34586735+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service monitoring/grafana 端口配置","resource":"grafana","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"port_count":1,"ports":[{"name":"service","node_port":30300,"port":80,"protocol":"TCP","target_port":"grafana"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:13.345870091+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"endpoint_availability","status":"PASS","message":"Service monitoring/grafana 有 1 个就绪端点","resource":"grafana","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"not_ready_pods":0,"ready_pods":1,"selector":{"app.kubernetes.io/instance":"grafana","app.kubernetes.io/name":"grafana"},"total_pods":1},"suggestions":null,"timestamp":"2026-02-03T11:00:13.545299103+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service monitoring/loki 类型: ClusterIP","resource":"loki","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"cluster_ip":"10.110.54.89","type":"ClusterIP"},"suggestions":null,"timestamp":"2026-02-03T11:00:13.545305079+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service monitoring/loki 端口配置","resource":"loki","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"port_count":1,"ports":[{"name":"http-metrics","node_port":0,"port":3100,"protocol":"TCP","target_port":"http-metrics"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:13.545307949+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"endpoint_availability","status":"PASS","message":"Service monitoring/loki 有 1 个就绪端点","resource":"loki","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"not_ready_pods":0,"ready_pods":1,"selector":{"app":"loki"},"total_pods":1},"suggestions":null,"timestamp":"2026-02-03T11:00:13.745554538+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_type","status":"PASS","message":"Service monitoring/prometheus-server 类型: NodePort","resource":"prometheus-server","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"cluster_ip":"10.108.115.91","type":"NodePort"},"suggestions":null,"timestamp":"2026-02-03T11:00:13.745560839+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"port_summary","status":"PASS","message":"Service monitoring/prometheus-server 端口配置","resource":"prometheus-server","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"port_count":1,"ports":[{"name":"http","node_port":30900,"port":80,"protocol":"TCP","target_port":"9090"}]},"suggestions":null,"timestamp":"2026-02-03T11:00:13.745563917+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"endpoint_availability","status":"PASS","message":"Service monitoring/prometheus-server 有 1 个就绪端点","resource":"prometheus-server","resource_type":"Service","namespace":"monitoring","severity":"LOW","evidence":{"not_ready_pods":0,"ready_pods":1,"selector":{"app":"prometheus","component":"server"},"total_pods":1},"suggestions":null,"timestamp":"2026-02-03T11:00:13.945950509+08:00","duration":0},{"category":"network","check_name":"service_health","check_id":"service_summary","status":"WARNING","message":"Service健康状态: 总数 12, 有问题 5","resource":"cluster","resource_type":"cluster","namespace":"","severity":"LOW","evidence":{"namespaces":9,"problem_services":5,"total_services":12},"suggestions":null,"timestamp":"2026-02-03T11:00:13.945954082+08:00","duration":0}]
+            </script>
+        </div>
+        
+        
+        
+        
+        <div class="footer">
+            <p>报告生成时间: 2026-02-03 11:00:13 | 生成工具: k8s-inspector v1.0.0</p>
+            <p>© 2024 K8s巡检工具. 保留所有权利.</p>
+        </div>
+    </div>
+
+    <script>
+        
+        const chartData = {
+            scores: [{"date":"2026-02-02","score":78},{"date":"2026-02-02","score":78},{"date":"2026-02-02","score":0},{"date":"2026-02-02","score":0},{"date":"2026-02-02","score":0},{"date":"2026-02-02","score":0},{"date":"2026-02-02","score":0},{"date":"2026-02-02","score":0},{"date":"2026-02-02","score":0},{"date":"2026-02-02","score":0},{"date":"2026-02-03","score":78},{"date":"2026-02-03","score":78},{"date":"2026-02-03","score":78},{"date":"2026-02-03","score":78},{"date":"2026-02-03","score":78},{"date":"2026-02-03","score":78},{"date":"2026-02-03","score":78},{"date":"2026-02-03","score":78},{"date":"2026-02-03","score":78},{"date":"2026-02-03","score":78},{"date":"2026-02-03","score":78},{"date":"2026-02-03","score":78}],
+            categories: [{"category":"base","count":2},{"category":"network","count":39},{"category":"node","count":10},{"category":"resource","count":10},{"category":"workload","count":101}]
+        };
+        
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const scoreCtx = document.getElementById('scoreTrendChart').getContext('2d');
+            new Chart(scoreCtx, {
+                type: 'line',
+                data: {
+                    labels: chartData.scores.map(s => s.date),
+                    datasets: [{
+                        label: '健康分',
+                        data: chartData.scores.map(s => s.score),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '健康分趋势'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '健康分'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            
+            const categoryCtx = document.getElementById('categoryDistributionChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: chartData.categories.map(c => c.category),
+                    datasets: [{
+                        data: chartData.categories.map(c => c.count),
+                        backgroundColor: [
+                            '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', 
+                            '#3b82f6', '#ec4899', '#14b8a6', '#f97316'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '检查项分类分布'
+                        },
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+            
+            
+            const tabs = document.querySelectorAll('.category-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    
+                    
+                    const category = this.dataset.category;
+                    const items = document.querySelectorAll('.check-item');
+                    
+                    items.forEach(item => {
+                        if (category === 'all' || item.dataset.category === category) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+        
+        
+        function toggleDetails(button) {
+            const details = button.nextElementSibling;
+            details.classList.toggle('show');
+            button.textContent = details.classList.contains('show') ? '隐藏详情' : '查看详情';
+        }
+        
+        
+        document.getElementById('exportPdf').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('PDF导出功能需要服务器端支持');
+            
+        });
+        
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            processCheckResults();
+        });
+        
+        
+        function processCheckResults() {
+            const checkDataElement = document.getElementById('checkData');
+            const checkResultsElement = document.getElementById('checkResults');
+            
+            if (!checkDataElement || !checkResultsElement) {
+                console.error('检查数据或结果容器不存在');
+                return;
+            }
+            
+            try {
+                const checkDetails = JSON.parse(checkDataElement.textContent);
+                
+                
+                const resultsByCategory = {};
+                checkDetails.forEach(detail => {
+                    if (!resultsByCategory[detail.Category]) {
+                        resultsByCategory[detail.Category] = [];
+                    }
+                    resultsByCategory[detail.Category].push(detail);
+                });
+                
+                
+                let html = '';
+                
+                
+                Object.keys(resultsByCategory).forEach(category => {
+                    const details = resultsByCategory[category];
+                    
+                    
+                    if (category === 'node') {
+                        html += generateMergedNodeHealthResults(details);
+                    } 
+                    
+                    else if (category === 'workload') {
+                        html += generateMergedWorkloadResults(details);
+                    } 
+                    
+                    else {
+                        details.forEach(detail => {
+                            html += generateCheckItem(detail);
+                        });
+                    }
+                });
+                
+                checkResultsElement.innerHTML = html;
+                
+            } catch (error) {
+                console.error('处理检查结果失败:', error);
+                
+                const checkDetails = JSON.parse(checkDataElement.textContent);
+                let html = '';
+                checkDetails.forEach(detail => {
+                    html += generateCheckItem(detail);
+                });
+                checkResultsElement.innerHTML = html;
+            }
+        }
+        
+        
+        function generateMergedNodeHealthResults(details) {
+            
+            const nodeResults = {};
+            details.forEach(detail => {
+                if (detail.CheckName === 'node_health') {
+                    const nodeKey = detail.Resource;
+                    if (!nodeResults[nodeKey]) {
+                        nodeResults[nodeKey] = [];
+                    }
+                    nodeResults[nodeKey].push(detail);
+                }
+            });
+            
+            let html = '';
+            
+            
+            Object.keys(nodeResults).forEach(nodeKey => {
+                const nodeDetails = nodeResults[nodeKey];
+                if (nodeDetails.length === 0) return;
+                
+                
+                let overallStatus = 'PASS';
+                let overallSeverity = 'LOW';
+                nodeDetails.forEach(detail => {
+                    if (getStatusPriority(detail.Status) > getStatusPriority(overallStatus)) {
+                        overallStatus = detail.Status;
+                    }
+                    if (getSeverityPriority(detail.Severity) > getSeverityPriority(overallSeverity)) {
+                        overallSeverity = detail.Severity;
+                    }
+                });
+                
+                
+                html += `
+                <div class="check-item ${overallStatus.toLowerCase()}" data-category="node">
+                    <div class="check-header">
+                        <div class="check-title">node_health</div>
+                        <div class="check-status ${overallStatus.toLowerCase()}">${overallStatus}</div>
+                    </div>
+                    <div class="check-message">Node ${nodeKey} 状态</div>
+                    <div class="check-details">
+                        <div class="details-toggle" onclick="toggleDetails(this)">查看详情</div>
+                        <div class="details-content">
+                `;
+                
+                
+                nodeDetails.forEach(detail => {
+                    html += `
+                        <div class="sub-check-item ${detail.Status.toLowerCase()}">
+                            <div class="sub-check-status ${detail.Status.toLowerCase()}">${detail.Status}</div>
+                            <div class="sub-check-message">${detail.Message.replace(`Node ${nodeKey} `, '')}</div>
+                        `;
+                    
+                    
+                    if (detail.Suggestions && detail.Suggestions.length > 0) {
+                        html += '<ul class="sub-check-suggestions">';
+                        detail.Suggestions.forEach(suggestion => {
+                            html += `<li>${suggestion}</li>`;
+                        });
+                        html += '</ul>';
+                    }
+                    
+                    html += '</div>';
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            
+            return html;
+        }
+        
+        
+        function generateMergedWorkloadResults(details) {
+            
+            const checkerResults = {};
+            details.forEach(detail => {
+                if (!checkerResults[detail.CheckName]) {
+                    checkerResults[detail.CheckName] = [];
+                }
+                checkerResults[detail.CheckName].push(detail);
+            });
+            
+            let html = '';
+            
+            
+            if (checkerResults['pod_health']) {
+                const podDetails = checkerResults['pod_health'];
+                
+                
+                const podResults = {};
+                podDetails.forEach(detail => {
+                    let podKey = detail.Resource;
+                    if (detail.Namespace) {
+                        podKey = detail.Namespace + '/' + detail.Resource;
+                    }
+                    if (!podResults[podKey]) {
+                        podResults[podKey] = [];
+                    }
+                    podResults[podKey].push(detail);
+                });
+                
+                
+                Object.keys(podResults).forEach(podKey => {
+                    const podDetails = podResults[podKey];
+                    if (podDetails.length === 0) return;
+                    
+                    
+                    let overallStatus = 'PASS';
+                    let overallSeverity = 'LOW';
+                    podDetails.forEach(detail => {
+                        if (getStatusPriority(detail.Status) > getStatusPriority(overallStatus)) {
+                            overallStatus = detail.Status;
+                        }
+                        if (getSeverityPriority(detail.Severity) > getSeverityPriority(overallSeverity)) {
+                            overallSeverity = detail.Severity;
+                        }
+                    });
+                    
+                    
+                    html += `
+                    <div class="check-item ${overallStatus.toLowerCase()}" data-category="workload">
+                        <div class="check-header">
+                            <div class="check-title">pod_health</div>
+                            <div class="check-status ${overallStatus.toLowerCase()}">${overallStatus}</div>
+                        </div>
+                        <div class="check-message">Pod ${podKey} 状态</div>
+                        <div class="check-details">
+                            <div class="details-toggle" onclick="toggleDetails(this)">查看详情</div>
+                            <div class="details-content">
+                    `;
+                    
+                    
+                    podDetails.forEach(detail => {
+                        html += `
+                            <div class="sub-check-item ${detail.Status.toLowerCase()}">
+                                <div class="sub-check-status ${detail.Status.toLowerCase()}">${detail.Status}</div>
+                                <div class="sub-check-message">${detail.Message.replace(`Pod ${podKey} `, '')}</div>
+                            `;
+                        
+                        
+                        if (detail.Suggestions && detail.Suggestions.length > 0) {
+                            html += '<ul class="sub-check-suggestions">';
+                            detail.Suggestions.forEach(suggestion => {
+                                html += `<li>${suggestion}</li>`;
+                            });
+                            html += '</ul>';
+                        }
+                        
+                        html += '</div>';
+                    });
+                    
+                    html += `
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                });
+            }
+            
+            
+            Object.keys(checkerResults).forEach(checkerName => {
+                if (checkerName !== 'pod_health') {
+                    const checkerDetails = checkerResults[checkerName];
+                    checkerDetails.forEach(detail => {
+                        html += generateCheckItem(detail);
+                    });
+                }
+            });
+            
+            return html;
+        }
+        
+        
+        function generateCheckItem(detail) {
+            let html = `
+            <div class="check-item ${detail.Status.toLowerCase()}" data-category="${detail.Category}">
+                <div class="check-header">
+                    <div class="check-title">${detail.CheckName}</div>
+                    <div class="check-status ${detail.Status.toLowerCase()}">${detail.Status}</div>
+                </div>
+                <div class="check-message">${detail.Message}</div>
+                <div class="check-details">
+                    <div class="details-toggle" onclick="toggleDetails(this)">查看详情</div>
+                    <div class="details-content">
+            `;
+            
+            if (detail.Resource) {
+                html += `<p><strong>资源:</strong> ${detail.Resource}</p>`;
+            }
+            
+            if (detail.Namespace) {
+                html += `<p><strong>命名空间:</strong> ${detail.Namespace}</p>`;
+            }
+            
+            if (detail.Severity) {
+                html += `<p><strong>严重程度:</strong> ${detail.Severity}</p>`;
+            }
+            
+            if (detail.Evidence) {
+                html += `<h4>检查证据:</h4>`;
+                html += `<pre class="evidence-json">${JSON.stringify(detail.Evidence, null, 2)}</pre>`;
+            }
+            
+            if (detail.Suggestions && detail.Suggestions.length > 0) {
+                html += `<h4>改进建议:</h4>`;
+                html += `<ul>`;
+                detail.Suggestions.forEach(suggestion => {
+                    html += `<li>${suggestion}</li>`;
+                });
+                html += `</ul>`;
+            }
+            
+            html += `
+                    </div>
+                </div>
+            </div>
+            `;
+            
+            return html;
+        }
+        
+        
+        function getStatusPriority(status) {
+            const priorities = {
+                'PASS': 0,
+                'WARNING': 1,
+                'FAIL': 2,
+                'ERROR': 3
+            };
+            return priorities[status] || 0;
+        }
+        
+        
+        function getSeverityPriority(severity) {
+            const priorities = {
+                'LOW': 0,
+                'MEDIUM': 1,
+                'HIGH': 2,
+                'CRITICAL': 3
+            };
+            return priorities[severity] || 0;
+        }
+        
+        
+        function searchChecks() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const items = document.querySelectorAll('.check-item');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

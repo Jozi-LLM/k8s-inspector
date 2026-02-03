@@ -19,10 +19,12 @@ func Register(checker types.Checker) {
 	defer registryLock.Unlock()
 
 	name := checker.Name()
+	fmt.Printf("Registering checker: %s\n", name)
 	if _, exists := registry[name]; exists {
 		panic(fmt.Sprintf("checker %s already registered", name))
 	}
 	registry[name] = checker
+	fmt.Printf("Registry size after registration: %d\n", len(registry))
 }
 
 func Get(name string) (types.Checker, bool) {
@@ -42,6 +44,17 @@ func List() []types.Checker {
 		checkers = append(checkers, checker)
 	}
 	return checkers
+}
+
+// DebugPrintRegistry 打印registry的内容（用于调试）
+func DebugPrintRegistry() {
+	registryLock.RLock()
+	defer registryLock.RUnlock()
+
+	fmt.Printf("Registry size: %d\n", len(registry))
+	for name, checker := range registry {
+		fmt.Printf("Registry entry: %s -> %v\n", name, checker)
+	}
 }
 
 func ExecuteAll(ctx context.Context, client *k8s.Client, checkersNames []string) ([]types.CheckDetail, error) {

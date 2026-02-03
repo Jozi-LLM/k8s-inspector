@@ -51,6 +51,13 @@ func main() {
 
 	// 初始化并注册所有检查器
 	checker.InitCheckers()
+	
+	// 调试：打印注册的检查器列表
+	registeredCheckers := checker.List()
+	logger.Infof("已注册的检查器数量: %d", len(registeredCheckers))
+	for _, c := range registeredCheckers {
+		logger.Infof("已注册的检查器: %s", c.Name())
+	}
 
 	// 创建上下文
 	ctx, cancel := context.WithCancel(context.Background())

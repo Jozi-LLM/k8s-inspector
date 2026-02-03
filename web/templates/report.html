@@ -318,6 +318,63 @@
             background: #2563eb;
         }
         
+        /* 子检查项样式 */
+        .sub-check-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        .sub-check-status {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+        
+        .sub-check-status.passed {
+            background: #10b981;
+            color: white;
+        }
+        
+        .sub-check-status.warning {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .sub-check-status.failed {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .sub-check-status.error {
+            background: #8b5cf6;
+            color: white;
+        }
+        
+        .sub-check-message {
+            flex: 1;
+            font-size: 0.95rem;
+            color: #4b5563;
+        }
+        
+        .sub-check-suggestions {
+            margin: 5px 0 0 30px;
+            padding-left: 15px;
+        }
+        
+        .sub-check-suggestions li {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin: 3px 0;
+        }
+        
         @media (max-width: 768px) {
             .charts {
                 grid-template-columns: 1fr;
@@ -421,51 +478,16 @@
             
             <!-- 检查项列表 -->
             <div id="checkResults">
-                {{range .Details}}
-                <div class="check-item {{.Status | toLower}}" data-category="{{.Category}}">
-                    <div class="check-header">
-                        <div class="check-title">{{.CheckName}}</div>
-                        <div class="check-status {{.Status | toLower}}">{{.Status}}</div>
-                    </div>
-                    <div class="check-message">{{.Message}}</div>
-                    <div class="check-details">
-                        <div class="details-toggle" onclick="toggleDetails(this)">查看详情</div>
-                        <div class="details-content">
-                            {{if .Resource}}<p><strong>资源:</strong> {{.Resource}}</p>{{end}}
-                            {{if .Namespace}}<p><strong>命名空间:</strong> {{.Namespace}}</p>{{end}}
-                            {{if .Severity}}<p><strong>严重程度:</strong> {{.Severity}}</p>{{end}}
-                            
-                            {{if .Evidence}}
-                            <h4>检查证据:</h4>
-                            <pre class="evidence-json">{{.Evidence | toJson}}</pre>
-                            {{end}}
-                            
-                            {{if .Suggestions}}
-                            <h4>改进建议:</h4>
-                            <ul>
-                                {{range .Suggestions}}
-                                <li>{{.}}</li>
-                                {{end}}
-                            </ul>
-                            {{end}}
-                        </div>
-                    </div>
-                </div>
-                {{end}}
+                <!-- 这里将通过JavaScript动态生成合并后的检查结果 -->
             </div>
+            
+            <!-- 原始检查数据（用于JavaScript处理） -->
+            <script id="checkData" type="application/json">
+                {{.Details | toJson}}
+            </script>
         </div>
         
-        <!-- 推荐建议 -->
-        {{if .Recommendations}}
-        <div class="recommendations">
-            <h3>改进建议</h3>
-            {{range $index, $rec := .Recommendations}}
-            <div class="recommendation-item">
-                {{add $index 1}}. {{$rec}}
-            </div>
-            {{end}}
-        </div>
-        {{end}}
+        <!-- 推荐建议 (暂时隐藏) -->
         
         <!-- 页脚 -->
         <div class="footer">
@@ -585,6 +607,343 @@
             alert('PDF导出功能需要服务器端支持');
             // 在实际实现中，这里会调用后端API生成PDF
         });
+        
+        // 页面加载完成后处理检查结果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 处理检查结果
+            processCheckResults();
+        });
+        
+        // 处理和合并检查结果
+        function processCheckResults() {
+            const checkDataElement = document.getElementById('checkData');
+            const checkResultsElement = document.getElementById('checkResults');
+            
+            if (!checkDataElement || !checkResultsElement) {
+                console.error('检查数据或结果容器不存在');
+                return;
+            }
+            
+            try {
+                const checkDetails = JSON.parse(checkDataElement.textContent);
+                
+                // 按分类分组
+                const resultsByCategory = {};
+                checkDetails.forEach(detail => {
+                    const category = detail.category || detail.Category;
+                    if (!resultsByCategory[category]) {
+                        resultsByCategory[category] = [];
+                    }
+                    resultsByCategory[category].push(detail);
+                });
+                
+                // 生成HTML
+                let html = '';
+                
+                // 处理每个分类
+                Object.keys(resultsByCategory).forEach(category => {
+                    const details = resultsByCategory[category];
+                    
+                    // 处理node_health检查结果的合并显示
+                    if (category === 'node') {
+                        html += generateMergedNodeHealthResults(details);
+                    } 
+                    // 处理pod_health检查结果的合并显示
+                    else if (category === 'workload') {
+                        html += generateMergedWorkloadResults(details);
+                    } 
+                    // 其他类别的检查结果保持原有显示方式
+                    else {
+                        details.forEach(detail => {
+                            html += generateCheckItem(detail);
+                        });
+                    }
+                });
+                
+                checkResultsElement.innerHTML = html;
+                
+            } catch (error) {
+                console.error('处理检查结果失败:', error);
+                // 如果处理失败，显示原始检查结果
+                const checkDetails = JSON.parse(checkDataElement.textContent);
+                let html = '';
+                checkDetails.forEach(detail => {
+                    html += generateCheckItem(detail);
+                });
+                checkResultsElement.innerHTML = html;
+            }
+        }
+        
+        // 生成合并后的Node健康检查结果
+        function generateMergedNodeHealthResults(details) {
+            // 按Node名称分组
+            const nodeResults = {};
+            details.forEach(detail => {
+                const checkName = detail.check_name || detail.CheckName;
+                if (checkName === 'node_health') {
+                    const nodeKey = detail.resource || detail.Resource;
+                    if (!nodeResults[nodeKey]) {
+                        nodeResults[nodeKey] = [];
+                    }
+                    nodeResults[nodeKey].push(detail);
+                }
+            });
+            
+            let html = '';
+            
+            // 合并显示每个Node的健康检查结果
+            Object.keys(nodeResults).forEach(nodeKey => {
+                const nodeDetails = nodeResults[nodeKey];
+                if (nodeDetails.length === 0) return;
+                
+                // 确定Node的整体状态
+                let overallStatus = 'PASS';
+                let overallSeverity = 'LOW';
+                nodeDetails.forEach(detail => {
+                    const status = detail.status || detail.Status;
+                    const severity = detail.severity || detail.Severity;
+                    if (getStatusPriority(status) > getStatusPriority(overallStatus)) {
+                        overallStatus = status;
+                    }
+                    if (getSeverityPriority(severity) > getSeverityPriority(overallSeverity)) {
+                        overallSeverity = severity;
+                    }
+                });
+                
+                // 生成Node整体状态的HTML
+                html += `
+                <div class="check-item ${overallStatus.toLowerCase()}" data-category="node">
+                    <div class="check-header">
+                        <div class="check-title">node_health</div>
+                        <div class="check-status ${overallStatus.toLowerCase()}">${overallStatus}</div>
+                    </div>
+                    <div class="check-message">Node ${nodeKey} 状态</div>
+                    <div class="check-details">
+                        <div class="details-toggle" onclick="toggleDetails(this)">查看详情</div>
+                        <div class="details-content">
+                `;
+                
+                // 生成详细的检查结果
+                nodeDetails.forEach(detail => {
+                    const status = detail.status || detail.Status;
+                    const message = detail.message || detail.Message;
+                    html += `
+                        <div class="sub-check-item ${status.toLowerCase()}">
+                            <div class="sub-check-status ${status.toLowerCase()}">${status}</div>
+                            <div class="sub-check-message">${message.replace(`Node ${nodeKey} `, '')}</div>
+                        `;
+                    
+                    // 添加建议
+                    const suggestions = detail.suggestions || detail.Suggestions;
+                    if (suggestions && suggestions.length > 0) {
+                        html += '<ul class="sub-check-suggestions">';
+                        suggestions.forEach(suggestion => {
+                            html += `<li>${suggestion}</li>`;
+                        });
+                        html += '</ul>';
+                    }
+                    
+                    html += '</div>';
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            
+            return html;
+        }
+        
+        // 生成合并后的工作负载健康检查结果
+        function generateMergedWorkloadResults(details) {
+            // 按检查器名称分组
+            const checkerResults = {};
+            details.forEach(detail => {
+                const checkName = detail.check_name || detail.CheckName;
+                if (!checkerResults[checkName]) {
+                    checkerResults[checkName] = [];
+                }
+                checkerResults[checkName].push(detail);
+            });
+            
+            let html = '';
+            
+            // 处理pod_health检查结果
+            if (checkerResults['pod_health']) {
+                const podDetails = checkerResults['pod_health'];
+                
+                // 按Pod名称分组
+                const podResults = {};
+                podDetails.forEach(detail => {
+                    let podKey = detail.resource || detail.Resource;
+                    const namespace = detail.namespace || detail.Namespace;
+                    if (namespace) {
+                        podKey = namespace + '/' + podKey;
+                    }
+                    if (!podResults[podKey]) {
+                        podResults[podKey] = [];
+                    }
+                    podResults[podKey].push(detail);
+                });
+                
+                // 合并显示每个Pod的健康检查结果
+                Object.keys(podResults).forEach(podKey => {
+                    const podDetails = podResults[podKey];
+                    if (podDetails.length === 0) return;
+                    
+                    // 确定Pod的整体状态
+                    let overallStatus = 'PASS';
+                    let overallSeverity = 'LOW';
+                    podDetails.forEach(detail => {
+                        const status = detail.status || detail.Status;
+                        const severity = detail.severity || detail.Severity;
+                        if (getStatusPriority(status) > getStatusPriority(overallStatus)) {
+                            overallStatus = status;
+                        }
+                        if (getSeverityPriority(severity) > getSeverityPriority(overallSeverity)) {
+                            overallSeverity = severity;
+                        }
+                    });
+                    
+                    // 生成Pod整体状态的HTML
+                    html += `
+                    <div class="check-item ${overallStatus.toLowerCase()}" data-category="workload">
+                        <div class="check-header">
+                            <div class="check-title">pod_health</div>
+                            <div class="check-status ${overallStatus.toLowerCase()}">${overallStatus}</div>
+                        </div>
+                        <div class="check-message">Pod ${podKey} 状态</div>
+                        <div class="check-details">
+                            <div class="details-toggle" onclick="toggleDetails(this)">查看详情</div>
+                            <div class="details-content">
+                    `;
+                    
+                    // 生成详细的检查结果
+                    podDetails.forEach(detail => {
+                        const status = detail.status || detail.Status;
+                        const message = detail.message || detail.Message;
+                        html += `
+                            <div class="sub-check-item ${status.toLowerCase()}">
+                                <div class="sub-check-status ${status.toLowerCase()}">${status}</div>
+                                <div class="sub-check-message">${message.replace(`Pod ${podKey} `, '')}</div>
+                            `;
+                        
+                        // 添加建议
+                        const suggestions = detail.suggestions || detail.Suggestions;
+                        if (suggestions && suggestions.length > 0) {
+                            html += '<ul class="sub-check-suggestions">';
+                            suggestions.forEach(suggestion => {
+                                html += `<li>${suggestion}</li>`;
+                            });
+                            html += '</ul>';
+                        }
+                        
+                        html += '</div>';
+                    });
+                    
+                    html += `
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                });
+            }
+            
+            // 处理其他检查器的结果（如deployment_health）
+            Object.keys(checkerResults).forEach(checkerName => {
+                if (checkerName !== 'pod_health') {
+                    const checkerDetails = checkerResults[checkerName];
+                    checkerDetails.forEach(detail => {
+                        html += generateCheckItem(detail);
+                    });
+                }
+            });
+            
+            return html;
+        }
+        
+        // 生成单个检查项的HTML
+        function generateCheckItem(detail) {
+            const status = detail.status || detail.Status;
+            const category = detail.category || detail.Category;
+            const checkName = detail.check_name || detail.CheckName;
+            const message = detail.message || detail.Message;
+            const resource = detail.resource || detail.Resource;
+            const namespace = detail.namespace || detail.Namespace;
+            const severity = detail.severity || detail.Severity;
+            const evidence = detail.evidence || detail.Evidence;
+            const suggestions = detail.suggestions || detail.Suggestions;
+            
+            let html = `
+            <div class="check-item ${status.toLowerCase()}" data-category="${category}">
+                <div class="check-header">
+                    <div class="check-title">${checkName}</div>
+                    <div class="check-status ${status.toLowerCase()}">${status}</div>
+                </div>
+                <div class="check-message">${message}</div>
+                <div class="check-details">
+                    <div class="details-toggle" onclick="toggleDetails(this)">查看详情</div>
+                    <div class="details-content">
+            `;
+            
+            if (resource) {
+                html += `<p><strong>资源:</strong> ${resource}</p>`;
+            }
+            
+            if (namespace) {
+                html += `<p><strong>命名空间:</strong> ${namespace}</p>`;
+            }
+            
+            if (severity) {
+                html += `<p><strong>严重程度:</strong> ${severity}</p>`;
+            }
+            
+            if (evidence) {
+                html += `<h4>检查证据:</h4>`;
+                html += `<pre class="evidence-json">${JSON.stringify(evidence, null, 2)}</pre>`;
+            }
+            
+            if (suggestions && suggestions.length > 0) {
+                html += `<h4>改进建议:</h4>`;
+                html += `<ul>`;
+                suggestions.forEach(suggestion => {
+                    html += `<li>${suggestion}</li>`;
+                });
+                html += `</ul>`;
+            }
+            
+            html += `
+                    </div>
+                </div>
+            </div>
+            `;
+            
+            return html;
+        }
+        
+        // 获取状态优先级（用于比较状态）
+        function getStatusPriority(status) {
+            const priorities = {
+                'PASS': 0,
+                'WARNING': 1,
+                'FAIL': 2,
+                'ERROR': 3
+            };
+            return priorities[status] || 0;
+        }
+        
+        // 获取严重程度优先级（用于比较严重程度）
+        function getSeverityPriority(severity) {
+            const priorities = {
+                'LOW': 0,
+                'MEDIUM': 1,
+                'HIGH': 2,
+                'CRITICAL': 3
+            };
+            return priorities[severity] || 0;
+        }
         
         // 搜索功能（可选）
         function searchChecks() {

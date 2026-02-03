@@ -102,3 +102,506 @@
 1.7671497313530421e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20251231_105531.json"}
 1.7671497313683026e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20251231-105531.html", "latest": "reports/latest-production.html"}
 1.7671497313683422e+09	info	cli/main.go:190	巡检完成	{"cluster": "production", "score": 73, "duration": 4.404462672}
+1.7700192320328398e+09	info	cli/main.go:88	开始集群巡检...
+1.7700192320378823e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700192320379493e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700192320389135e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700192320436227e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700192320436616e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.770019232047012e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.003334069, "results": 2}
+1.7700192320470583e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.770019232049344e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration2.186686msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-02T15:59:41+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-02 15:59:41 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-02 15:59:41 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-02 15:59:41 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-02 15:59:41 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-02 16:00:32.04923922 +0800 CST m=+0.022457661 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-02 16:00:32.049242221 +0800 CST m=+0.022460647 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-02 16:00:32.049243131 +0800 CST m=+0.022461556 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-02 16:00:32.049243918 +0800 CST m=+0.022462344 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-02 16:00:32.049244533 +0800 CST m=+0.022462959 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-02 16:00:32.049246732 +0800 CST m=+0.022465171 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-02 16:00:32.049247728 +0800 CST m=+0.022466154 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-02 16:00:32.049248437 +0800 CST m=+0.022466863 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-02 16:00:32.049248911 +0800 CST m=+0.022467337 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-02 16:00:32.04925351 +0800 CST m=+0.022471936 0s}]
+1.7700192320494034e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700192320632687e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.013853034, "total_pods": 12, "problem_pods": 12}
+1.7700192320633156e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700192320648067e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001480215, "node_count": 1, "results": 10}
+1.7700192320648594e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700192320778828e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.013013143, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700192320779243e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.770019235647017e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.569082071, "total_services": 12, "problem_services": 5}
+1.7700192356492386e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.605614102, "score": 78, "passed": 101, "failed": 7}
+1.770019235672581e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770019235650216350"}
+1.7700192356772108e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260202_160035.json"}
+1.7700192356858666e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260202-160035.html", "latest": "reports/latest-production.html"}
+1.7700192356858945e+09	info	cli/main.go:190	巡检完成	{"cluster": "production", "score": 78, "duration": 3.605614102}
+1.770019524485255e+09	info	cli/main.go:88	开始集群巡检...
+1.7700195244881673e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700195244882073e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700195244898708e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.770019524494176e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.770019524494215e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.7700195244975202e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.003287608, "results": 2}
+1.7700195244975657e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.770019524499667e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration1.882312msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-02T16:04:47+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-02 16:04:47 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-02 16:04:47 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-02 16:04:47 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-02 16:04:47 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-02 16:05:24.499445863 +0800 CST m=+0.019399941 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-02 16:05:24.499447114 +0800 CST m=+0.019401185 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-02 16:05:24.499448237 +0800 CST m=+0.019402308 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-02 16:05:24.499449591 +0800 CST m=+0.019403666 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-02 16:05:24.499450443 +0800 CST m=+0.019404515 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-02 16:05:24.499451954 +0800 CST m=+0.019406028 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-02 16:05:24.499453136 +0800 CST m=+0.019407203 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-02 16:05:24.499453949 +0800 CST m=+0.019408027 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-02 16:05:24.499454914 +0800 CST m=+0.019408986 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-02 16:05:24.499458572 +0800 CST m=+0.019412648 0s}]
+1.7700195244997222e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.770019524512408e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.012672755, "total_pods": 12, "problem_pods": 12}
+1.7700195245124464e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700195245140285e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001571537, "node_count": 1, "results": 10}
+1.7700195245143266e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700195245253181e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.010973078, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700195245253522e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.7700195280975661e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.572202204, "total_services": 12, "problem_services": 5}
+1.7700195280984364e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.604259561, "score": 78, "passed": 101, "failed": 7}
+1.7700195281270914e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770019528099265478"}
+1.770019528145767e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260202_160528.json"}
+1.7700195281551905e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260202-160528.html", "latest": "reports/latest-production.html"}
+1.7700195281552258e+09	info	cli/main.go:190	巡检完成	{"cluster": "production", "score": 78, "duration": 3.604259561}
+1.7700195936255465e+09	info	cli/main.go:88	开始集群巡检...
+1.77001959362763e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700195936276715e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700195936296074e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700195936342208e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700195936349323e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 0.000711028, "score": 0, "passed": 0, "failed": 0}
+1.7700195936502595e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 0, "record_id": "1770019593635100535"}
+1.7700195936504252e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260202_160633.json"}
+1.7700195936516185e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260202-160633.html", "latest": "reports/latest-production.html"}
+1.7700195936516414e+09	info	cli/main.go:190	巡检完成	{"cluster": "production", "score": 0, "duration": 0.000711028}
+1.7700196396901915e+09	info	cli/main.go:88	开始集群巡检...
+1.7700196396923301e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700196396923673e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700196396932526e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700196396993265e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700196397002633e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 0.000936486, "score": 0, "passed": 0, "failed": 0}
+1.7700196397208192e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 0, "record_id": "1770019639700401284"}
+1.770019639720972e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260202_160719.json"}
+1.7700196397254083e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260202-160719.html", "latest": "reports/latest-production.html"}
+1.7700196397254896e+09	info	cli/main.go:190	巡检完成	{"cluster": "production", "score": 0, "duration": 0.000936486}
+1.7700196701167316e+09	info	cli/main.go:88	开始集群巡检...
+1.770019670119329e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.770019670119386e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700196701203353e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700196701248589e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700196701256118e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 0.000752483, "score": 0, "passed": 0, "failed": 0}
+1.7700196701364257e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 0, "record_id": "1770019670125871671"}
+1.7700196701365752e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260202_160750.json"}
+1.7700196701379128e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260202-160750.html", "latest": "reports/latest-production.html"}
+1.7700196701379426e+09	info	cli/main.go:190	巡检完成	{"cluster": "production", "score": 0, "duration": 0.000752483}
+1.7700198923543892e+09	info	cli/main.go:88	开始集群巡检...
+1.770019892357594e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700198923576386e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700198923586564e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700198923631644e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700198923642566e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 0.001091078, "score": 0, "passed": 0, "failed": 0}
+1.7700198923774257e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 0, "record_id": "1770019892364482667"}
+1.7700198923775852e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260202_161132.json"}
+1.7700198923791196e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260202-161132.html", "latest": "reports/latest-production.html"}
+1.770019892379155e+09	info	cli/main.go:190	巡检完成	{"cluster": "production", "score": 0, "duration": 0.001091078}
+1.7700200746239388e+09	info	cli/main.go:88	开始集群巡检...
+1.7700200746267505e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700200746267946e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.770020074628549e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700200746336424e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700200746345382e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 0.000895353, "score": 0, "passed": 0, "failed": 0}
+1.77002007464505e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 0, "record_id": "1770020074634680278"}
+1.770020074645213e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260202_161434.json"}
+1.7700200746466196e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260202-161434.html", "latest": "reports/latest-production.html"}
+1.7700200746466477e+09	info	cli/main.go:190	巡检完成	{"cluster": "production", "score": 0, "duration": 0.000895353}
+1.7700202413953633e+09	info	cli/main.go:88	开始集群巡检...
+1.770020241397944e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700202413979857e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.770020241398947e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700202414032981e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.770020241403975e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 0.000675718, "score": 0, "passed": 0, "failed": 0}
+1.7700202414207935e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 0, "record_id": "1770020241404282206"}
+1.7700202414209573e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260202_161721.json"}
+1.7700202414222822e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260202-161721.html", "latest": "reports/latest-production.html"}
+1.7700202414223096e+09	info	cli/main.go:190	巡检完成	{"cluster": "production", "score": 0, "duration": 0.000675718}
+1.7700205819911797e+09	info	cli/main.go:57	已注册的检查器数量: 0
+1.7700205819916813e+09	info	cli/main.go:95	开始集群巡检...
+1.7700205819944146e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700205819944553e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.770020581995515e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700205820004084e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700205820010445e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 0.000635561, "score": 0, "passed": 0, "failed": 0}
+1.7700205820161636e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 0, "record_id": "1770020582001199835"}
+1.770020582016324e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260202_162302.json"}
+1.7700205820177991e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260202-162302.html", "latest": "reports/latest-production.html"}
+1.7700205820178258e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 0, "duration": 0.000635561}
+1.770020855959033e+09	info	cli/main.go:57	已注册的检查器数量: 0
+1.7700208559598484e+09	info	cli/main.go:95	开始集群巡检...
+1.7700208559624355e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700208559624739e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700208559635937e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700208559684727e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.770020855969269e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 0.000795688, "score": 0, "passed": 0, "failed": 0}
+1.7700208559809155e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 0, "record_id": "1770020855969419179"}
+1.7700208559810688e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260202_162735.json"}
+1.7700208559831443e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260202-162735.html", "latest": "reports/latest-production.html"}
+1.77002085598317e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 0, "duration": 0.000795688}
+1.770083905162864e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.7700839051629386e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.7700839051629508e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.7700839051629555e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700839051629598e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.770083905162967e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.7700839051629727e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.770083905163354e+09	info	cli/main.go:95	开始集群巡检...
+1.7700839051661766e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700839051662202e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700839051673043e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.770083905173479e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700839051735141e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.7700839051772087e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.003684158, "results": 2}
+1.7700839051772447e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700839051797395e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration2.357249msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T09:56:22+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 09:56:22 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 09:56:22 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 09:56:22 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 09:56:22 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 09:58:25.179592038 +0800 CST m=+0.023490844 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 09:58:25.179596602 +0800 CST m=+0.023495413 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 09:58:25.179598001 +0800 CST m=+0.023496807 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 09:58:25.179599257 +0800 CST m=+0.023498055 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 09:58:25.179600109 +0800 CST m=+0.023498913 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 09:58:25.179602263 +0800 CST m=+0.023501067 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 09:58:25.179605999 +0800 CST m=+0.023504800 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 09:58:25.179607232 +0800 CST m=+0.023506031 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 09:58:25.179608141 +0800 CST m=+0.023506943 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 09:58:25.179612628 +0800 CST m=+0.023511436 0s}]
+1.7700839051797917e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700839051979773e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.018173757, "total_pods": 12, "problem_pods": 12}
+1.7700839051980207e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700839051994696e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001439768, "node_count": 1, "results": 10}
+1.7700839051995103e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700839052168353e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.017316072, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700839052168763e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.7700839087774696e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.56057057, "total_services": 12, "problem_services": 5}
+1.7700839087782588e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.604778907, "score": 78, "passed": 101, "failed": 7}
+1.770083908796535e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770083908779114602"}
+1.7700839087999897e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_095828.json"}
+1.7700839088141444e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-095828.html", "latest": "reports/latest-production.html"}
+1.770083908814182e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.604778907}
+1.7700865979165738e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.7700865979166398e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.7700865979166465e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.7700865979166508e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700865979166548e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700865979166586e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.7700865979166622e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.77008659791687e+09	info	cli/main.go:95	开始集群巡检...
+1.7700865979188948e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.770086597918929e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700865979200683e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700865979247844e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700865979248168e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.7700865979278603e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.003033699, "results": 2}
+1.770086597927899e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700865979295542e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration1.575318msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:42:16+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:42:16 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:42:16 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:42:16 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:42:16 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 10:43:17.929470418 +0800 CST m=+0.018704670 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 10:43:17.929471537 +0800 CST m=+0.018705840 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 10:43:17.929472954 +0800 CST m=+0.018707218 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 10:43:17.929474151 +0800 CST m=+0.018708405 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 10:43:17.92947495 +0800 CST m=+0.018709222 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 10:43:17.929476292 +0800 CST m=+0.018710562 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:43:17.929477698 +0800 CST m=+0.018711958 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 10:43:17.929478752 +0800 CST m=+0.018713011 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:43:17.929479698 +0800 CST m=+0.018713952 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 10:43:17.92948367 +0800 CST m=+0.018717925 0s}]
+1.7700865979295971e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700865979447649e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.015155218, "total_pods": 12, "problem_pods": 12}
+1.7700865979448135e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700865979463198e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001494696, "node_count": 1, "results": 10}
+1.7700865979463544e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.770086597957742e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.011378492, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700865979577932e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.7700866015284789e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.570658215, "total_services": 12, "problem_services": 5}
+1.7700866015292213e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.604437032, "score": 78, "passed": 101, "failed": 7}
+1.770086601556472e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770086601529921770"}
+1.7700866015600433e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_104321.json"}
+1.7700866015694087e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-104321.html", "latest": "reports/latest-production.html"}
+1.7700866015694377e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.604437032}
+1.7700868897818635e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.7700868897821271e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.770086889782141e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700868897821515e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.770086889782162e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.7700868897821674e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.770086889782174e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.770086889782436e+09	info	cli/main.go:95	开始集群巡检...
+1.7700868897852857e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700868897853246e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700868897862456e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.770086889790495e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700868897905278e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.7700868897944028e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.003864603, "results": 2}
+1.7700868897947052e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700868897964022e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration1.583078msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:47:21+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:47:21 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 10:48:09.796299137 +0800 CST m=+0.019979465 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 10:48:09.796300492 +0800 CST m=+0.019980820 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 10:48:09.796302192 +0800 CST m=+0.019982527 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 10:48:09.796303165 +0800 CST m=+0.019983502 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 10:48:09.796304159 +0800 CST m=+0.019984490 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 10:48:09.796305995 +0800 CST m=+0.019986320 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:48:09.796306885 +0800 CST m=+0.019987209 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 10:48:09.796307529 +0800 CST m=+0.019987854 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:48:09.796308038 +0800 CST m=+0.019988362 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 10:48:09.796311119 +0800 CST m=+0.019991444 0s}]
+1.7700868897964475e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.770086889808425e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.011965394, "total_pods": 12, "problem_pods": 12}
+1.7700868898085053e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700868898116453e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.003049973, "node_count": 1, "results": 10}
+1.7700868898116798e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700868898229012e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.011213611, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700868898229365e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.7700868933943365e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.571390353, "total_services": 12, "problem_services": 5}
+1.7700868933951607e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.604663951, "score": 78, "passed": 101, "failed": 7}
+1.7700868934166028e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770086893395909939"}
+1.7700868934187086e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_104813.json"}
+1.77008689342907e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-104813.html", "latest": "reports/latest-production.html"}
+1.7700868934291034e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.604663951}
+1.77008694670048e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.7700869467007499e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.7700869467007666e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.7700869467007782e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700869467007837e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700869467007954e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.770086946700808e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.7700869467013023e+09	info	cli/main.go:95	开始集群巡检...
+1.7700869467044206e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700869467044601e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700869467055228e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.770086946715151e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700869467151856e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.770086946718786e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.003592128, "results": 2}
+1.7700869467188194e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700869467206066e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration1.691196msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:47:21+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:47:21 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 10:49:06.720502562 +0800 CST m=+0.025154163 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 10:49:06.720504041 +0800 CST m=+0.025155639 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 10:49:06.72050517 +0800 CST m=+0.025156770 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 10:49:06.720505977 +0800 CST m=+0.025157571 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 10:49:06.72050732 +0800 CST m=+0.025158931 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 10:49:06.720509386 +0800 CST m=+0.025160994 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:49:06.720511002 +0800 CST m=+0.025162609 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 10:49:06.720512279 +0800 CST m=+0.025163882 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:49:06.720513085 +0800 CST m=+0.025164689 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 10:49:06.720517301 +0800 CST m=+0.025168909 0s}]
+1.7700869467206423e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700869467401946e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.019542028, "total_pods": 12, "problem_pods": 12}
+1.7700869467402282e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700869467424753e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.002238274, "node_count": 1, "results": 10}
+1.7700869467425172e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700869467588637e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.016337966, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700869467588966e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.770086950318347e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.559441942, "total_services": 12, "problem_services": 5}
+1.7700869503192697e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.604116954, "score": 78, "passed": 101, "failed": 7}
+1.77008695033777e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770086950321441173"}
+1.7700869503392735e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_104910.json"}
+1.7700869503512177e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-104910.html", "latest": "reports/latest-production.html"}
+1.7700869503512561e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.604116954}
+1.7700870228140721e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.770087022814856e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.7700870228148704e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.7700870228148797e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700870228148847e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700870228149414e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.77008702281495e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.7700870228150764e+09	info	cli/main.go:95	开始集群巡检...
+1.7700870228177626e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700870228178043e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.770087022819295e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700870228239546e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700870228239884e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.7700870228271484e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.003151976, "results": 2}
+1.7700870228271842e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700870228300467e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration1.460108msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:47:21+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:47:21 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 10:50:22.828633843 +0800 CST m=+0.019786889 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 10:50:22.828634855 +0800 CST m=+0.019787896 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 10:50:22.828641363 +0800 CST m=+0.019794413 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 10:50:22.828642162 +0800 CST m=+0.019795209 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 10:50:22.828642937 +0800 CST m=+0.019795981 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 10:50:22.828644258 +0800 CST m=+0.019797304 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:50:22.828645328 +0800 CST m=+0.019798375 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 10:50:22.82864613 +0800 CST m=+0.019799178 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:50:22.828646764 +0800 CST m=+0.019799809 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 10:50:22.828650214 +0800 CST m=+0.019803257 0s}]
+1.770087022830101e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700870228495777e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.019466644, "total_pods": 12, "problem_pods": 12}
+1.7700870228496358e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700870228513591e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001715479, "node_count": 1, "results": 10}
+1.7700870228514163e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700870228633864e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.011962167, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700870228634355e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.7700870264279525e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.564505607, "total_services": 12, "problem_services": 5}
+1.770087026430447e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.606491561, "score": 78, "passed": 101, "failed": 7}
+1.7700870264470022e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770087026431197709"}
+1.7700870264511738e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_105026.json"}
+1.770087026459555e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-105026.html", "latest": "reports/latest-production.html"}
+1.770087026459581e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.606491561}
+1.770087106957759e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.77008710695782e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700871069578261e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.7700871069578304e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.7700871069578364e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.7700871069578407e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.7700871069578445e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700871069579e+09	info	cli/main.go:95	开始集群巡检...
+1.7700871069603958e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700871069604375e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.770087106963495e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700871069688575e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700871069688857e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.770087106971772e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.00287486, "results": 2}
+1.7700871069717996e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700871069737444e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration1.875387msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:47:21+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:47:21 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 10:51:46.973670016 +0800 CST m=+0.021639585 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 10:51:46.973670996 +0800 CST m=+0.021640558 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 10:51:46.973671764 +0800 CST m=+0.021641332 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 10:51:46.97367346 +0800 CST m=+0.021643022 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 10:51:46.97367403 +0800 CST m=+0.021643591 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 10:51:46.973675358 +0800 CST m=+0.021644919 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:51:46.973676136 +0800 CST m=+0.021645697 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 10:51:46.973677111 +0800 CST m=+0.021646673 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:51:46.973677564 +0800 CST m=+0.021647126 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 10:51:46.973680495 +0800 CST m=+0.021650057 0s}]
+1.7700871069737766e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.770087106988624e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.014838436, "total_pods": 12, "problem_pods": 12}
+1.7700871069886627e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.770087106990278e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001607445, "node_count": 1, "results": 10}
+1.7700871069903176e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700871070045393e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.014214352, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700871070045705e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.7700871105719924e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.567414785, "total_services": 12, "problem_services": 5}
+1.7700871105728543e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.60399492, "score": 78, "passed": 101, "failed": 7}
+1.7700871105914452e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770087110573662029"}
+1.7700871105932953e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_105150.json"}
+1.7700871106027317e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-105150.html", "latest": "reports/latest-production.html"}
+1.7700871106027598e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.60399492}
+1.7700871239644382e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.7700871239647005e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.7700871239647117e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.7700871239647226e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.7700871239647276e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.7700871239647326e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700871239647398e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700871239648716e+09	info	cli/main.go:95	开始集群巡检...
+1.7700871239679322e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700871239679797e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.770087123974656e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.770087123978995e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.770087123979034e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.7700871239829967e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.003949625, "results": 2}
+1.7700871239830394e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700871239851797e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration2.045271msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:47:21+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:47:21 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 10:52:03.985071128 +0800 CST m=+0.026089301 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 10:52:03.985072664 +0800 CST m=+0.026090839 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 10:52:03.985073656 +0800 CST m=+0.026091821 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 10:52:03.985074543 +0800 CST m=+0.026092711 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 10:52:03.985075273 +0800 CST m=+0.026093438 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 10:52:03.985076594 +0800 CST m=+0.026094768 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:52:03.985077621 +0800 CST m=+0.026095785 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 10:52:03.985078655 +0800 CST m=+0.026096826 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:52:03.985079432 +0800 CST m=+0.026097597 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 10:52:03.985091034 +0800 CST m=+0.026109203 0s}]
+1.7700871239852123e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700871240001638e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.014940751, "total_pods": 12, "problem_pods": 12}
+1.7700871240001984e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700871240018003e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001594529, "node_count": 1, "results": 10}
+1.7700871240019891e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700871240156615e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.013659595, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700871240158124e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.770087127582085e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.566248808, "total_services": 12, "problem_services": 5}
+1.770087127584174e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.605176633, "score": 78, "passed": 101, "failed": 7}
+1.7700871276021779e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770087127585154584"}
+1.7700871276093564e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_105207.json"}
+1.7700871276195722e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-105207.html", "latest": "reports/latest-production.html"}
+1.7700871276196015e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.605176633}
+1.7700871454497721e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.7700871454498594e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.7700871454498684e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.7700871454498737e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.770087145449882e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.7700871454498866e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700871454498906e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700871454511712e+09	info	cli/main.go:95	开始集群巡检...
+1.7700871454534094e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700871454534585e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.770087145454573e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.770087145459434e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700871454594767e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.7700871454624476e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.002953658, "results": 2}
+1.770087145462482e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700871454642394e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration1.677833msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:47:21+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:47:21 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 10:52:25.464157286 +0800 CST m=+0.020233726 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 10:52:25.464157968 +0800 CST m=+0.020234409 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 10:52:25.464158838 +0800 CST m=+0.020235276 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 10:52:25.464159533 +0800 CST m=+0.020235976 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 10:52:25.464160281 +0800 CST m=+0.020236719 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 10:52:25.464161644 +0800 CST m=+0.020238083 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:52:25.46416255 +0800 CST m=+0.020238989 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 10:52:25.464163582 +0800 CST m=+0.020240047 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:52:25.464164152 +0800 CST m=+0.020240591 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 10:52:25.464167798 +0800 CST m=+0.020244238 0s}]
+1.7700871454642873e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700871454770257e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.012726027, "total_pods": 12, "problem_pods": 12}
+1.7700871454770637e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700871454785607e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001486592, "node_count": 1, "results": 10}
+1.7700871454785979e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700871454894617e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.010854809, "total_deployments": 7, "unhealthy_deployments": 7}
+1.770087145489499e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.7700871490626564e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.573145623, "total_services": 12, "problem_services": 5}
+1.7700871490634744e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.604038189, "score": 78, "passed": 101, "failed": 7}
+1.7700871491319897e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770087149064314566"}
+1.77008714913378e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_105229.json"}
+1.770087149150328e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-105229.html", "latest": "reports/latest-production.html"}
+1.770087149150367e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.604038189}
+1.77008741875046e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.7700874187505653e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.7700874187505906e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.770087418750596e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700874187506003e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700874187506049e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.7700874187506135e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.7700874187507148e+09	info	cli/main.go:95	开始集群巡检...
+1.770087418752675e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700874187527168e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700874187536538e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700874187592711e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700874187593136e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.7700874187623353e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.003004579, "results": 2}
+1.7700874187623694e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700874187640972e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration1.643984msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:52:29+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:52:29 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:52:29 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:52:29 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:52:29 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 10:56:58.76401837 +0800 CST m=+0.019416014 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 10:56:58.764019338 +0800 CST m=+0.019416983 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 10:56:58.764020207 +0800 CST m=+0.019417852 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 10:56:58.764020943 +0800 CST m=+0.019418587 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 10:56:58.764021648 +0800 CST m=+0.019419293 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 10:56:58.764023564 +0800 CST m=+0.019421211 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:56:58.764024755 +0800 CST m=+0.019422403 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 10:56:58.764025628 +0800 CST m=+0.019423273 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:56:58.764026581 +0800 CST m=+0.019424229 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 10:56:58.76402989 +0800 CST m=+0.019427538 0s}]
+1.770087418764142e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700874187767699e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.012615951, "total_pods": 12, "problem_pods": 12}
+1.7700874187768054e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700874187782104e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001394968, "node_count": 1, "results": 10}
+1.7700874187782588e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.770087418789022e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.010753288, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700874187890592e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.770087422362759e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.573672616, "total_services": 12, "problem_services": 5}
+1.7700874223635194e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.604245897, "score": 78, "passed": 101, "failed": 7}
+1.7700874223823957e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770087422364385416"}
+1.7700874223845801e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_105702.json"}
+1.770087422391726e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-105702.html", "latest": "reports/latest-production.html"}
+1.770087422391756e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.604245897}
+1.7700874948270824e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.770087494827324e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.7700874948273325e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.770087494827341e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700874948273458e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700874948273506e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.7700874948273563e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.7700874948287199e+09	info	cli/main.go:95	开始集群巡检...
+1.7700874948323023e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700874948323479e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700874948335986e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.77008749483937e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700874948394282e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.770087494842234e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.002792282, "results": 2}
+1.7700874948422768e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.770087494843929e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration1.579486msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:57:34+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:57:34 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:57:34 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:57:34 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:57:34 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 10:58:14.843852986 +0800 CST m=+0.022684457 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 10:58:14.843854902 +0800 CST m=+0.022686374 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 10:58:14.843855826 +0800 CST m=+0.022687298 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 10:58:14.843856544 +0800 CST m=+0.022688016 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 10:58:14.843857415 +0800 CST m=+0.022688887 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 10:58:14.843858877 +0800 CST m=+0.022690349 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:58:14.843859923 +0800 CST m=+0.022691394 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 10:58:14.84386095 +0800 CST m=+0.022692422 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:58:14.843861467 +0800 CST m=+0.022692938 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 10:58:14.843864317 +0800 CST m=+0.022695789 0s}]
+1.7700874948439636e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700874948576095e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.013635755, "total_pods": 12, "problem_pods": 12}
+1.7700874948576496e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700874948591342e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001475256, "node_count": 1, "results": 10}
+1.770087494859182e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700874948697295e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.010536989, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700874948697636e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.7700874984422934e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.572519756, "total_services": 12, "problem_services": 5}
+1.7700874984431424e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.603771363, "score": 78, "passed": 101, "failed": 7}
+1.770087498458834e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770087498443854419"}
+1.7700874984619277e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_105818.json"}
+1.7700874984629917e+09	error	cli/main.go:192	生成报告失败	{"error": "加载模板失败: 解析模板文件失败: template: report.html:491: comment ends before closing delimiter"}
+1.7700874984630325e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.603771363}
+1.7700875378772807e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.770087537877718e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.770087537877732e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.770087537877742e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.7700875378777473e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700875378777518e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700875378777587e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.7700875378788698e+09	info	cli/main.go:95	开始集群巡检...
+1.7700875378811753e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700875378812225e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700875378821998e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700875378870733e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700875378871124e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.7700875378900163e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.002888468, "results": 2}
+1.7700875378900497e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700875378915758e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration1.455611msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:57:34+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:57:34 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:57:34 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:57:34 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:57:34 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 10:58:57.891503871 +0800 CST m=+0.018925510 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 10:58:57.891504651 +0800 CST m=+0.018926290 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 10:58:57.891505414 +0800 CST m=+0.018927053 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 10:58:57.891506091 +0800 CST m=+0.018927731 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 10:58:57.891507387 +0800 CST m=+0.018929026 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 10:58:57.891508948 +0800 CST m=+0.018930588 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:58:57.891509924 +0800 CST m=+0.018931564 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 10:58:57.891510641 +0800 CST m=+0.018932281 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:58:57.891511114 +0800 CST m=+0.018932754 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 10:58:57.891514326 +0800 CST m=+0.018935966 0s}]
+1.7700875378916202e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700875379048085e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.013177758, "total_pods": 12, "problem_pods": 12}
+1.7700875379049473e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700875379078e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.002838914, "node_count": 1, "results": 10}
+1.7700875379078367e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700875379182281e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.010381901, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700875379182594e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.770087541494899e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.576628418, "total_services": 12, "problem_services": 5}
+1.7700875414956803e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.608597734, "score": 78, "passed": 101, "failed": 7}
+1.7700875415374644e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770087541496462298"}
+1.7700875415391057e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_105901.json"}
+1.7700875415438654e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-105901.html", "latest": "reports/latest-production.html"}
+1.7700875415438993e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.608597734}
+1.7700876103331656e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.770087610333508e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700876103336084e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.7700876103336263e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.770087610333634e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.7700876103336427e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.770087610333648e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700876103342323e+09	info	cli/main.go:95	开始集群巡检...
+1.7700876103364732e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700876103365147e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700876103374534e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700876103420584e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700876103420985e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.7700876103450184e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.002905477, "results": 2}
+1.7700876103450525e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700876103466856e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration1.56814msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:57:34+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:57:34 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:57:34 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:57:34 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:57:34 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 11:00:10.346611657 +0800 CST m=+0.018195188 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 11:00:10.3466131 +0800 CST m=+0.018196650 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 11:00:10.34661421 +0800 CST m=+0.018197742 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 11:00:10.346620369 +0800 CST m=+0.018203919 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 11:00:10.346621036 +0800 CST m=+0.018204570 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 11:00:10.346622571 +0800 CST m=+0.018206107 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 11:00:10.346623569 +0800 CST m=+0.018207105 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 11:00:10.346624274 +0800 CST m=+0.018207810 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 11:00:10.346624728 +0800 CST m=+0.018208256 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 11:00:10.346627618 +0800 CST m=+0.018211160 0s}]
+1.770087610346739e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.770087610360106e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.013355774, "total_pods": 12, "problem_pods": 12}
+1.7700876103601465e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700876103616717e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001515226, "node_count": 1, "results": 10}
+1.7700876103617077e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700876103726268e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.010890644, "total_deployments": 7, "unhealthy_deployments": 7}
+1.770087610372664e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.770087613945956e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.573282064, "total_services": 12, "problem_services": 5}
+1.770087613946784e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.604724145, "score": 78, "passed": 101, "failed": 7}
+1.7700876139741158e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770087613947534154"}
+1.7700876139757752e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_110013.json"}
+1.7700876139819694e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-110013.html", "latest": "reports/latest-production.html"}
+1.770087613982e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.604724145}
+1.770088012492408e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.7700880124927735e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.7700880124927897e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.7700880124928005e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700880124928057e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.770088012492811e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.7700880124928186e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.7700880124930193e+09	info	cli/main.go:95	开始集群巡检...
+1.7700880124972575e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700880124973118e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.7700880124983377e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.7700880125030143e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.7700880125030453e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.77008801250583e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.002768215, "results": 2}
+1.7700880125058696e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700880125087533e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration2.787315msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T11:02:41+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 11:02:41 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 11:02:41 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 11:02:41 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 11:02:41 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 11:06:52.508647228 +0800 CST m=+0.020884452 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 11:06:52.508648908 +0800 CST m=+0.020886133 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 11:06:52.508652712 +0800 CST m=+0.020889936 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 11:06:52.508653804 +0800 CST m=+0.020891036 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 11:06:52.508654581 +0800 CST m=+0.020891806 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 11:06:52.508658396 +0800 CST m=+0.020895620 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 11:06:52.508659664 +0800 CST m=+0.020896889 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 11:06:52.508660485 +0800 CST m=+0.020897710 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 11:06:52.508661931 +0800 CST m=+0.020899163 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 11:06:52.508666867 +0800 CST m=+0.020904099 0s}]
+1.7700880125088031e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700880125209997e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.012185768, "total_pods": 12, "problem_pods": 12}
+1.770088012521034e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700880125224302e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001386408, "node_count": 1, "results": 10}
+1.7700880125224688e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700880125361428e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.013665281, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700880125361784e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.770088016106063e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.569861934, "total_services": 12, "problem_services": 5}
+1.7700880161068375e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.603822305, "score": 78, "passed": 101, "failed": 7}
+1.770088016145126e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770088016107513623"}
+1.7700880161500168e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_110656.json"}
+1.7700880161556485e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-110656.html", "latest": "reports/latest-production.html"}
+1.7700880161556754e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.603822305}

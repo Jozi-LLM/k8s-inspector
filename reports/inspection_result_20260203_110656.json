@@ -1,0 +1,4005 @@
+{
+  "cluster_name": "production",
+  "cluster_info": {
+    "platform": "linux/amd64",
+    "version": "v1.28.2"
+  },
+  "timestamp": "2026-02-03T11:06:56.106836045+08:00",
+  "duration": 3603822305,
+  "summary": {
+    "total_checks": 162,
+    "passed": 101,
+    "warnings": 54,
+    "failed": 7,
+    "errors": 0,
+    "skipped": 0,
+    "score": 78
+  },
+  "details": [
+    {
+      "category": "base",
+      "check_name": "cluster_info",
+      "check_id": "cluster_version",
+      "status": "PASS",
+      "message": "集群版本: v1.28.2",
+      "resource": "cluster",
+      "resource_type": "cluster",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "platform": "linux/amd64",
+        "version": "v1.28.2"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.50366163+08:00",
+      "duration": 0
+    },
+    {
+      "category": "base",
+      "check_name": "cluster_info",
+      "check_id": "cluster_node_count",
+      "status": "PASS",
+      "message": "节点状态: 1/1 Ready",
+      "resource": "cluster",
+      "resource_type": "cluster",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "readyNodes": 1,
+        "totalNodes": 1
+      },
+      "suggestions": [],
+      "timestamp": "2026-02-03T11:06:52.505829252+08:00",
+      "duration": 0
+    },
+    {
+      "category": "node",
+      "check_name": "node_health",
+      "check_id": "node_health",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 状态正常",
+      "resource": "jiaozi-uat",
+      "resource_type": "",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "last_heartbeat_time": "2026-02-03T11:02:41+08:00",
+        "mesage": "节点 jiaozi-uat 状态正常",
+        "node_conditions": [
+          {
+            "type": "NetworkUnavailable",
+            "status": "False",
+            "lastHeartbeatTime": "2026-01-29T08:27:41Z",
+            "lastTransitionTime": "2026-01-29T08:27:41Z",
+            "reason": "FlannelIsUp",
+            "message": "Flannel is running on this node"
+          },
+          {
+            "type": "MemoryPressure",
+            "status": "False",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2025-10-31T03:29:28Z",
+            "reason": "KubeletHasSufficientMemory",
+            "message": "kubelet has sufficient memory available"
+          },
+          {
+            "type": "DiskPressure",
+            "status": "False",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2025-10-31T03:29:28Z",
+            "reason": "KubeletHasNoDiskPressure",
+            "message": "kubelet has no disk pressure"
+          },
+          {
+            "type": "PIDPressure",
+            "status": "False",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2025-10-31T03:29:28Z",
+            "reason": "KubeletHasSufficientPID",
+            "message": "kubelet has sufficient PID available"
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2026-01-28T16:15:51Z",
+            "reason": "KubeletReady",
+            "message": "kubelet is posting ready status"
+          }
+        ],
+        "ready": true
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.508647228+08:00",
+      "duration": 0
+    },
+    {
+      "category": "node",
+      "check_name": "node_health",
+      "check_id": "node_schedulable",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 可调度",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "taints": null,
+        "unschedulable": false
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.508648908+08:00",
+      "duration": 0
+    },
+    {
+      "category": "node",
+      "check_name": "node_health",
+      "check_id": "memory_pressure",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 内存压力正常",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "memory_pressure": false,
+        "message": "kubelet has sufficient memory available"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.508652712+08:00",
+      "duration": 0
+    },
+    {
+      "category": "node",
+      "check_name": "node_health",
+      "check_id": "disk_pressure",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 磁盘压力正常",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "disk_pressure": false,
+        "message": "kubelet has no disk pressure"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.508653804+08:00",
+      "duration": 0
+    },
+    {
+      "category": "node",
+      "check_name": "node_health",
+      "check_id": "pid_pressure",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat PID压力正常",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "message": "kubelet has sufficient PID available",
+        "pid_pressure": false
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.508654581+08:00",
+      "duration": 0
+    },
+    {
+      "category": "node",
+      "check_name": "node_health",
+      "check_id": "network_available",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 网络正常",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "addresses": [
+          {
+            "type": "InternalIP",
+            "address": "172.16.40.253"
+          },
+          {
+            "type": "Hostname",
+            "address": "jiaozi-uat"
+          }
+        ],
+        "message": "Flannel is running on this node",
+        "network_unavailable": false
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.508658396+08:00",
+      "duration": 0
+    },
+    {
+      "category": "node",
+      "check_name": "node_health",
+      "check_id": "kernel_version",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "architecture": "amd64",
+        "kernel_version": "5.10.134-19.1.al8.x86_64",
+        "os_image": "Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.508659664+08:00",
+      "duration": 0
+    },
+    {
+      "category": "node",
+      "check_name": "node_health",
+      "check_id": "container_runtime",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 容器运行时: containerd://1.6.32",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "container_runtime_version": "containerd://1.6.32",
+        "kubelet_version": "v1.28.2"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.508660485+08:00",
+      "duration": 0
+    },
+    {
+      "category": "node",
+      "check_name": "node_health",
+      "check_id": "operating_system",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "operating_system": "linux",
+        "os_image": "Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.508661931+08:00",
+      "duration": 0
+    },
+    {
+      "category": "node",
+      "check_name": "node_health",
+      "check_id": "resource_summary",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "cpu_allocatable": "4",
+        "cpu_capacity": "4",
+        "memory_allocatable": "15719356Ki",
+        "memory_capacity": "15821756Ki",
+        "pods_capacity": "110"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.508666867+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 状态正常",
+      "resource": "ingress-nginx-admission-create-d2qz4",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Succeeded",
+        "qos": "BestEffort",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.516062947+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "FAIL",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 有容器已终止",
+      "resource": "ingress-nginx-admission-create-d2qz4",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "create",
+            "state": {
+              "terminated": {
+                "exitCode": 0,
+                "reason": "Completed",
+                "startedAt": "2025-09-24T03:00:11Z",
+                "finishedAt": "2025-09-24T03:00:11Z",
+                "containerID": "containerd://21477677bf9c277fa7666ef2a67d69fd8ea8706778dc79b4fd3ca916a3e074e3"
+              }
+            },
+            "lastState": {},
+            "ready": false,
+            "restartCount": 0,
+            "image": "registry.cn-hangzhou.aliyuncs.com/google_containers/kube-webhook-certgen:v20230407",
+            "imageID": "registry.cn-hangzhou.aliyuncs.com/google_containers/kube-webhook-certgen@sha256:bf362268a6ccb40dd0fd260517403b32642677628a68beede72fe2918790f9d5",
+            "containerID": "containerd://21477677bf9c277fa7666ef2a67d69fd8ea8706778dc79b4fd3ca916a3e074e3",
+            "started": false
+          }
+        ],
+        "running_containers": false,
+        "total_containers": 1
+      },
+      "suggestions": [
+        "查看容器退出代码和原因"
+      ],
+      "timestamp": "2026-02-03T11:06:52.516064824+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "PASS",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 重启次数正常",
+      "resource": "ingress-nginx-admission-create-d2qz4",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "age": "3168h6m43.516065678s",
+        "max_restarts": 0,
+        "restarting_containers": null
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.516066168+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "resource_limits_missing",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 的容器未设置资源限制: create",
+      "resource": "ingress-nginx-admission-create-d2qz4",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "containers_without_limits": [
+          "create"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置CPU和内存限制",
+        "参考应用实际使用情况设置合理的限制",
+        "使用Vertical Pod Autoscaler自动设置资源"
+      ],
+      "timestamp": "2026-02-03T11:06:52.516067725+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "resource_requests_missing",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 的容器未设置资源请求: create",
+      "resource": "ingress-nginx-admission-create-d2qz4",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "containers_without_requests": [
+          "create"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置CPU和内存请求",
+        "资源请求应该反映应用的最小资源需求"
+      ],
+      "timestamp": "2026-02-03T11:06:52.516068342+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "readiness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 的容器未设置就绪探针: create",
+      "resource": "ingress-nginx-admission-create-d2qz4",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "containers_without_readiness": [
+          "create"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置就绪探针",
+        "就绪探针确保流量只转发到完全准备好的Pod"
+      ],
+      "timestamp": "2026-02-03T11:06:52.516070503+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "liveness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 的容器未设置存活探针: create",
+      "resource": "ingress-nginx-admission-create-d2qz4",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "containers_without_liveness": [
+          "create"
+        ]
+      },
+      "suggestions": [
+        "为关键容器设置存活探针",
+        "存活探针可以自动重启失败的容器"
+      ],
+      "timestamp": "2026-02-03T11:06:52.516071181+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "run_as_root",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 的容器以root用户运行: create",
+      "resource": "ingress-nginx-admission-create-d2qz4",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "root_containers": [
+          "create"
+        ]
+      },
+      "suggestions": [
+        "避免以root用户运行容器",
+        "创建非root用户运行应用",
+        "在Dockerfile中使用USER指令"
+      ],
+      "timestamp": "2026-02-03T11:06:52.51607224+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 状态正常",
+      "resource": "ingress-nginx-admission-patch-7nk6m",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Succeeded",
+        "qos": "BestEffort",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.516073181+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "FAIL",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 有容器已终止",
+      "resource": "ingress-nginx-admission-patch-7nk6m",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "patch",
+            "state": {
+              "terminated": {
+                "exitCode": 0,
+                "reason": "Completed",
+                "startedAt": "2025-09-24T03:00:11Z",
+                "finishedAt": "2025-09-24T03:00:11Z",
+                "containerID": "containerd://393cf9a866de371df08defb3d3b8ee70adc2f8352e8494dcd88b28ed2e49c6b9"
+              }
+            },
+            "lastState": {},
+            "ready": false,
+            "restartCount": 0,
+            "image": "registry.cn-hangzhou.aliyuncs.com/google_containers/kube-webhook-certgen:v20230407",
+            "imageID": "registry.cn-hangzhou.aliyuncs.com/google_containers/kube-webhook-certgen@sha256:bf362268a6ccb40dd0fd260517403b32642677628a68beede72fe2918790f9d5",
+            "containerID": "containerd://393cf9a866de371df08defb3d3b8ee70adc2f8352e8494dcd88b28ed2e49c6b9",
+            "started": false
+          }
+        ],
+        "running_containers": false,
+        "total_containers": 1
+      },
+      "suggestions": [
+        "查看容器退出代码和原因"
+      ],
+      "timestamp": "2026-02-03T11:06:52.516073777+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "PASS",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 重启次数正常",
+      "resource": "ingress-nginx-admission-patch-7nk6m",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "age": "3168h6m43.516074127s",
+        "max_restarts": 0,
+        "restarting_containers": null
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.516074313+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "resource_limits_missing",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 的容器未设置资源限制: patch",
+      "resource": "ingress-nginx-admission-patch-7nk6m",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "containers_without_limits": [
+          "patch"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置CPU和内存限制",
+        "参考应用实际使用情况设置合理的限制",
+        "使用Vertical Pod Autoscaler自动设置资源"
+      ],
+      "timestamp": "2026-02-03T11:06:52.516074863+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "resource_requests_missing",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 的容器未设置资源请求: patch",
+      "resource": "ingress-nginx-admission-patch-7nk6m",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "containers_without_requests": [
+          "patch"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置CPU和内存请求",
+        "资源请求应该反映应用的最小资源需求"
+      ],
+      "timestamp": "2026-02-03T11:06:52.516075229+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "readiness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 的容器未设置就绪探针: patch",
+      "resource": "ingress-nginx-admission-patch-7nk6m",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "containers_without_readiness": [
+          "patch"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置就绪探针",
+        "就绪探针确保流量只转发到完全准备好的Pod"
+      ],
+      "timestamp": "2026-02-03T11:06:52.51607588+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "liveness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 的容器未设置存活探针: patch",
+      "resource": "ingress-nginx-admission-patch-7nk6m",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "containers_without_liveness": [
+          "patch"
+        ]
+      },
+      "suggestions": [
+        "为关键容器设置存活探针",
+        "存活探针可以自动重启失败的容器"
+      ],
+      "timestamp": "2026-02-03T11:06:52.516076211+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "run_as_root",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 的容器以root用户运行: patch",
+      "resource": "ingress-nginx-admission-patch-7nk6m",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "root_containers": [
+          "patch"
+        ]
+      },
+      "suggestions": [
+        "避免以root用户运行容器",
+        "创建非root用户运行应用",
+        "在Dockerfile中使用USER指令"
+      ],
+      "timestamp": "2026-02-03T11:06:52.516076659+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod ingress-nginx/ingress-nginx-controller-5f68f8d58f-mrpbf 状态正常",
+      "resource": "ingress-nginx-controller-5f68f8d58f-mrpbf",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Running",
+        "qos": "Burstable",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.516078207+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "PASS",
+      "message": "Pod ingress-nginx/ingress-nginx-controller-5f68f8d58f-mrpbf 所有容器运行正常",
+      "resource": "ingress-nginx-controller-5f68f8d58f-mrpbf",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "controller",
+            "state": {
+              "running": {
+                "startedAt": "2026-01-29T08:27:52Z"
+              }
+            },
+            "lastState": {
+              "terminated": {
+                "exitCode": 255,
+                "reason": "Unknown",
+                "startedAt": "2026-01-29T08:16:25Z",
+                "finishedAt": "2026-01-29T08:27:24Z",
+                "containerID": "containerd://d1b395ad865d6c0dac54096a3b5b335734b32697325316d43e41157e685c17f5"
+              }
+            },
+            "ready": true,
+            "restartCount": 40,
+            "image": "registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-ingress-controller:v1.8.1",
+            "imageID": "registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-ingress-controller@sha256:cddf819180b5472dd238dccf2148eb8ee4de104293f30fecc3cbd26b47401b13",
+            "containerID": "containerd://375a0a761f35fb6dd1b51fe200a98eae537b0c4c1fabf31a4d163b33af1090a2",
+            "started": true
+          }
+        ],
+        "running_containers": true,
+        "total_containers": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.516078587+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-controller-5f68f8d58f-mrpbf 重启次数较多: 40次",
+      "resource": "ingress-nginx-controller-5f68f8d58f-mrpbf",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "age": "2303h7m39.516080115s",
+        "max_restarts": 40,
+        "restarting_containers": [
+          "controller(40)"
+        ]
+      },
+      "suggestions": [
+        "检查容器日志查找重启原因",
+        "检查内存限制是否过小",
+        "检查应用是否有内存泄漏",
+        "检查健康检查探针配置"
+      ],
+      "timestamp": "2026-02-03T11:06:52.51608029+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "resource_limits_missing",
+      "status": "WARNING",
+      "message": "Pod ingress-nginx/ingress-nginx-controller-5f68f8d58f-mrpbf 的容器未设置资源限制: controller",
+      "resource": "ingress-nginx-controller-5f68f8d58f-mrpbf",
+      "resource_type": "Pod",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "containers_without_limits": [
+          "controller"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置CPU和内存限制",
+        "参考应用实际使用情况设置合理的限制",
+        "使用Vertical Pod Autoscaler自动设置资源"
+      ],
+      "timestamp": "2026-02-03T11:06:52.51608079+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod jiaozi/jiaozi-app-deployment-cd489cd6d-gz429 状态正常",
+      "resource": "jiaozi-app-deployment-cd489cd6d-gz429",
+      "resource_type": "Pod",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Running",
+        "qos": "Burstable",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.517490407+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "PASS",
+      "message": "Pod jiaozi/jiaozi-app-deployment-cd489cd6d-gz429 所有容器运行正常",
+      "resource": "jiaozi-app-deployment-cd489cd6d-gz429",
+      "resource_type": "Pod",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "jozi-app",
+            "state": {
+              "running": {
+                "startedAt": "2026-01-29T08:34:00Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.cn-hangzhou.aliyuncs.com/jiaoziera/jiaozi_app:01231547",
+            "imageID": "registry.cn-hangzhou.aliyuncs.com/jiaoziera/jiaozi_app@sha256:b166c9fef858664f7d65f50c28dac9ed9300c1cdc1a4cb3c019dec4e5549d0af",
+            "containerID": "containerd://653cd894e10d262c4c270aedaf13b471c3ec4018e080eb8601a30f6fad5491c1",
+            "started": true
+          }
+        ],
+        "running_containers": true,
+        "total_containers": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.51749161+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "PASS",
+      "message": "Pod jiaozi/jiaozi-app-deployment-cd489cd6d-gz429 重启次数正常",
+      "resource": "jiaozi-app-deployment-cd489cd6d-gz429",
+      "resource_type": "Pod",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "age": "114h32m53.517492668s",
+        "max_restarts": 0,
+        "restarting_containers": null
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.517493127+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "run_as_root",
+      "status": "WARNING",
+      "message": "Pod jiaozi/jiaozi-app-deployment-cd489cd6d-gz429 的容器以root用户运行: jozi-app",
+      "resource": "jiaozi-app-deployment-cd489cd6d-gz429",
+      "resource_type": "Pod",
+      "namespace": "jiaozi",
+      "severity": "MEDIUM",
+      "evidence": {
+        "root_containers": [
+          "jozi-app"
+        ]
+      },
+      "suggestions": [
+        "避免以root用户运行容器",
+        "创建非root用户运行应用",
+        "在Dockerfile中使用USER指令"
+      ],
+      "timestamp": "2026-02-03T11:06:52.517495855+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod jiaozi/jiaozi-app-deployment-cd489cd6d-lv5bm 状态正常",
+      "resource": "jiaozi-app-deployment-cd489cd6d-lv5bm",
+      "resource_type": "Pod",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Running",
+        "qos": "Burstable",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.517496676+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "PASS",
+      "message": "Pod jiaozi/jiaozi-app-deployment-cd489cd6d-lv5bm 所有容器运行正常",
+      "resource": "jiaozi-app-deployment-cd489cd6d-lv5bm",
+      "resource_type": "Pod",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "jozi-app",
+            "state": {
+              "running": {
+                "startedAt": "2026-01-29T08:34:10Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.cn-hangzhou.aliyuncs.com/jiaoziera/jiaozi_app:01231547",
+            "imageID": "registry.cn-hangzhou.aliyuncs.com/jiaoziera/jiaozi_app@sha256:b166c9fef858664f7d65f50c28dac9ed9300c1cdc1a4cb3c019dec4e5549d0af",
+            "containerID": "containerd://de4983c0a2f549beba01dabeb370b061e813a4cbfe4613cc75967771d996f8ec",
+            "started": true
+          }
+        ],
+        "running_containers": true,
+        "total_containers": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.517497175+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "PASS",
+      "message": "Pod jiaozi/jiaozi-app-deployment-cd489cd6d-lv5bm 重启次数正常",
+      "resource": "jiaozi-app-deployment-cd489cd6d-lv5bm",
+      "resource_type": "Pod",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "age": "114h32m42.517497565s",
+        "max_restarts": 0,
+        "restarting_containers": null
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.517497751+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "run_as_root",
+      "status": "WARNING",
+      "message": "Pod jiaozi/jiaozi-app-deployment-cd489cd6d-lv5bm 的容器以root用户运行: jozi-app",
+      "resource": "jiaozi-app-deployment-cd489cd6d-lv5bm",
+      "resource_type": "Pod",
+      "namespace": "jiaozi",
+      "severity": "MEDIUM",
+      "evidence": {
+        "root_containers": [
+          "jozi-app"
+        ]
+      },
+      "suggestions": [
+        "避免以root用户运行容器",
+        "创建非root用户运行应用",
+        "在Dockerfile中使用USER指令"
+      ],
+      "timestamp": "2026-02-03T11:06:52.517498698+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod kubernetes-dashboard/dashboard-metrics-scraper-5bd5dd4784-rrxxp 状态正常",
+      "resource": "dashboard-metrics-scraper-5bd5dd4784-rrxxp",
+      "resource_type": "Pod",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Running",
+        "qos": "Burstable",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.519016098+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "PASS",
+      "message": "Pod kubernetes-dashboard/dashboard-metrics-scraper-5bd5dd4784-rrxxp 所有容器运行正常",
+      "resource": "dashboard-metrics-scraper-5bd5dd4784-rrxxp",
+      "resource_type": "Pod",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "dashboard-metrics-scraper",
+            "state": {
+              "running": {
+                "startedAt": "2026-01-29T08:27:52Z"
+              }
+            },
+            "lastState": {
+              "terminated": {
+                "exitCode": 255,
+                "reason": "Unknown",
+                "startedAt": "2026-01-28T16:15:51Z",
+                "finishedAt": "2026-01-29T08:27:25Z",
+                "containerID": "containerd://e7832c83418ef7b376426dfea72a0752c5159516dfd21a01a8b50a64113a4492"
+              }
+            },
+            "ready": true,
+            "restartCount": 28,
+            "image": "registry.aliyuncs.com/google_containers/metrics-scraper:v1.0.8",
+            "imageID": "registry.aliyuncs.com/google_containers/metrics-scraper@sha256:76049887f07a0476dc93efc2d3569b9529bf982b22d29f356092ce206e98765c",
+            "containerID": "containerd://bd7c36afe26f005e25c852e19222e4cae22ecb51e5b13bff405a250cddbea4a4",
+            "started": true
+          }
+        ],
+        "running_containers": true,
+        "total_containers": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.519017268+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "WARNING",
+      "message": "Pod kubernetes-dashboard/dashboard-metrics-scraper-5bd5dd4784-rrxxp 重启次数较多: 28次",
+      "resource": "dashboard-metrics-scraper-5bd5dd4784-rrxxp",
+      "resource_type": "Pod",
+      "namespace": "kubernetes-dashboard",
+      "severity": "MEDIUM",
+      "evidence": {
+        "age": "2297h36m2.519020337s",
+        "max_restarts": 28,
+        "restarting_containers": [
+          "dashboard-metrics-scraper(28)"
+        ]
+      },
+      "suggestions": [
+        "检查容器日志查找重启原因",
+        "检查内存限制是否过小",
+        "检查应用是否有内存泄漏",
+        "检查健康检查探针配置"
+      ],
+      "timestamp": "2026-02-03T11:06:52.519021049+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "readiness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod kubernetes-dashboard/dashboard-metrics-scraper-5bd5dd4784-rrxxp 的容器未设置就绪探针: dashboard-metrics-scraper",
+      "resource": "dashboard-metrics-scraper-5bd5dd4784-rrxxp",
+      "resource_type": "Pod",
+      "namespace": "kubernetes-dashboard",
+      "severity": "MEDIUM",
+      "evidence": {
+        "containers_without_readiness": [
+          "dashboard-metrics-scraper"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置就绪探针",
+        "就绪探针确保流量只转发到完全准备好的Pod"
+      ],
+      "timestamp": "2026-02-03T11:06:52.519023438+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod kubernetes-dashboard/kubernetes-dashboard-7cf975b984-8p8lh 状态正常",
+      "resource": "kubernetes-dashboard-7cf975b984-8p8lh",
+      "resource_type": "Pod",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Running",
+        "qos": "Burstable",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.519024475+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "PASS",
+      "message": "Pod kubernetes-dashboard/kubernetes-dashboard-7cf975b984-8p8lh 所有容器运行正常",
+      "resource": "kubernetes-dashboard-7cf975b984-8p8lh",
+      "resource_type": "Pod",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "kubernetes-dashboard",
+            "state": {
+              "running": {
+                "startedAt": "2026-01-29T08:27:53Z"
+              }
+            },
+            "lastState": {
+              "terminated": {
+                "exitCode": 255,
+                "reason": "Unknown",
+                "startedAt": "2026-01-28T16:15:52Z",
+                "finishedAt": "2026-01-29T08:27:25Z",
+                "containerID": "containerd://d67f78d61690943a3a5aaee28609709fb9a899f61acff2c5b19b764452bb347c"
+              }
+            },
+            "ready": true,
+            "restartCount": 22,
+            "image": "registry.aliyuncs.com/google_containers/dashboard:v2.7.0",
+            "imageID": "registry.aliyuncs.com/google_containers/dashboard@sha256:2e500d29e9d5f4a086b908eb8dfe7ecac57d2ab09d65b24f588b1d449841ef93",
+            "containerID": "containerd://df8e279442a3b08ac96b3888538c731499c3e9ffa849a529bce9d5e3ff31a029",
+            "started": true
+          }
+        ],
+        "running_containers": true,
+        "total_containers": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.519024952+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "WARNING",
+      "message": "Pod kubernetes-dashboard/kubernetes-dashboard-7cf975b984-8p8lh 重启次数较多: 22次",
+      "resource": "kubernetes-dashboard-7cf975b984-8p8lh",
+      "resource_type": "Pod",
+      "namespace": "kubernetes-dashboard",
+      "severity": "MEDIUM",
+      "evidence": {
+        "age": "2297h36m2.519025707s",
+        "max_restarts": 22,
+        "restarting_containers": [
+          "kubernetes-dashboard(22)"
+        ]
+      },
+      "suggestions": [
+        "检查容器日志查找重启原因",
+        "检查内存限制是否过小",
+        "检查应用是否有内存泄漏",
+        "检查健康检查探针配置"
+      ],
+      "timestamp": "2026-02-03T11:06:52.519025907+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "readiness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod kubernetes-dashboard/kubernetes-dashboard-7cf975b984-8p8lh 的容器未设置就绪探针: kubernetes-dashboard",
+      "resource": "kubernetes-dashboard-7cf975b984-8p8lh",
+      "resource_type": "Pod",
+      "namespace": "kubernetes-dashboard",
+      "severity": "MEDIUM",
+      "evidence": {
+        "containers_without_readiness": [
+          "kubernetes-dashboard"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置就绪探针",
+        "就绪探针确保流量只转发到完全准备好的Pod"
+      ],
+      "timestamp": "2026-02-03T11:06:52.519026578+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod monitoring/grafana-5598848c7f-qh85g 状态正常",
+      "resource": "grafana-5598848c7f-qh85g",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Running",
+        "qos": "Burstable",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520968086+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "PASS",
+      "message": "Pod monitoring/grafana-5598848c7f-qh85g 所有容器运行正常",
+      "resource": "grafana-5598848c7f-qh85g",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "grafana",
+            "state": {
+              "running": {
+                "startedAt": "2026-01-30T02:50:43Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.cn-hangzhou.aliyuncs.com/aliyun-wym/grafana:12.3.0",
+            "imageID": "registry.cn-hangzhou.aliyuncs.com/aliyun-wym/grafana@sha256:7b3879a91d13357379c55d9f9ebea9cf02c4637ff9321e13b4c032e818703ff2",
+            "containerID": "containerd://6917d726aa81709c258042d3ce1897050def412abbcfb23b4b72946176ac7a50",
+            "started": true
+          }
+        ],
+        "running_containers": true,
+        "total_containers": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520971387+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "PASS",
+      "message": "Pod monitoring/grafana-5598848c7f-qh85g 重启次数正常",
+      "resource": "grafana-5598848c7f-qh85g",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "age": "96h16m9.520972535s",
+        "max_restarts": 0,
+        "restarting_containers": null
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520973152+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "run_as_root",
+      "status": "WARNING",
+      "message": "Pod monitoring/grafana-5598848c7f-qh85g 的容器以root用户运行: grafana",
+      "resource": "grafana-5598848c7f-qh85g",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "MEDIUM",
+      "evidence": {
+        "root_containers": [
+          "grafana"
+        ]
+      },
+      "suggestions": [
+        "避免以root用户运行容器",
+        "创建非root用户运行应用",
+        "在Dockerfile中使用USER指令"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520976358+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod monitoring/loki-fcbb6d57c-lvnl4 状态正常",
+      "resource": "loki-fcbb6d57c-lvnl4",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Running",
+        "qos": "Burstable",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520979133+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "PASS",
+      "message": "Pod monitoring/loki-fcbb6d57c-lvnl4 所有容器运行正常",
+      "resource": "loki-fcbb6d57c-lvnl4",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "loki",
+            "state": {
+              "running": {
+                "startedAt": "2026-01-30T03:50:23Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools:loki-2.8.0",
+            "imageID": "registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools@sha256:8a74987b5f6e9064a62eab0de22c1beef9c948641d4a753f87a4e5971e1cc46d",
+            "containerID": "containerd://7d4938b196b58d4243b89088e3dddc774191cd086fdea40edaac3275b1dab061",
+            "started": true
+          }
+        ],
+        "running_containers": true,
+        "total_containers": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520979739+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "PASS",
+      "message": "Pod monitoring/loki-fcbb6d57c-lvnl4 重启次数正常",
+      "resource": "loki-fcbb6d57c-lvnl4",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "age": "95h16m29.520980238s",
+        "max_restarts": 0,
+        "restarting_containers": null
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520980499+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "readiness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod monitoring/loki-fcbb6d57c-lvnl4 的容器未设置就绪探针: loki",
+      "resource": "loki-fcbb6d57c-lvnl4",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "MEDIUM",
+      "evidence": {
+        "containers_without_readiness": [
+          "loki"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置就绪探针",
+        "就绪探针确保流量只转发到完全准备好的Pod"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520982106+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "liveness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod monitoring/loki-fcbb6d57c-lvnl4 的容器未设置存活探针: loki",
+      "resource": "loki-fcbb6d57c-lvnl4",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "containers_without_liveness": [
+          "loki"
+        ]
+      },
+      "suggestions": [
+        "为关键容器设置存活探针",
+        "存活探针可以自动重启失败的容器"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520983121+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "run_as_root",
+      "status": "WARNING",
+      "message": "Pod monitoring/loki-fcbb6d57c-lvnl4 的容器以root用户运行: loki",
+      "resource": "loki-fcbb6d57c-lvnl4",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "MEDIUM",
+      "evidence": {
+        "root_containers": [
+          "loki"
+        ]
+      },
+      "suggestions": [
+        "避免以root用户运行容器",
+        "创建非root用户运行应用",
+        "在Dockerfile中使用USER指令"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520984133+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod monitoring/node-exporter-vq2tr 状态正常",
+      "resource": "node-exporter-vq2tr",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Running",
+        "qos": "Burstable",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520984685+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "PASS",
+      "message": "Pod monitoring/node-exporter-vq2tr 所有容器运行正常",
+      "resource": "node-exporter-vq2tr",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "node-exporter",
+            "state": {
+              "running": {
+                "startedAt": "2026-01-30T06:24:18Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools:node-exporter-latest",
+            "imageID": "registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools@sha256:d5b2a2e2bb07a4a5a7c4bd9e54641cab63e1d2627622dbde17efc04849d3d30d",
+            "containerID": "containerd://c52ef8c8a39e6b37849346f91eff317c262c55bc517cb7df4ebd911dd9716c64",
+            "started": true
+          }
+        ],
+        "running_containers": true,
+        "total_containers": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520985079+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "PASS",
+      "message": "Pod monitoring/node-exporter-vq2tr 重启次数正常",
+      "resource": "node-exporter-vq2tr",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "age": "92h42m35.520985432s",
+        "max_restarts": 0,
+        "restarting_containers": null
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520985578+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "node_affinity_set",
+      "status": "PASS",
+      "message": "Pod monitoring/node-exporter-vq2tr 设置了节点亲和性",
+      "resource": "node-exporter-vq2tr",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "node_affinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [
+              {
+                "matchFields": [
+                  {
+                    "key": "metadata.name",
+                    "operator": "In",
+                    "values": [
+                      "jiaozi-uat"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520986891+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "readiness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod monitoring/node-exporter-vq2tr 的容器未设置就绪探针: node-exporter",
+      "resource": "node-exporter-vq2tr",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "MEDIUM",
+      "evidence": {
+        "containers_without_readiness": [
+          "node-exporter"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置就绪探针",
+        "就绪探针确保流量只转发到完全准备好的Pod"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520987454+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "liveness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod monitoring/node-exporter-vq2tr 的容器未设置存活探针: node-exporter",
+      "resource": "node-exporter-vq2tr",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "containers_without_liveness": [
+          "node-exporter"
+        ]
+      },
+      "suggestions": [
+        "为关键容器设置存活探针",
+        "存活探针可以自动重启失败的容器"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520987778+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 状态正常",
+      "resource": "prometheus-server-c7bbbdbd5-f2gms",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Running",
+        "qos": "Burstable",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520990968+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "PASS",
+      "message": "Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 所有容器运行正常",
+      "resource": "prometheus-server-c7bbbdbd5-f2gms",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "prometheus",
+            "state": {
+              "running": {
+                "startedAt": "2026-01-30T06:07:11Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.cn-hangzhou.aliyuncs.com/google_containers/prometheus:v2.48.0",
+            "imageID": "registry.cn-hangzhou.aliyuncs.com/google_containers/prometheus@sha256:8746f9f324e8f8956dfe30e1abb9ff0a1af4024bae623e0f7feeaa8562faa119",
+            "containerID": "containerd://96f4784c923704577cad604bc2df28a7eecd7067544a27f3368b83ba5c47987c",
+            "started": true
+          }
+        ],
+        "running_containers": true,
+        "total_containers": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520991383+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "PASS",
+      "message": "Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 重启次数正常",
+      "resource": "prometheus-server-c7bbbdbd5-f2gms",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "age": "92h59m42.520991771s",
+        "max_restarts": 0,
+        "restarting_containers": null
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520991879+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "readiness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 的容器未设置就绪探针: prometheus",
+      "resource": "prometheus-server-c7bbbdbd5-f2gms",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "MEDIUM",
+      "evidence": {
+        "containers_without_readiness": [
+          "prometheus"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置就绪探针",
+        "就绪探针确保流量只转发到完全准备好的Pod"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520992594+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "liveness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 的容器未设置存活探针: prometheus",
+      "resource": "prometheus-server-c7bbbdbd5-f2gms",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "containers_without_liveness": [
+          "prometheus"
+        ]
+      },
+      "suggestions": [
+        "为关键容器设置存活探针",
+        "存活探针可以自动重启失败的容器"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520993121+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "run_as_root",
+      "status": "WARNING",
+      "message": "Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 的容器以root用户运行: prometheus",
+      "resource": "prometheus-server-c7bbbdbd5-f2gms",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "MEDIUM",
+      "evidence": {
+        "root_containers": [
+          "prometheus"
+        ]
+      },
+      "suggestions": [
+        "避免以root用户运行容器",
+        "创建非root用户运行应用",
+        "在Dockerfile中使用USER指令"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520993885+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_phase",
+      "status": "PASS",
+      "message": "Pod monitoring/promtail-g8q6z 状态正常",
+      "resource": "promtail-g8q6z",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "message": "",
+        "phase": "Running",
+        "qos": "Burstable",
+        "reason": ""
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520994366+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "container_status",
+      "status": "PASS",
+      "message": "Pod monitoring/promtail-g8q6z 所有容器运行正常",
+      "resource": "promtail-g8q6z",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "container_statuses": [
+          {
+            "name": "promtail",
+            "state": {
+              "running": {
+                "startedAt": "2026-01-30T03:49:15Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools:promtail-2.8.0",
+            "imageID": "registry.cn-hangzhou.aliyuncs.com/aliyun-wym/tools@sha256:34a52d6030077bfccf82fdd1448831dff8881f7b4253893e72ec3e62c6b5b8b9",
+            "containerID": "containerd://d1dd90193aa21fde18203337a7dcf146c91ce55f9fe81bbe7c65ba3074fb459b",
+            "started": true
+          }
+        ],
+        "running_containers": true,
+        "total_containers": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520995113+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "restart_count",
+      "status": "PASS",
+      "message": "Pod monitoring/promtail-g8q6z 重启次数正常",
+      "resource": "promtail-g8q6z",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "age": "95h17m37.520995466s",
+        "max_restarts": 0,
+        "restarting_containers": null
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520995571+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "node_affinity_set",
+      "status": "PASS",
+      "message": "Pod monitoring/promtail-g8q6z 设置了节点亲和性",
+      "resource": "promtail-g8q6z",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "node_affinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [
+              {
+                "matchFields": [
+                  {
+                    "key": "metadata.name",
+                    "operator": "In",
+                    "values": [
+                      "jiaozi-uat"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.52099609+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "readiness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod monitoring/promtail-g8q6z 的容器未设置就绪探针: promtail",
+      "resource": "promtail-g8q6z",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "MEDIUM",
+      "evidence": {
+        "containers_without_readiness": [
+          "promtail"
+        ]
+      },
+      "suggestions": [
+        "为所有容器设置就绪探针",
+        "就绪探针确保流量只转发到完全准备好的Pod"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520996506+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "liveness_probe_missing",
+      "status": "WARNING",
+      "message": "Pod monitoring/promtail-g8q6z 的容器未设置存活探针: promtail",
+      "resource": "promtail-g8q6z",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "containers_without_liveness": [
+          "promtail"
+        ]
+      },
+      "suggestions": [
+        "为关键容器设置存活探针",
+        "存活探针可以自动重启失败的容器"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520996868+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "run_as_root",
+      "status": "WARNING",
+      "message": "Pod monitoring/promtail-g8q6z 的容器以root用户运行: promtail",
+      "resource": "promtail-g8q6z",
+      "resource_type": "Pod",
+      "namespace": "monitoring",
+      "severity": "MEDIUM",
+      "evidence": {
+        "root_containers": [
+          "promtail"
+        ]
+      },
+      "suggestions": [
+        "避免以root用户运行容器",
+        "创建非root用户运行应用",
+        "在Dockerfile中使用USER指令"
+      ],
+      "timestamp": "2026-02-03T11:06:52.520997855+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "pod_health",
+      "check_id": "pod_summary",
+      "status": "FAIL",
+      "message": "Pod健康状态: 总数 12, 有问题 12",
+      "resource": "cluster",
+      "resource_type": "cluster",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "namespaces": 9,
+        "problem_pods": 12,
+        "total_pods": 12
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.520999051+08:00",
+      "duration": 0
+    },
+    {
+      "category": "resource",
+      "check_name": "resource_usage",
+      "check_id": "node_ready",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 状态正常",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "last_heartbeat": "2026-02-03T11:02:41+08:00",
+        "message": "kubelet is posting ready status",
+        "node_conditions": [
+          {
+            "type": "NetworkUnavailable",
+            "status": "False",
+            "lastHeartbeatTime": "2026-01-29T08:27:41Z",
+            "lastTransitionTime": "2026-01-29T08:27:41Z",
+            "reason": "FlannelIsUp",
+            "message": "Flannel is running on this node"
+          },
+          {
+            "type": "MemoryPressure",
+            "status": "False",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2025-10-31T03:29:28Z",
+            "reason": "KubeletHasSufficientMemory",
+            "message": "kubelet has sufficient memory available"
+          },
+          {
+            "type": "DiskPressure",
+            "status": "False",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2025-10-31T03:29:28Z",
+            "reason": "KubeletHasNoDiskPressure",
+            "message": "kubelet has no disk pressure"
+          },
+          {
+            "type": "PIDPressure",
+            "status": "False",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2025-10-31T03:29:28Z",
+            "reason": "KubeletHasSufficientPID",
+            "message": "kubelet has sufficient PID available"
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2026-01-28T16:15:51Z",
+            "reason": "KubeletReady",
+            "message": "kubelet is posting ready status"
+          }
+        ],
+        "ready": true
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.522415073+08:00",
+      "duration": 0
+    },
+    {
+      "category": "resource",
+      "check_name": "resource_usage",
+      "check_id": "node_schedulable",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 可调度",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "taints": null,
+        "unschedulable": false
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.522416494+08:00",
+      "duration": 0
+    },
+    {
+      "category": "resource",
+      "check_name": "resource_usage",
+      "check_id": "node_resource_usage",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 资源使用情况正常",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "allocatable": {
+          "cpu": "4",
+          "ephemeral-storage": "123293848577",
+          "hugepages-1Gi": "0",
+          "hugepages-2Mi": "0",
+          "memory": "15719356Ki",
+          "pods": "110"
+        },
+        "capacity": {
+          "cpu": "4",
+          "ephemeral-storage": "133782388Ki",
+          "hugepages-1Gi": "0",
+          "hugepages-2Mi": "0",
+          "memory": "15821756Ki",
+          "pods": "110"
+        },
+        "conditions": [
+          {
+            "type": "NetworkUnavailable",
+            "status": "False",
+            "lastHeartbeatTime": "2026-01-29T08:27:41Z",
+            "lastTransitionTime": "2026-01-29T08:27:41Z",
+            "reason": "FlannelIsUp",
+            "message": "Flannel is running on this node"
+          },
+          {
+            "type": "MemoryPressure",
+            "status": "False",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2025-10-31T03:29:28Z",
+            "reason": "KubeletHasSufficientMemory",
+            "message": "kubelet has sufficient memory available"
+          },
+          {
+            "type": "DiskPressure",
+            "status": "False",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2025-10-31T03:29:28Z",
+            "reason": "KubeletHasNoDiskPressure",
+            "message": "kubelet has no disk pressure"
+          },
+          {
+            "type": "PIDPressure",
+            "status": "False",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2025-10-31T03:29:28Z",
+            "reason": "KubeletHasSufficientPID",
+            "message": "kubelet has sufficient PID available"
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "lastHeartbeatTime": "2026-02-03T03:02:41Z",
+            "lastTransitionTime": "2026-01-28T16:15:51Z",
+            "reason": "KubeletReady",
+            "message": "kubelet is posting ready status"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.522417587+08:00",
+      "duration": 0
+    },
+    {
+      "category": "resource",
+      "check_name": "resource_usage",
+      "check_id": "disk_pressure",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 磁盘压力正常",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "disk_pressure": false,
+        "message": "kubelet has no disk pressure"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.522418476+08:00",
+      "duration": 0
+    },
+    {
+      "category": "resource",
+      "check_name": "resource_usage",
+      "check_id": "pid_pressure",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat PID压力正常",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "message": "kubelet has sufficient PID available",
+        "pid_pressure": false
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.522419435+08:00",
+      "duration": 0
+    },
+    {
+      "category": "resource",
+      "check_name": "resource_usage",
+      "check_id": "network_available",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 网络正常",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "addresses": [
+          {
+            "type": "InternalIP",
+            "address": "172.16.40.253"
+          },
+          {
+            "type": "Hostname",
+            "address": "jiaozi-uat"
+          }
+        ],
+        "message": "Flannel is running on this node",
+        "network_unavailable": false
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.522422343+08:00",
+      "duration": 0
+    },
+    {
+      "category": "resource",
+      "check_name": "resource_usage",
+      "check_id": "kernel_version",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "architecture": "amd64",
+        "kernel_version": "5.10.134-19.1.al8.x86_64",
+        "os_image": "Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.522423421+08:00",
+      "duration": 0
+    },
+    {
+      "category": "resource",
+      "check_name": "resource_usage",
+      "check_id": "container_runtime",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 容器运行时: containerd://1.6.32",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "container_runtime_version": "containerd://1.6.32",
+        "kubelet_version": "v1.28.2"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.522424751+08:00",
+      "duration": 0
+    },
+    {
+      "category": "resource",
+      "check_name": "resource_usage",
+      "check_id": "operating_system",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "operating_system": "linux",
+        "os_image": "Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.522425757+08:00",
+      "duration": 0
+    },
+    {
+      "category": "resource",
+      "check_name": "resource_usage",
+      "check_id": "resource_summary",
+      "status": "PASS",
+      "message": "节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki",
+      "resource": "jiaozi-uat",
+      "resource_type": "Node",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "cpu_allocatable": "4",
+        "cpu_capacity": "4",
+        "memory_allocatable": "15719356Ki",
+        "memory_capacity": "15821756Ki",
+        "pods_capacity": "110"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.52242887+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "replica_status",
+      "status": "PASS",
+      "message": "Deployment ingress-nginx/ingress-nginx-controller 副本状态正常",
+      "resource": "ingress-nginx-controller",
+      "resource_type": "Deployment",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "available_replicas": 1,
+        "conditions": [
+          {
+            "type": "Progressing",
+            "status": "True",
+            "lastUpdateTime": "2025-09-24T03:00:33Z",
+            "lastTransitionTime": "2025-09-24T03:00:09Z",
+            "reason": "NewReplicaSetAvailable",
+            "message": "ReplicaSet \"ingress-nginx-controller-5f68f8d58f\" has successfully progressed."
+          },
+          {
+            "type": "Available",
+            "status": "True",
+            "lastUpdateTime": "2026-01-28T16:16:06Z",
+            "lastTransitionTime": "2026-01-28T16:16:06Z",
+            "reason": "MinimumReplicasAvailable",
+            "message": "Deployment has minimum availability."
+          }
+        ],
+        "desired_replicas": 1,
+        "ready_replicas": 1,
+        "replicas": 1,
+        "updated_replicas": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.532099618+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "update_strategy",
+      "status": "PASS",
+      "message": "Deployment ingress-nginx/ingress-nginx-controller 更新策略: RollingUpdate",
+      "resource": "ingress-nginx-controller",
+      "resource_type": "Deployment",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "max_surge": "25%",
+        "max_unavailable": "25%",
+        "strategy_type": "RollingUpdate"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.532102528+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "rolling_update_stalled",
+      "status": "WARNING",
+      "message": "Deployment ingress-nginx/ingress-nginx-controller 滚动更新已进行 3168h6m19.532103297s，可能已停滞",
+      "resource": "ingress-nginx-controller",
+      "resource_type": "Deployment",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "duration": "3168h6m19.532103297s",
+        "progressing_condition": {
+          "type": "Progressing",
+          "status": "True",
+          "lastUpdateTime": "2025-09-24T03:00:33Z",
+          "lastTransitionTime": "2025-09-24T03:00:09Z",
+          "reason": "NewReplicaSetAvailable",
+          "message": "ReplicaSet \"ingress-nginx-controller-5f68f8d58f\" has successfully progressed."
+        }
+      },
+      "suggestions": [
+        "检查新Pod是否无法启动",
+        "查看就绪探针配置",
+        "检查资源限制是否足够",
+        "考虑增加滚动更新超时时间"
+      ],
+      "timestamp": "2026-02-03T11:06:52.532106085+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "container_no_limits",
+      "status": "WARNING",
+      "message": "Deployment ingress-nginx/ingress-nginx-controller 容器 controller 未设置资源限制",
+      "resource": "ingress-nginx-controller",
+      "resource_type": "Deployment",
+      "namespace": "ingress-nginx",
+      "severity": "MEDIUM",
+      "evidence": {
+        "container": "controller"
+      },
+      "suggestions": [
+        "为容器设置CPU和内存限制",
+        "资源限制可以防止单个容器占用过多资源"
+      ],
+      "timestamp": "2026-02-03T11:06:52.532120715+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_monitoring_annotations",
+      "status": "WARNING",
+      "message": "Deployment ingress-nginx/ingress-nginx-controller 缺少监控注解",
+      "resource": "ingress-nginx-controller",
+      "resource_type": "Deployment",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加Prometheus监控注解",
+        "例如: prometheus.io/scrape, prometheus.io/port"
+      ],
+      "timestamp": "2026-02-03T11:06:52.532121893+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "replica_status",
+      "status": "PASS",
+      "message": "Deployment jiaozi/jiaozi-app-deployment 副本状态正常",
+      "resource": "jiaozi-app-deployment",
+      "resource_type": "Deployment",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "available_replicas": 2,
+        "conditions": [
+          {
+            "type": "Available",
+            "status": "True",
+            "lastUpdateTime": "2026-01-29T08:34:10Z",
+            "lastTransitionTime": "2026-01-29T08:34:10Z",
+            "reason": "MinimumReplicasAvailable",
+            "message": "Deployment has minimum availability."
+          },
+          {
+            "type": "Progressing",
+            "status": "True",
+            "lastUpdateTime": "2026-01-29T08:34:20Z",
+            "lastTransitionTime": "2026-01-21T02:58:06Z",
+            "reason": "NewReplicaSetAvailable",
+            "message": "ReplicaSet \"jiaozi-app-deployment-cd489cd6d\" has successfully progressed."
+          }
+        ],
+        "desired_replicas": 2,
+        "ready_replicas": 2,
+        "replicas": 2,
+        "updated_replicas": 2
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.533279868+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "update_strategy",
+      "status": "PASS",
+      "message": "Deployment jiaozi/jiaozi-app-deployment 更新策略: RollingUpdate",
+      "resource": "jiaozi-app-deployment",
+      "resource_type": "Deployment",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "max_surge": "25%",
+        "max_unavailable": "25%",
+        "strategy_type": "RollingUpdate"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.533282279+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "rolling_update_stalled",
+      "status": "WARNING",
+      "message": "Deployment jiaozi/jiaozi-app-deployment 滚动更新已进行 114h32m32.533283192s，可能已停滞",
+      "resource": "jiaozi-app-deployment",
+      "resource_type": "Deployment",
+      "namespace": "jiaozi",
+      "severity": "MEDIUM",
+      "evidence": {
+        "duration": "114h32m32.533283192s",
+        "progressing_condition": {
+          "type": "Progressing",
+          "status": "True",
+          "lastUpdateTime": "2026-01-29T08:34:20Z",
+          "lastTransitionTime": "2026-01-21T02:58:06Z",
+          "reason": "NewReplicaSetAvailable",
+          "message": "ReplicaSet \"jiaozi-app-deployment-cd489cd6d\" has successfully progressed."
+        }
+      },
+      "suggestions": [
+        "检查新Pod是否无法启动",
+        "查看就绪探针配置",
+        "检查资源限制是否足够",
+        "考虑增加滚动更新超时时间"
+      ],
+      "timestamp": "2026-02-03T11:06:52.533285216+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_version_label",
+      "status": "WARNING",
+      "message": "Deployment jiaozi/jiaozi-app-deployment 缺少版本标签",
+      "resource": "jiaozi-app-deployment",
+      "resource_type": "Deployment",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加版本标签以便跟踪和管理",
+        "建议使用app.kubernetes.io/version标签"
+      ],
+      "timestamp": "2026-02-03T11:06:52.533294567+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_monitoring_annotations",
+      "status": "WARNING",
+      "message": "Deployment jiaozi/jiaozi-app-deployment 缺少监控注解",
+      "resource": "jiaozi-app-deployment",
+      "resource_type": "Deployment",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加Prometheus监控注解",
+        "例如: prometheus.io/scrape, prometheus.io/port"
+      ],
+      "timestamp": "2026-02-03T11:06:52.533294985+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "replica_status",
+      "status": "PASS",
+      "message": "Deployment kubernetes-dashboard/dashboard-metrics-scraper 副本状态正常",
+      "resource": "dashboard-metrics-scraper",
+      "resource_type": "Deployment",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "available_replicas": 1,
+        "conditions": [
+          {
+            "type": "Progressing",
+            "status": "True",
+            "lastUpdateTime": "2025-10-30T09:31:00Z",
+            "lastTransitionTime": "2025-10-30T09:30:49Z",
+            "reason": "NewReplicaSetAvailable",
+            "message": "ReplicaSet \"dashboard-metrics-scraper-5bd5dd4784\" has successfully progressed."
+          },
+          {
+            "type": "Available",
+            "status": "True",
+            "lastUpdateTime": "2026-01-21T02:28:19Z",
+            "lastTransitionTime": "2026-01-21T02:28:19Z",
+            "reason": "MinimumReplicasAvailable",
+            "message": "Deployment has minimum availability."
+          }
+        ],
+        "desired_replicas": 1,
+        "ready_replicas": 1,
+        "replicas": 1,
+        "updated_replicas": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.534582417+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "update_strategy",
+      "status": "PASS",
+      "message": "Deployment kubernetes-dashboard/dashboard-metrics-scraper 更新策略: RollingUpdate",
+      "resource": "dashboard-metrics-scraper",
+      "resource_type": "Deployment",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "max_surge": "25%",
+        "max_unavailable": "25%",
+        "strategy_type": "RollingUpdate"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.534584376+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "rolling_update_stalled",
+      "status": "WARNING",
+      "message": "Deployment kubernetes-dashboard/dashboard-metrics-scraper 滚动更新已进行 2297h35m52.534584766s，可能已停滞",
+      "resource": "dashboard-metrics-scraper",
+      "resource_type": "Deployment",
+      "namespace": "kubernetes-dashboard",
+      "severity": "MEDIUM",
+      "evidence": {
+        "duration": "2297h35m52.534584766s",
+        "progressing_condition": {
+          "type": "Progressing",
+          "status": "True",
+          "lastUpdateTime": "2025-10-30T09:31:00Z",
+          "lastTransitionTime": "2025-10-30T09:30:49Z",
+          "reason": "NewReplicaSetAvailable",
+          "message": "ReplicaSet \"dashboard-metrics-scraper-5bd5dd4784\" has successfully progressed."
+        }
+      },
+      "suggestions": [
+        "检查新Pod是否无法启动",
+        "查看就绪探针配置",
+        "检查资源限制是否足够",
+        "考虑增加滚动更新超时时间"
+      ],
+      "timestamp": "2026-02-03T11:06:52.534587005+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_version_label",
+      "status": "WARNING",
+      "message": "Deployment kubernetes-dashboard/dashboard-metrics-scraper 缺少版本标签",
+      "resource": "dashboard-metrics-scraper",
+      "resource_type": "Deployment",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加版本标签以便跟踪和管理",
+        "建议使用app.kubernetes.io/version标签"
+      ],
+      "timestamp": "2026-02-03T11:06:52.534592051+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_monitoring_annotations",
+      "status": "WARNING",
+      "message": "Deployment kubernetes-dashboard/dashboard-metrics-scraper 缺少监控注解",
+      "resource": "dashboard-metrics-scraper",
+      "resource_type": "Deployment",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加Prometheus监控注解",
+        "例如: prometheus.io/scrape, prometheus.io/port"
+      ],
+      "timestamp": "2026-02-03T11:06:52.534592377+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "replica_status",
+      "status": "PASS",
+      "message": "Deployment kubernetes-dashboard/kubernetes-dashboard 副本状态正常",
+      "resource": "kubernetes-dashboard",
+      "resource_type": "Deployment",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "available_replicas": 1,
+        "conditions": [
+          {
+            "type": "Progressing",
+            "status": "True",
+            "lastUpdateTime": "2025-10-30T09:30:57Z",
+            "lastTransitionTime": "2025-10-30T09:30:49Z",
+            "reason": "NewReplicaSetAvailable",
+            "message": "ReplicaSet \"kubernetes-dashboard-7cf975b984\" has successfully progressed."
+          },
+          {
+            "type": "Available",
+            "status": "True",
+            "lastUpdateTime": "2026-01-21T02:28:24Z",
+            "lastTransitionTime": "2026-01-21T02:28:24Z",
+            "reason": "MinimumReplicasAvailable",
+            "message": "Deployment has minimum availability."
+          }
+        ],
+        "desired_replicas": 1,
+        "ready_replicas": 1,
+        "replicas": 1,
+        "updated_replicas": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.534594587+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "update_strategy",
+      "status": "PASS",
+      "message": "Deployment kubernetes-dashboard/kubernetes-dashboard 更新策略: RollingUpdate",
+      "resource": "kubernetes-dashboard",
+      "resource_type": "Deployment",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "max_surge": "1",
+        "max_unavailable": "0",
+        "strategy_type": "RollingUpdate"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.534595534+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "rolling_update_stalled",
+      "status": "WARNING",
+      "message": "Deployment kubernetes-dashboard/kubernetes-dashboard 滚动更新已进行 2297h35m55.534595749s，可能已停滞",
+      "resource": "kubernetes-dashboard",
+      "resource_type": "Deployment",
+      "namespace": "kubernetes-dashboard",
+      "severity": "MEDIUM",
+      "evidence": {
+        "duration": "2297h35m55.534595749s",
+        "progressing_condition": {
+          "type": "Progressing",
+          "status": "True",
+          "lastUpdateTime": "2025-10-30T09:30:57Z",
+          "lastTransitionTime": "2025-10-30T09:30:49Z",
+          "reason": "NewReplicaSetAvailable",
+          "message": "ReplicaSet \"kubernetes-dashboard-7cf975b984\" has successfully progressed."
+        }
+      },
+      "suggestions": [
+        "检查新Pod是否无法启动",
+        "查看就绪探针配置",
+        "检查资源限制是否足够",
+        "考虑增加滚动更新超时时间"
+      ],
+      "timestamp": "2026-02-03T11:06:52.534596575+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_version_label",
+      "status": "WARNING",
+      "message": "Deployment kubernetes-dashboard/kubernetes-dashboard 缺少版本标签",
+      "resource": "kubernetes-dashboard",
+      "resource_type": "Deployment",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加版本标签以便跟踪和管理",
+        "建议使用app.kubernetes.io/version标签"
+      ],
+      "timestamp": "2026-02-03T11:06:52.534598694+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_monitoring_annotations",
+      "status": "WARNING",
+      "message": "Deployment kubernetes-dashboard/kubernetes-dashboard 缺少监控注解",
+      "resource": "kubernetes-dashboard",
+      "resource_type": "Deployment",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加Prometheus监控注解",
+        "例如: prometheus.io/scrape, prometheus.io/port"
+      ],
+      "timestamp": "2026-02-03T11:06:52.534599033+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "replica_status",
+      "status": "PASS",
+      "message": "Deployment monitoring/grafana 副本状态正常",
+      "resource": "grafana",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "available_replicas": 1,
+        "conditions": [
+          {
+            "type": "Available",
+            "status": "True",
+            "lastUpdateTime": "2026-01-30T02:19:12Z",
+            "lastTransitionTime": "2026-01-30T02:19:12Z",
+            "reason": "MinimumReplicasAvailable",
+            "message": "Deployment has minimum availability."
+          },
+          {
+            "type": "Progressing",
+            "status": "True",
+            "lastUpdateTime": "2026-01-30T02:50:53Z",
+            "lastTransitionTime": "2026-01-30T02:05:56Z",
+            "reason": "NewReplicaSetAvailable",
+            "message": "ReplicaSet \"grafana-5598848c7f\" has successfully progressed."
+          }
+        ],
+        "desired_replicas": 1,
+        "ready_replicas": 1,
+        "replicas": 1,
+        "updated_replicas": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.536102811+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "update_strategy",
+      "status": "PASS",
+      "message": "Deployment monitoring/grafana 更新策略: RollingUpdate",
+      "resource": "grafana",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "max_surge": "25%",
+        "max_unavailable": "25%",
+        "strategy_type": "RollingUpdate"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.536104616+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "rolling_update_stalled",
+      "status": "WARNING",
+      "message": "Deployment monitoring/grafana 滚动更新已进行 96h15m59.536105263s，可能已停滞",
+      "resource": "grafana",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "MEDIUM",
+      "evidence": {
+        "duration": "96h15m59.536105263s",
+        "progressing_condition": {
+          "type": "Progressing",
+          "status": "True",
+          "lastUpdateTime": "2026-01-30T02:50:53Z",
+          "lastTransitionTime": "2026-01-30T02:05:56Z",
+          "reason": "NewReplicaSetAvailable",
+          "message": "ReplicaSet \"grafana-5598848c7f\" has successfully progressed."
+        }
+      },
+      "suggestions": [
+        "检查新Pod是否无法启动",
+        "查看就绪探针配置",
+        "检查资源限制是否足够",
+        "考虑增加滚动更新超时时间"
+      ],
+      "timestamp": "2026-02-03T11:06:52.53610711+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_monitoring_annotations",
+      "status": "WARNING",
+      "message": "Deployment monitoring/grafana 缺少监控注解",
+      "resource": "grafana",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加Prometheus监控注解",
+        "例如: prometheus.io/scrape, prometheus.io/port"
+      ],
+      "timestamp": "2026-02-03T11:06:52.536119863+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "replica_status",
+      "status": "PASS",
+      "message": "Deployment monitoring/loki 副本状态正常",
+      "resource": "loki",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "available_replicas": 1,
+        "conditions": [
+          {
+            "type": "Progressing",
+            "status": "True",
+            "lastUpdateTime": "2026-01-30T03:49:40Z",
+            "lastTransitionTime": "2026-01-30T03:41:34Z",
+            "reason": "NewReplicaSetAvailable",
+            "message": "ReplicaSet \"loki-fcbb6d57c\" has successfully progressed."
+          },
+          {
+            "type": "Available",
+            "status": "True",
+            "lastUpdateTime": "2026-01-30T03:50:24Z",
+            "lastTransitionTime": "2026-01-30T03:50:24Z",
+            "reason": "MinimumReplicasAvailable",
+            "message": "Deployment has minimum availability."
+          }
+        ],
+        "desired_replicas": 1,
+        "ready_replicas": 1,
+        "replicas": 1,
+        "updated_replicas": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.53612153+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "update_strategy",
+      "status": "PASS",
+      "message": "Deployment monitoring/loki 更新策略: RollingUpdate",
+      "resource": "loki",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "max_surge": "25%",
+        "max_unavailable": "25%",
+        "strategy_type": "RollingUpdate"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.536122174+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "rolling_update_stalled",
+      "status": "WARNING",
+      "message": "Deployment monitoring/loki 滚动更新已进行 95h17m12.536122365s，可能已停滞",
+      "resource": "loki",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "MEDIUM",
+      "evidence": {
+        "duration": "95h17m12.536122365s",
+        "progressing_condition": {
+          "type": "Progressing",
+          "status": "True",
+          "lastUpdateTime": "2026-01-30T03:49:40Z",
+          "lastTransitionTime": "2026-01-30T03:41:34Z",
+          "reason": "NewReplicaSetAvailable",
+          "message": "ReplicaSet \"loki-fcbb6d57c\" has successfully progressed."
+        }
+      },
+      "suggestions": [
+        "检查新Pod是否无法启动",
+        "查看就绪探针配置",
+        "检查资源限制是否足够",
+        "考虑增加滚动更新超时时间"
+      ],
+      "timestamp": "2026-02-03T11:06:52.536122976+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_version_label",
+      "status": "WARNING",
+      "message": "Deployment monitoring/loki 缺少版本标签",
+      "resource": "loki",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加版本标签以便跟踪和管理",
+        "建议使用app.kubernetes.io/version标签"
+      ],
+      "timestamp": "2026-02-03T11:06:52.536124665+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_monitoring_annotations",
+      "status": "WARNING",
+      "message": "Deployment monitoring/loki 缺少监控注解",
+      "resource": "loki",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加Prometheus监控注解",
+        "例如: prometheus.io/scrape, prometheus.io/port"
+      ],
+      "timestamp": "2026-02-03T11:06:52.536124942+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "replica_status",
+      "status": "PASS",
+      "message": "Deployment monitoring/prometheus-server 副本状态正常",
+      "resource": "prometheus-server",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "available_replicas": 1,
+        "conditions": [
+          {
+            "type": "Available",
+            "status": "True",
+            "lastUpdateTime": "2026-01-30T02:10:22Z",
+            "lastTransitionTime": "2026-01-30T02:10:22Z",
+            "reason": "MinimumReplicasAvailable",
+            "message": "Deployment has minimum availability."
+          },
+          {
+            "type": "Progressing",
+            "status": "True",
+            "lastUpdateTime": "2026-01-30T06:07:11Z",
+            "lastTransitionTime": "2026-01-30T02:10:13Z",
+            "reason": "NewReplicaSetAvailable",
+            "message": "ReplicaSet \"prometheus-server-c7bbbdbd5\" has successfully progressed."
+          }
+        ],
+        "desired_replicas": 1,
+        "ready_replicas": 1,
+        "replicas": 1,
+        "updated_replicas": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.536125725+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "update_strategy",
+      "status": "PASS",
+      "message": "Deployment monitoring/prometheus-server 更新策略: RollingUpdate",
+      "resource": "prometheus-server",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "max_surge": "25%",
+        "max_unavailable": "25%",
+        "strategy_type": "RollingUpdate"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.536135541+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "rolling_update_stalled",
+      "status": "WARNING",
+      "message": "Deployment monitoring/prometheus-server 滚动更新已进行 92h59m41.536135827s，可能已停滞",
+      "resource": "prometheus-server",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "MEDIUM",
+      "evidence": {
+        "duration": "92h59m41.536135827s",
+        "progressing_condition": {
+          "type": "Progressing",
+          "status": "True",
+          "lastUpdateTime": "2026-01-30T06:07:11Z",
+          "lastTransitionTime": "2026-01-30T02:10:13Z",
+          "reason": "NewReplicaSetAvailable",
+          "message": "ReplicaSet \"prometheus-server-c7bbbdbd5\" has successfully progressed."
+        }
+      },
+      "suggestions": [
+        "检查新Pod是否无法启动",
+        "查看就绪探针配置",
+        "检查资源限制是否足够",
+        "考虑增加滚动更新超时时间"
+      ],
+      "timestamp": "2026-02-03T11:06:52.536136592+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_version_label",
+      "status": "WARNING",
+      "message": "Deployment monitoring/prometheus-server 缺少版本标签",
+      "resource": "prometheus-server",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加版本标签以便跟踪和管理",
+        "建议使用app.kubernetes.io/version标签"
+      ],
+      "timestamp": "2026-02-03T11:06:52.536139614+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "missing_monitoring_annotations",
+      "status": "WARNING",
+      "message": "Deployment monitoring/prometheus-server 缺少监控注解",
+      "resource": "prometheus-server",
+      "resource_type": "Deployment",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": null,
+      "suggestions": [
+        "添加Prometheus监控注解",
+        "例如: prometheus.io/scrape, prometheus.io/port"
+      ],
+      "timestamp": "2026-02-03T11:06:52.536139964+08:00",
+      "duration": 0
+    },
+    {
+      "category": "workload",
+      "check_name": "deployment_health",
+      "check_id": "deployment_summary",
+      "status": "FAIL",
+      "message": "Deployment健康状态: 总数 7, 有问题 7",
+      "resource": "cluster",
+      "resource_type": "cluster",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "namespaces": 9,
+        "total_deployments": 7,
+        "unhealthy_deployments": 7
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.536141547+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service default/kubernetes 类型: ClusterIP",
+      "resource": "kubernetes",
+      "resource_type": "Service",
+      "namespace": "default",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.96.0.1",
+        "type": "ClusterIP"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.90599287+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service default/kubernetes 端口配置",
+      "resource": "kubernetes",
+      "resource_type": "Service",
+      "namespace": "default",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 1,
+        "ports": [
+          {
+            "name": "https",
+            "node_port": 0,
+            "port": 443,
+            "protocol": "TCP",
+            "target_port": "6443"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:52.905996235+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "no_selector",
+      "status": "WARNING",
+      "message": "Service default/kubernetes 没有选择器",
+      "resource": "kubernetes",
+      "resource_type": "Service",
+      "namespace": "default",
+      "severity": "LOW",
+      "evidence": {
+        "selector": null
+      },
+      "suggestions": [
+        "如果这是外部服务，请确认端点已正确配置",
+        "如果是集群内服务，请添加选择器以自动管理端点"
+      ],
+      "timestamp": "2026-02-03T11:06:52.905997867+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service ingress-nginx/ingress-nginx-controller 类型: NodePort",
+      "resource": "ingress-nginx-controller",
+      "resource_type": "Service",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.102.180.190",
+        "type": "NodePort"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:53.306417576+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service ingress-nginx/ingress-nginx-controller 端口配置",
+      "resource": "ingress-nginx-controller",
+      "resource_type": "Service",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 2,
+        "ports": [
+          {
+            "name": "http",
+            "node_port": 30170,
+            "port": 80,
+            "protocol": "TCP",
+            "target_port": "http"
+          },
+          {
+            "name": "https",
+            "node_port": 31121,
+            "port": 443,
+            "protocol": "TCP",
+            "target_port": "https"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:53.306420984+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "endpoint_availability",
+      "status": "PASS",
+      "message": "Service ingress-nginx/ingress-nginx-controller 有 1 个就绪端点",
+      "resource": "ingress-nginx-controller",
+      "resource_type": "Service",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "not_ready_pods": 0,
+        "ready_pods": 1,
+        "selector": {
+          "app.kubernetes.io/component": "controller",
+          "app.kubernetes.io/instance": "ingress-nginx",
+          "app.kubernetes.io/name": "ingress-nginx"
+        },
+        "total_pods": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:53.506507112+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service ingress-nginx/ingress-nginx-controller-admission 类型: ClusterIP",
+      "resource": "ingress-nginx-controller-admission",
+      "resource_type": "Service",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.101.2.176",
+        "type": "ClusterIP"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:53.506512835+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service ingress-nginx/ingress-nginx-controller-admission 端口配置",
+      "resource": "ingress-nginx-controller-admission",
+      "resource_type": "Service",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 1,
+        "ports": [
+          {
+            "name": "https-webhook",
+            "node_port": 0,
+            "port": 443,
+            "protocol": "TCP",
+            "target_port": "webhook"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:53.506515549+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "endpoint_availability",
+      "status": "PASS",
+      "message": "Service ingress-nginx/ingress-nginx-controller-admission 有 1 个就绪端点",
+      "resource": "ingress-nginx-controller-admission",
+      "resource_type": "Service",
+      "namespace": "ingress-nginx",
+      "severity": "LOW",
+      "evidence": {
+        "not_ready_pods": 0,
+        "ready_pods": 1,
+        "selector": {
+          "app.kubernetes.io/component": "controller",
+          "app.kubernetes.io/instance": "ingress-nginx",
+          "app.kubernetes.io/name": "ingress-nginx"
+        },
+        "total_pods": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:53.705641109+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service jiaozi/jiaozi-backend 类型: NodePort",
+      "resource": "jiaozi-backend",
+      "resource_type": "Service",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.102.119.171",
+        "type": "NodePort"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:53.905423783+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service jiaozi/jiaozi-backend 端口配置",
+      "resource": "jiaozi-backend",
+      "resource_type": "Service",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 1,
+        "ports": [
+          {
+            "name": "tcp-8000",
+            "node_port": 30088,
+            "port": 8000,
+            "protocol": "TCP",
+            "target_port": "8000"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:53.905426472+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "endpoint_availability",
+      "status": "FAIL",
+      "message": "Service jiaozi/jiaozi-backend 没有匹配的Pod",
+      "resource": "jiaozi-backend",
+      "resource_type": "Service",
+      "namespace": "jiaozi",
+      "severity": "HIGH",
+      "evidence": {
+        "not_ready_pods": 0,
+        "ready_pods": 0,
+        "selector": {
+          "app": "jiaozi-backend"
+        },
+        "total_pods": 0
+      },
+      "suggestions": [
+        "检查Pod标签是否与Service选择器匹配",
+        "确认Pod已部署到正确的命名空间"
+      ],
+      "timestamp": "2026-02-03T11:06:54.106324621+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service jiaozi/jozi-app-service 类型: ClusterIP",
+      "resource": "jozi-app-service",
+      "resource_type": "Service",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.104.42.20",
+        "type": "ClusterIP"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:54.106338499+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service jiaozi/jozi-app-service 端口配置",
+      "resource": "jozi-app-service",
+      "resource_type": "Service",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 1,
+        "ports": [
+          {
+            "name": "http",
+            "node_port": 0,
+            "port": 3001,
+            "protocol": "TCP",
+            "target_port": "3001"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:54.10634134+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "endpoint_availability",
+      "status": "PASS",
+      "message": "Service jiaozi/jozi-app-service 有 2 个就绪端点",
+      "resource": "jozi-app-service",
+      "resource_type": "Service",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "not_ready_pods": 0,
+        "ready_pods": 2,
+        "selector": {
+          "app": "jozi-app"
+        },
+        "total_pods": 2
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:54.306210735+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service jiaozi/standalone-backend-service 类型: NodePort",
+      "resource": "standalone-backend-service",
+      "resource_type": "Service",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.101.68.137",
+        "type": "NodePort"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:54.306217279+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service jiaozi/standalone-backend-service 端口配置",
+      "resource": "standalone-backend-service",
+      "resource_type": "Service",
+      "namespace": "jiaozi",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 1,
+        "ports": [
+          {
+            "name": "http",
+            "node_port": 30089,
+            "port": 81,
+            "protocol": "TCP",
+            "target_port": "8000"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:54.306221063+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "endpoint_availability",
+      "status": "FAIL",
+      "message": "Service jiaozi/standalone-backend-service 没有匹配的Pod",
+      "resource": "standalone-backend-service",
+      "resource_type": "Service",
+      "namespace": "jiaozi",
+      "severity": "HIGH",
+      "evidence": {
+        "not_ready_pods": 0,
+        "ready_pods": 0,
+        "selector": {
+          "app": "standalone-backend"
+        },
+        "total_pods": 0
+      },
+      "suggestions": [
+        "检查Pod标签是否与Service选择器匹配",
+        "确认Pod已部署到正确的命名空间"
+      ],
+      "timestamp": "2026-02-03T11:06:54.506310332+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service kubernetes-dashboard/dashboard-metrics-scraper 类型: ClusterIP",
+      "resource": "dashboard-metrics-scraper",
+      "resource_type": "Service",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.98.161.154",
+        "type": "ClusterIP"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:54.706540009+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_name_missing",
+      "status": "WARNING",
+      "message": "Service kubernetes-dashboard/dashboard-metrics-scraper 端口 8000 缺少名称",
+      "resource": "dashboard-metrics-scraper",
+      "resource_type": "Service",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "port": 8000,
+        "target_port": "8000"
+      },
+      "suggestions": [
+        "为端口设置一个有意义的名称",
+        "端口名称在Istio等Service Mesh中有特殊用途"
+      ],
+      "timestamp": "2026-02-03T11:06:54.706543265+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service kubernetes-dashboard/dashboard-metrics-scraper 端口配置",
+      "resource": "dashboard-metrics-scraper",
+      "resource_type": "Service",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 1,
+        "ports": [
+          {
+            "name": "",
+            "node_port": 0,
+            "port": 8000,
+            "protocol": "TCP",
+            "target_port": "8000"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:54.706545301+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "endpoint_availability",
+      "status": "PASS",
+      "message": "Service kubernetes-dashboard/dashboard-metrics-scraper 有 1 个就绪端点",
+      "resource": "dashboard-metrics-scraper",
+      "resource_type": "Service",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "not_ready_pods": 0,
+        "ready_pods": 1,
+        "selector": {
+          "k8s-app": "dashboard-metrics-scraper"
+        },
+        "total_pods": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:54.905799286+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service kubernetes-dashboard/kubernetes-dashboard 类型: NodePort",
+      "resource": "kubernetes-dashboard",
+      "resource_type": "Service",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.104.221.251",
+        "type": "NodePort"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:54.905804038+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service kubernetes-dashboard/kubernetes-dashboard 端口配置",
+      "resource": "kubernetes-dashboard",
+      "resource_type": "Service",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 1,
+        "ports": [
+          {
+            "name": "https",
+            "node_port": 30443,
+            "port": 443,
+            "protocol": "TCP",
+            "target_port": "8443"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:54.905806116+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "endpoint_availability",
+      "status": "PASS",
+      "message": "Service kubernetes-dashboard/kubernetes-dashboard 有 1 个就绪端点",
+      "resource": "kubernetes-dashboard",
+      "resource_type": "Service",
+      "namespace": "kubernetes-dashboard",
+      "severity": "LOW",
+      "evidence": {
+        "not_ready_pods": 0,
+        "ready_pods": 1,
+        "selector": {
+          "k8s-app": "kubernetes-dashboard"
+        },
+        "total_pods": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:55.106046455+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service monitoring/alertmanager 类型: NodePort",
+      "resource": "alertmanager",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.110.40.179",
+        "type": "NodePort"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:55.306139833+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_name_missing",
+      "status": "WARNING",
+      "message": "Service monitoring/alertmanager 端口 80 缺少名称",
+      "resource": "alertmanager",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "port": 80,
+        "target_port": "9093"
+      },
+      "suggestions": [
+        "为端口设置一个有意义的名称",
+        "端口名称在Istio等Service Mesh中有特殊用途"
+      ],
+      "timestamp": "2026-02-03T11:06:55.306142555+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service monitoring/alertmanager 端口配置",
+      "resource": "alertmanager",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 1,
+        "ports": [
+          {
+            "name": "",
+            "node_port": 30903,
+            "port": 80,
+            "protocol": "TCP",
+            "target_port": "9093"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:55.306144615+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "endpoint_availability",
+      "status": "FAIL",
+      "message": "Service monitoring/alertmanager 没有匹配的Pod",
+      "resource": "alertmanager",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "HIGH",
+      "evidence": {
+        "not_ready_pods": 0,
+        "ready_pods": 0,
+        "selector": {
+          "app": "alertmanager"
+        },
+        "total_pods": 0
+      },
+      "suggestions": [
+        "检查Pod标签是否与Service选择器匹配",
+        "确认Pod已部署到正确的命名空间"
+      ],
+      "timestamp": "2026-02-03T11:06:55.506471206+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service monitoring/grafana 类型: NodePort",
+      "resource": "grafana",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.108.162.23",
+        "type": "NodePort"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:55.506476946+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service monitoring/grafana 端口配置",
+      "resource": "grafana",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 1,
+        "ports": [
+          {
+            "name": "service",
+            "node_port": 30300,
+            "port": 80,
+            "protocol": "TCP",
+            "target_port": "grafana"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:55.506479412+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "endpoint_availability",
+      "status": "PASS",
+      "message": "Service monitoring/grafana 有 1 个就绪端点",
+      "resource": "grafana",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "not_ready_pods": 0,
+        "ready_pods": 1,
+        "selector": {
+          "app.kubernetes.io/instance": "grafana",
+          "app.kubernetes.io/name": "grafana"
+        },
+        "total_pods": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:55.706940909+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service monitoring/loki 类型: ClusterIP",
+      "resource": "loki",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.110.54.89",
+        "type": "ClusterIP"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:55.706945395+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service monitoring/loki 端口配置",
+      "resource": "loki",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 1,
+        "ports": [
+          {
+            "name": "http-metrics",
+            "node_port": 0,
+            "port": 3100,
+            "protocol": "TCP",
+            "target_port": "http-metrics"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:55.7069472+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "endpoint_availability",
+      "status": "PASS",
+      "message": "Service monitoring/loki 有 1 个就绪端点",
+      "resource": "loki",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "not_ready_pods": 0,
+        "ready_pods": 1,
+        "selector": {
+          "app": "loki"
+        },
+        "total_pods": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:55.906355256+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_type",
+      "status": "PASS",
+      "message": "Service monitoring/prometheus-server 类型: NodePort",
+      "resource": "prometheus-server",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "cluster_ip": "10.108.115.91",
+        "type": "NodePort"
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:55.906361238+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "port_summary",
+      "status": "PASS",
+      "message": "Service monitoring/prometheus-server 端口配置",
+      "resource": "prometheus-server",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "port_count": 1,
+        "ports": [
+          {
+            "name": "http",
+            "node_port": 30900,
+            "port": 80,
+            "protocol": "TCP",
+            "target_port": "9090"
+          }
+        ]
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:55.906366707+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "endpoint_availability",
+      "status": "PASS",
+      "message": "Service monitoring/prometheus-server 有 1 个就绪端点",
+      "resource": "prometheus-server",
+      "resource_type": "Service",
+      "namespace": "monitoring",
+      "severity": "LOW",
+      "evidence": {
+        "not_ready_pods": 0,
+        "ready_pods": 1,
+        "selector": {
+          "app": "prometheus",
+          "component": "server"
+        },
+        "total_pods": 1
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:56.106057515+08:00",
+      "duration": 0
+    },
+    {
+      "category": "network",
+      "check_name": "service_health",
+      "check_id": "service_summary",
+      "status": "WARNING",
+      "message": "Service健康状态: 总数 12, 有问题 5",
+      "resource": "cluster",
+      "resource_type": "cluster",
+      "namespace": "",
+      "severity": "LOW",
+      "evidence": {
+        "namespaces": 9,
+        "problem_services": 5,
+        "total_services": 12
+      },
+      "suggestions": null,
+      "timestamp": "2026-02-03T11:06:56.106061109+08:00",
+      "duration": 0
+    }
+  ],
+  "recommendations": [
+    "发现 3 个高危问题，建议尽快处理",
+    "查看容器退出代码和原因",
+    "为所有容器设置CPU和内存限制",
+    "参考应用实际使用情况设置合理的限制",
+    "使用Vertical Pod Autoscaler自动设置资源",
+    "为所有容器设置CPU和内存请求",
+    "资源请求应该反映应用的最小资源需求",
+    "为所有容器设置就绪探针",
+    "就绪探针确保流量只转发到完全准备好的Pod",
+    "为关键容器设置存活探针",
+    "存活探针可以自动重启失败的容器",
+    "避免以root用户运行容器",
+    "创建非root用户运行应用",
+    "在Dockerfile中使用USER指令",
+    "检查容器日志查找重启原因",
+    "检查内存限制是否过小",
+    "检查应用是否有内存泄漏",
+    "检查健康检查探针配置",
+    "检查新Pod是否无法启动",
+    "查看就绪探针配置",
+    "检查资源限制是否足够",
+    "考虑增加滚动更新超时时间",
+    "为容器设置CPU和内存限制",
+    "资源限制可以防止单个容器占用过多资源",
+    "添加Prometheus监控注解",
+    "例如: prometheus.io/scrape, prometheus.io/port",
+    "添加版本标签以便跟踪和管理",
+    "建议使用app.kubernetes.io/version标签",
+    "如果这是外部服务，请确认端点已正确配置",
+    "如果是集群内服务，请添加选择器以自动管理端点",
+    "检查Pod标签是否与Service选择器匹配",
+    "确认Pod已部署到正确的命名空间",
+    "为端口设置一个有意义的名称",
+    "端口名称在Istio等Service Mesh中有特殊用途"
+  ],
+  "metadata": {
+    "tool_version": "1.0.0",
+    "generated_by": "k8s-inspector"
+  }
+}

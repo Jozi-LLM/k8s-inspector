@@ -1,0 +1,392 @@
+Registering checker: cluster_info
+Registry size after registration: 1
+Registering checker: node_health
+Registry size after registration: 2
+Registering checker: pod_health
+Registry size after registration: 3
+Registering checker: deployment_health
+Registry size after registration: 4
+Registering checker: resource_usage
+Registry size after registration: 5
+Registering checker: service_health
+Registry size after registration: 6
+1.7700871239644382e+09	info	cli/main.go:57	已注册的检查器数量: 6
+1.7700871239647005e+09	info	cli/main.go:59	已注册的检查器: resource_usage
+1.7700871239647117e+09	info	cli/main.go:59	已注册的检查器: service_health
+1.7700871239647226e+09	info	cli/main.go:59	已注册的检查器: cluster_info
+1.7700871239647276e+09	info	cli/main.go:59	已注册的检查器: node_health
+1.7700871239647326e+09	info	cli/main.go:59	已注册的检查器: pod_health
+1.7700871239647398e+09	info	cli/main.go:59	已注册的检查器: deployment_health
+1.7700871239648716e+09	info	cli/main.go:95	开始集群巡检...
+1.7700871239679322e+09	info	storage/manager.go:99	存储管理器初始化完成	{"driver": "sqlite", "dsn": "./data/k8s-inspector.db"}
+1.7700871239679797e+09	info	alerting/manager.go:75	注册告警发送器	{"sender": "slack"}
+1.770087123974656e+09	info	k8s/client.go:80	成功连接到K8S集群
+1.770087123978995e+09	info	analyzer/engine.go:35	开始集群巡检	{"cluster": "production", "checkers": 6}
+1.770087123979034e+09	info	base/cluster_info.go:36	开始进行集群基本信息检查	{"checker": "cluster_info"}
+1.7700871239829967e+09	info	base/cluster_info.go:135	集群基本信息检查完成	{"checker": "cluster_info", "duration": 0.003949625, "results": 2}
+1.7700871239830394e+09	info	checker/node_health.go:40	开始执行节点健康检查	{"checker": "node_health"}
+1.7700871239851797e+09	info	checker/node_health.go:80	完成节点健康检查checkernode_healthduration2.045271msnodes10results[{node node_health node_health PASS 节点 jiaozi-uat 状态正常 jiaozi-uat   LOW map[last_heartbeat_time:2026-02-03T10:47:21+08:00 mesage:节点 jiaozi-uat 状态正常 node_conditions:[{NetworkUnavailable False 2026-01-29 16:27:41 +0800 CST 2026-01-29 16:27:41 +0800 CST FlannelIsUp Flannel is running on this node} {MemoryPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientMemory kubelet has sufficient memory available} {DiskPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasNoDiskPressure kubelet has no disk pressure} {PIDPressure False 2026-02-03 10:47:21 +0800 CST 2025-10-31 11:29:28 +0800 CST KubeletHasSufficientPID kubelet has sufficient PID available} {Ready True 2026-02-03 10:47:21 +0800 CST 2026-01-29 00:15:51 +0800 CST KubeletReady kubelet is posting ready status}] ready:true] [] 2026-02-03 10:52:03.985071128 +0800 CST m=+0.026089301 0s} {node node_health node_schedulable PASS 节点 jiaozi-uat 可调度 jiaozi-uat Node  LOW map[taints:[] unschedulable:false] [] 2026-02-03 10:52:03.985072664 +0800 CST m=+0.026090839 0s} {node node_health memory_pressure PASS 节点 jiaozi-uat 内存压力正常 jiaozi-uat Node  LOW map[memory_pressure:false message:kubelet has sufficient memory available] [] 2026-02-03 10:52:03.985073656 +0800 CST m=+0.026091821 0s} {node node_health disk_pressure PASS 节点 jiaozi-uat 磁盘压力正常 jiaozi-uat Node  LOW map[disk_pressure:false message:kubelet has no disk pressure] [] 2026-02-03 10:52:03.985074543 +0800 CST m=+0.026092711 0s} {node node_health pid_pressure PASS 节点 jiaozi-uat PID压力正常 jiaozi-uat Node  LOW map[message:kubelet has sufficient PID available pid_pressure:false] [] 2026-02-03 10:52:03.985075273 +0800 CST m=+0.026093438 0s} {node node_health network_available PASS 节点 jiaozi-uat 网络正常 jiaozi-uat Node  LOW map[addresses:[{InternalIP 172.16.40.253} {Hostname jiaozi-uat}] message:Flannel is running on this node network_unavailable:false] [] 2026-02-03 10:52:03.985076594 +0800 CST m=+0.026094768 0s} {node node_health kernel_version PASS 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64 jiaozi-uat Node  LOW map[architecture:amd64 kernel_version:5.10.134-19.1.al8.x86_64 os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:52:03.985077621 +0800 CST m=+0.026095785 0s} {node node_health container_runtime PASS 节点 jiaozi-uat 容器运行时: containerd://1.6.32 jiaozi-uat Node  LOW map[container_runtime_version:containerd://1.6.32 kubelet_version:v1.28.2] [] 2026-02-03 10:52:03.985078655 +0800 CST m=+0.026096826 0s} {node node_health operating_system PASS 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition) jiaozi-uat Node  LOW map[operating_system:linux os_image:Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)] [] 2026-02-03 10:52:03.985079432 +0800 CST m=+0.026097597 0s} {node node_health resource_summary PASS 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki jiaozi-uat Node  LOW map[cpu_allocatable:4 cpu_capacity:4 memory_allocatable:15719356Ki memory_capacity:15821756Ki pods_capacity:110] [] 2026-02-03 10:52:03.985091034 +0800 CST m=+0.026109203 0s}]
+1.7700871239852123e+09	info	workload/pod_health.go:38	开始执行Pod健康检查	{"checker": "pod_health"}
+1.7700871240001638e+09	info	workload/pod_health.go:128	完成Pod健康检查	{"checker": "pod_health", "duration": 0.014940751, "total_pods": 12, "problem_pods": 12}
+1.7700871240001984e+09	info	resource/usage_checker.go:37	检查资源使用情况	{"checker": "resource_usage"}
+1.7700871240018003e+09	info	resource/usage_checker.go:74	节点资源使用情况检查完成	{"checker": "resource_usage", "duration": 0.001594529, "node_count": 1, "results": 10}
+1.7700871240019891e+09	info	workload/deploy_checker.go:39	开始执行Deployment检查	{"checker": "deployment_health"}
+1.7700871240156615e+09	info	workload/deploy_checker.go:129	完成Deployment检查	{"checker": "deployment_health", "duration": 0.013659595, "total_deployments": 7, "unhealthy_deployments": 7}
+1.7700871240158124e+09	info	network/service_check.go:38	开始执行Service检查	{"checker": "service_health"}
+1.770087127582085e+09	info	network/service_check.go:128	完成Service检查	{"checker": "service_health", "duration": 3.566248808, "total_services": 12, "problem_services": 5}
+1.770087127584174e+09	info	analyzer/engine.go:71	集群巡检完成	{"cluster": "production", "duration": 3.605176633, "score": 78, "passed": 101, "failed": 7}
+1.7700871276021779e+09	info	storage/manager.go:179	巡检结果已保存	{"cluster": "production", "score": 78, "record_id": "1770087127585154584"}
+
+================================================================================
+Kubernetes集群巡检报告
+================================================================================
+
+集群: production
+时间: 2026-02-03 10:52:07
+耗时: 3.61秒
+
+--------------------------------------------------------------------------------
+检查摘要:
+总分: 78/100
+检查项: 总计162 通过101 警告54 失败7 错误0 跳过0
+--------------------------------------------------------------------------------
+
+BASE:
+----------------------------------------
+📊 PASS       cluster_info 集群版本: v1.28.2
+📊 PASS       cluster_info 节点状态: 1/1 Ready
+
+NODE:
+----------------------------------------
+📊 PASS       node_health 节点 jiaozi-uat 健康状态
+  PASS       状态正常
+  PASS       可调度
+  PASS       内存压力正常
+  PASS       磁盘压力正常
+  PASS       PID压力正常
+  PASS       网络正常
+  PASS       内核版本: 5.10.134-19.1.al8.x86_64
+  PASS       容器运行时: containerd://1.6.32
+  PASS       操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)
+  PASS       资源容量: CPU 4, 内存 15821756Ki
+
+WORKLOAD:
+----------------------------------------
+📊 PASS       pod_health Pod cluster 状态
+  FAIL       Pod健康状态: 总数 12, 有问题 12
+⚠️ WARNING    pod_health Pod ingress-nginx/ingress-nginx-admission-create-d2qz4 状态
+  PASS       状态正常
+  FAIL       有容器已终止
+    建议: 查看容器退出代码和原因
+  PASS       重启次数正常
+  WARNING    的容器未设置资源限制: create
+    建议: 为所有容器设置CPU和内存限制
+    建议: 参考应用实际使用情况设置合理的限制
+    建议: 使用Vertical Pod Autoscaler自动设置资源
+  WARNING    的容器未设置资源请求: create
+    建议: 为所有容器设置CPU和内存请求
+    建议: 资源请求应该反映应用的最小资源需求
+  WARNING    的容器未设置就绪探针: create
+    建议: 为所有容器设置就绪探针
+    建议: 就绪探针确保流量只转发到完全准备好的Pod
+  WARNING    的容器未设置存活探针: create
+    建议: 为关键容器设置存活探针
+    建议: 存活探针可以自动重启失败的容器
+  WARNING    的容器以root用户运行: create
+    建议: 避免以root用户运行容器
+    建议: 创建非root用户运行应用
+    建议: 在Dockerfile中使用USER指令
+⚠️ WARNING    pod_health Pod ingress-nginx/ingress-nginx-admission-patch-7nk6m 状态
+  PASS       状态正常
+  FAIL       有容器已终止
+    建议: 查看容器退出代码和原因
+  PASS       重启次数正常
+  WARNING    的容器未设置资源限制: patch
+    建议: 为所有容器设置CPU和内存限制
+    建议: 参考应用实际使用情况设置合理的限制
+    建议: 使用Vertical Pod Autoscaler自动设置资源
+  WARNING    的容器未设置资源请求: patch
+    建议: 为所有容器设置CPU和内存请求
+    建议: 资源请求应该反映应用的最小资源需求
+  WARNING    的容器未设置就绪探针: patch
+    建议: 为所有容器设置就绪探针
+    建议: 就绪探针确保流量只转发到完全准备好的Pod
+  WARNING    的容器未设置存活探针: patch
+    建议: 为关键容器设置存活探针
+    建议: 存活探针可以自动重启失败的容器
+  WARNING    的容器以root用户运行: patch
+    建议: 避免以root用户运行容器
+    建议: 创建非root用户运行应用
+    建议: 在Dockerfile中使用USER指令
+⚠️ WARNING    pod_health Pod ingress-nginx/ingress-nginx-controller-5f68f8d58f-mrpbf 状态
+  PASS       状态正常
+  PASS       所有容器运行正常
+  WARNING    重启次数较多: 40次
+    建议: 检查容器日志查找重启原因
+    建议: 检查内存限制是否过小
+    建议: 检查应用是否有内存泄漏
+    建议: 检查健康检查探针配置
+  WARNING    的容器未设置资源限制: controller
+    建议: 为所有容器设置CPU和内存限制
+    建议: 参考应用实际使用情况设置合理的限制
+    建议: 使用Vertical Pod Autoscaler自动设置资源
+⚠️ WARNING    pod_health Pod jiaozi/jiaozi-app-deployment-cd489cd6d-gz429 状态
+  PASS       状态正常
+  PASS       所有容器运行正常
+  PASS       重启次数正常
+  WARNING    的容器以root用户运行: jozi-app
+    建议: 避免以root用户运行容器
+    建议: 创建非root用户运行应用
+    建议: 在Dockerfile中使用USER指令
+⚠️ WARNING    pod_health Pod jiaozi/jiaozi-app-deployment-cd489cd6d-lv5bm 状态
+  PASS       状态正常
+  PASS       所有容器运行正常
+  PASS       重启次数正常
+  WARNING    的容器以root用户运行: jozi-app
+    建议: 避免以root用户运行容器
+    建议: 创建非root用户运行应用
+    建议: 在Dockerfile中使用USER指令
+⚠️ WARNING    pod_health Pod monitoring/node-exporter-vq2tr 状态
+  PASS       状态正常
+  PASS       所有容器运行正常
+  PASS       重启次数正常
+  PASS       设置了节点亲和性
+  WARNING    的容器未设置就绪探针: node-exporter
+    建议: 为所有容器设置就绪探针
+    建议: 就绪探针确保流量只转发到完全准备好的Pod
+  WARNING    的容器未设置存活探针: node-exporter
+    建议: 为关键容器设置存活探针
+    建议: 存活探针可以自动重启失败的容器
+⚠️ WARNING    pod_health Pod kubernetes-dashboard/dashboard-metrics-scraper-5bd5dd4784-rrxxp 状态
+  PASS       状态正常
+  PASS       所有容器运行正常
+  WARNING    重启次数较多: 28次
+    建议: 检查容器日志查找重启原因
+    建议: 检查内存限制是否过小
+    建议: 检查应用是否有内存泄漏
+    建议: 检查健康检查探针配置
+  WARNING    的容器未设置就绪探针: dashboard-metrics-scraper
+    建议: 为所有容器设置就绪探针
+    建议: 就绪探针确保流量只转发到完全准备好的Pod
+⚠️ WARNING    pod_health Pod kubernetes-dashboard/kubernetes-dashboard-7cf975b984-8p8lh 状态
+  PASS       状态正常
+  PASS       所有容器运行正常
+  WARNING    重启次数较多: 22次
+    建议: 检查容器日志查找重启原因
+    建议: 检查内存限制是否过小
+    建议: 检查应用是否有内存泄漏
+    建议: 检查健康检查探针配置
+  WARNING    的容器未设置就绪探针: kubernetes-dashboard
+    建议: 为所有容器设置就绪探针
+    建议: 就绪探针确保流量只转发到完全准备好的Pod
+⚠️ WARNING    pod_health Pod monitoring/grafana-5598848c7f-qh85g 状态
+  PASS       状态正常
+  PASS       所有容器运行正常
+  PASS       重启次数正常
+  WARNING    的容器以root用户运行: grafana
+    建议: 避免以root用户运行容器
+    建议: 创建非root用户运行应用
+    建议: 在Dockerfile中使用USER指令
+⚠️ WARNING    pod_health Pod monitoring/loki-fcbb6d57c-lvnl4 状态
+  PASS       状态正常
+  PASS       所有容器运行正常
+  PASS       重启次数正常
+  WARNING    的容器未设置就绪探针: loki
+    建议: 为所有容器设置就绪探针
+    建议: 就绪探针确保流量只转发到完全准备好的Pod
+  WARNING    的容器未设置存活探针: loki
+    建议: 为关键容器设置存活探针
+    建议: 存活探针可以自动重启失败的容器
+  WARNING    的容器以root用户运行: loki
+    建议: 避免以root用户运行容器
+    建议: 创建非root用户运行应用
+    建议: 在Dockerfile中使用USER指令
+⚠️ WARNING    pod_health Pod monitoring/prometheus-server-c7bbbdbd5-f2gms 状态
+  PASS       状态正常
+  PASS       所有容器运行正常
+  PASS       重启次数正常
+  WARNING    的容器未设置就绪探针: prometheus
+    建议: 为所有容器设置就绪探针
+    建议: 就绪探针确保流量只转发到完全准备好的Pod
+  WARNING    的容器未设置存活探针: prometheus
+    建议: 为关键容器设置存活探针
+    建议: 存活探针可以自动重启失败的容器
+  WARNING    的容器以root用户运行: prometheus
+    建议: 避免以root用户运行容器
+    建议: 创建非root用户运行应用
+    建议: 在Dockerfile中使用USER指令
+⚠️ WARNING    pod_health Pod monitoring/promtail-g8q6z 状态
+  PASS       状态正常
+  PASS       所有容器运行正常
+  PASS       重启次数正常
+  PASS       设置了节点亲和性
+  WARNING    的容器未设置就绪探针: promtail
+    建议: 为所有容器设置就绪探针
+    建议: 就绪探针确保流量只转发到完全准备好的Pod
+  WARNING    的容器未设置存活探针: promtail
+    建议: 为关键容器设置存活探针
+    建议: 存活探针可以自动重启失败的容器
+  WARNING    的容器以root用户运行: promtail
+    建议: 避免以root用户运行容器
+    建议: 创建非root用户运行应用
+    建议: 在Dockerfile中使用USER指令
+📊 PASS       deployment_health Deployment ingress-nginx/ingress-nginx-controller 副本状态正常
+📊 PASS       deployment_health Deployment ingress-nginx/ingress-nginx-controller 更新策略: RollingUpdate
+⚠️ WARNING    deployment_health Deployment ingress-nginx/ingress-nginx-controller 滚动更新已进行 3167h51m31.010126731s，可能已停滞
+  建议: 检查新Pod是否无法启动
+  建议: 查看就绪探针配置
+  建议: 检查资源限制是否足够
+  建议: 考虑增加滚动更新超时时间
+⚠️ WARNING    deployment_health Deployment ingress-nginx/ingress-nginx-controller 容器 controller 未设置资源限制
+  建议: 为容器设置CPU和内存限制
+  建议: 资源限制可以防止单个容器占用过多资源
+📊 WARNING    deployment_health Deployment ingress-nginx/ingress-nginx-controller 缺少监控注解
+  建议: 添加Prometheus监控注解
+  建议: 例如: prometheus.io/scrape, prometheus.io/port
+📊 PASS       deployment_health Deployment jiaozi/jiaozi-app-deployment 副本状态正常
+📊 PASS       deployment_health Deployment jiaozi/jiaozi-app-deployment 更新策略: RollingUpdate
+⚠️ WARNING    deployment_health Deployment jiaozi/jiaozi-app-deployment 滚动更新已进行 114h17m44.011714017s，可能已停滞
+  建议: 检查新Pod是否无法启动
+  建议: 查看就绪探针配置
+  建议: 检查资源限制是否足够
+  建议: 考虑增加滚动更新超时时间
+📊 WARNING    deployment_health Deployment jiaozi/jiaozi-app-deployment 缺少版本标签
+  建议: 添加版本标签以便跟踪和管理
+  建议: 建议使用app.kubernetes.io/version标签
+📊 WARNING    deployment_health Deployment jiaozi/jiaozi-app-deployment 缺少监控注解
+  建议: 添加Prometheus监控注解
+  建议: 例如: prometheus.io/scrape, prometheus.io/port
+📊 PASS       deployment_health Deployment kubernetes-dashboard/dashboard-metrics-scraper 副本状态正常
+📊 PASS       deployment_health Deployment kubernetes-dashboard/dashboard-metrics-scraper 更新策略: RollingUpdate
+⚠️ WARNING    deployment_health Deployment kubernetes-dashboard/dashboard-metrics-scraper 滚动更新已进行 2297h21m4.01312894s，可能已停滞
+  建议: 检查新Pod是否无法启动
+  建议: 查看就绪探针配置
+  建议: 检查资源限制是否足够
+  建议: 考虑增加滚动更新超时时间
+📊 WARNING    deployment_health Deployment kubernetes-dashboard/dashboard-metrics-scraper 缺少版本标签
+  建议: 添加版本标签以便跟踪和管理
+  建议: 建议使用app.kubernetes.io/version标签
+📊 WARNING    deployment_health Deployment kubernetes-dashboard/dashboard-metrics-scraper 缺少监控注解
+  建议: 添加Prometheus监控注解
+  建议: 例如: prometheus.io/scrape, prometheus.io/port
+📊 PASS       deployment_health Deployment kubernetes-dashboard/kubernetes-dashboard 副本状态正常
+📊 PASS       deployment_health Deployment kubernetes-dashboard/kubernetes-dashboard 更新策略: RollingUpdate
+⚠️ WARNING    deployment_health Deployment kubernetes-dashboard/kubernetes-dashboard 滚动更新已进行 2297h21m7.013144451s，可能已停滞
+  建议: 检查新Pod是否无法启动
+  建议: 查看就绪探针配置
+  建议: 检查资源限制是否足够
+  建议: 考虑增加滚动更新超时时间
+📊 WARNING    deployment_health Deployment kubernetes-dashboard/kubernetes-dashboard 缺少版本标签
+  建议: 添加版本标签以便跟踪和管理
+  建议: 建议使用app.kubernetes.io/version标签
+📊 WARNING    deployment_health Deployment kubernetes-dashboard/kubernetes-dashboard 缺少监控注解
+  建议: 添加Prometheus监控注解
+  建议: 例如: prometheus.io/scrape, prometheus.io/port
+📊 PASS       deployment_health Deployment monitoring/grafana 副本状态正常
+📊 PASS       deployment_health Deployment monitoring/grafana 更新策略: RollingUpdate
+⚠️ WARNING    deployment_health Deployment monitoring/grafana 滚动更新已进行 96h1m11.015594514s，可能已停滞
+  建议: 检查新Pod是否无法启动
+  建议: 查看就绪探针配置
+  建议: 检查资源限制是否足够
+  建议: 考虑增加滚动更新超时时间
+📊 WARNING    deployment_health Deployment monitoring/grafana 缺少监控注解
+  建议: 添加Prometheus监控注解
+  建议: 例如: prometheus.io/scrape, prometheus.io/port
+📊 PASS       deployment_health Deployment monitoring/loki 副本状态正常
+📊 PASS       deployment_health Deployment monitoring/loki 更新策略: RollingUpdate
+⚠️ WARNING    deployment_health Deployment monitoring/loki 滚动更新已进行 95h2m24.01563279s，可能已停滞
+  建议: 检查新Pod是否无法启动
+  建议: 查看就绪探针配置
+  建议: 检查资源限制是否足够
+  建议: 考虑增加滚动更新超时时间
+📊 WARNING    deployment_health Deployment monitoring/loki 缺少版本标签
+  建议: 添加版本标签以便跟踪和管理
+  建议: 建议使用app.kubernetes.io/version标签
+📊 WARNING    deployment_health Deployment monitoring/loki 缺少监控注解
+  建议: 添加Prometheus监控注解
+  建议: 例如: prometheus.io/scrape, prometheus.io/port
+📊 PASS       deployment_health Deployment monitoring/prometheus-server 副本状态正常
+📊 PASS       deployment_health Deployment monitoring/prometheus-server 更新策略: RollingUpdate
+⚠️ WARNING    deployment_health Deployment monitoring/prometheus-server 滚动更新已进行 92h44m53.015648185s，可能已停滞
+  建议: 检查新Pod是否无法启动
+  建议: 查看就绪探针配置
+  建议: 检查资源限制是否足够
+  建议: 考虑增加滚动更新超时时间
+📊 WARNING    deployment_health Deployment monitoring/prometheus-server 缺少版本标签
+  建议: 添加版本标签以便跟踪和管理
+  建议: 建议使用app.kubernetes.io/version标签
+📊 WARNING    deployment_health Deployment monitoring/prometheus-server 缺少监控注解
+  建议: 添加Prometheus监控注解
+  建议: 例如: prometheus.io/scrape, prometheus.io/port
+📊 FAIL       deployment_health Deployment健康状态: 总数 7, 有问题 7
+
+RESOURCE:
+----------------------------------------
+📊 PASS       resource_usage 节点 jiaozi-uat 状态正常
+📊 PASS       resource_usage 节点 jiaozi-uat 可调度
+📊 PASS       resource_usage 节点 jiaozi-uat 资源使用情况正常
+📊 PASS       resource_usage 节点 jiaozi-uat 磁盘压力正常
+📊 PASS       resource_usage 节点 jiaozi-uat PID压力正常
+📊 PASS       resource_usage 节点 jiaozi-uat 网络正常
+📊 PASS       resource_usage 节点 jiaozi-uat 内核版本: 5.10.134-19.1.al8.x86_64
+📊 PASS       resource_usage 节点 jiaozi-uat 容器运行时: containerd://1.6.32
+📊 PASS       resource_usage 节点 jiaozi-uat 操作系统: Alibaba Cloud Linux 3.2104 U12 (OpenAnolis Edition)
+📊 PASS       resource_usage 节点 jiaozi-uat 资源容量: CPU 4, 内存 15821756Ki
+
+NETWORK:
+----------------------------------------
+📊 PASS       service_health Service default/kubernetes 类型: ClusterIP
+📊 PASS       service_health Service default/kubernetes 端口配置
+📊 WARNING    service_health Service default/kubernetes 没有选择器
+  建议: 如果这是外部服务，请确认端点已正确配置
+  建议: 如果是集群内服务，请添加选择器以自动管理端点
+📊 PASS       service_health Service ingress-nginx/ingress-nginx-controller 类型: NodePort
+📊 PASS       service_health Service ingress-nginx/ingress-nginx-controller 端口配置
+📊 PASS       service_health Service ingress-nginx/ingress-nginx-controller 有 1 个就绪端点
+📊 PASS       service_health Service ingress-nginx/ingress-nginx-controller-admission 类型: ClusterIP
+📊 PASS       service_health Service ingress-nginx/ingress-nginx-controller-admission 端口配置
+📊 PASS       service_health Service ingress-nginx/ingress-nginx-controller-admission 有 1 个就绪端点
+📊 PASS       service_health Service jiaozi/jiaozi-backend 类型: NodePort
+📊 PASS       service_health Service jiaozi/jiaozi-backend 端口配置
+🚨 FAIL       service_health Service jiaozi/jiaozi-backend 没有匹配的Pod
+  建议: 检查Pod标签是否与Service选择器匹配
+  建议: 确认Pod已部署到正确的命名空间
+📊 PASS       service_health Service jiaozi/jozi-app-service 类型: ClusterIP
+📊 PASS       service_health Service jiaozi/jozi-app-service 端口配置
+📊 PASS       service_health Service jiaozi/jozi-app-service 有 2 个就绪端点
+📊 PASS       service_health Service jiaozi/standalone-backend-service 类型: NodePort
+📊 PASS       service_health Service jiaozi/standalone-backend-service 端口配置
+🚨 FAIL       service_health Service jiaozi/standalone-backend-service 没有匹配的Pod
+  建议: 检查Pod标签是否与Service选择器匹配
+  建议: 确认Pod已部署到正确的命名空间
+📊 PASS       service_health Service kubernetes-dashboard/dashboard-metrics-scraper 类型: ClusterIP
+📊 WARNING    service_health Service kubernetes-dashboard/dashboard-metrics-scraper 端口 8000 缺少名称
+  建议: 为端口设置一个有意义的名称
+  建议: 端口名称在Istio等Service Mesh中有特殊用途
+📊 PASS       service_health Service kubernetes-dashboard/dashboard-metrics-scraper 端口配置
+📊 PASS       service_health Service kubernetes-dashboard/dashboard-metrics-scraper 有 1 个就绪端点
+📊 PASS       service_health Service kubernetes-dashboard/kubernetes-dashboard 类型: NodePort
+📊 PASS       service_health Service kubernetes-dashboard/kubernetes-dashboard 端口配置
+📊 PASS       service_health Service kubernetes-dashboard/kubernetes-dashboard 有 1 个就绪端点
+📊 PASS       service_health Service monitoring/alertmanager 类型: NodePort
+📊 WARNING    service_health Service monitoring/alertmanager 端口 80 缺少名称
+  建议: 为端口设置一个有意义的名称
+  建议: 端口名称在Istio等Service Mesh中有特殊用途
+📊 PASS       service_health Service monitoring/alertmanager 端口配置
+🚨 FAIL       service_health Service monitoring/alertmanager 没有匹配的Pod
+  建议: 检查Pod标签是否与Service选择器匹配
+  建议: 确认Pod已部署到正确的命名空间
+📊 PASS       service_health Service monitoring/grafana 类型: NodePort
+📊 PASS       service_health Service monitoring/grafana 端口配置
+📊 PASS       service_health Service monitoring/grafana 有 1 个就绪端点
+📊 PASS       service_health Service monitoring/loki 类型: ClusterIP
+📊 PASS       service_health Service monitoring/loki 端口配置
+📊 PASS       service_health Service monitoring/loki 有 1 个就绪端点
+📊 PASS       service_health Service monitoring/prometheus-server 类型: NodePort
+📊 PASS       service_health Service monitoring/prometheus-server 端口配置
+📊 PASS       service_health Service monitoring/prometheus-server 有 1 个就绪端点
+📊 WARNING    service_health Service健康状态: 总数 12, 有问题 5
+================================================================================
+1.7700871276093564e+09	info	reporter/json_reporter.go:46	JSON报告生成成功	{"filepath": "reports/inspection_result_20260203_105207.json"}
+1.7700871276195722e+09	info	reporter/html_reporter.go:100	HTML报告已生成	{"file": "reports/inspection-production-20260203-105207.html", "latest": "reports/latest-production.html"}
+1.7700871276196015e+09	info	cli/main.go:197	巡检完成	{"cluster": "production", "score": 78, "duration": 3.605176633}
